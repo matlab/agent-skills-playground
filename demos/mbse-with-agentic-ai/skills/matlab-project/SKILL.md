@@ -1,14 +1,10 @@
 ---
 name: matlab-project
-description: >
-  Use this skill for any work involving a MATLAB Project (.prj file) — creating
-  a new project, tracking files, managing the project path, configuring Simulink
-  cache and code-generation folders, running project health checks, or writing
-  build scripts that keep the project in sync with the file system. Trigger
-  phrases include "set up a MATLAB project", "create a .prj", "track this file
-  in the project", "project health check", "build script conventions". This
-  skill is the generic foundation; domain-specific skills (e.g. `mbse-workflow`)
-  build on it.
+description: Use this skill for any work involving a MATLAB Project (.prj file) — creating a new project, tracking files, managing the project path, configuring Simulink cache and code-generation folders, running project health checks, or writing build scripts that keep the project in sync with the file system. Trigger phrases include "set up a MATLAB project", "create a .prj", "track this file in the project", "project health check", "build script conventions". This skill is the generic foundation; domain-specific skills (e.g. `mbse-workflow`) build on it.
+license: MathWorks BSD-3-Clause (see LICENSE)
+metadata:
+  author: MathWorks
+  version: "1.0"
 ---
 
 # MATLAB Project — Setup, Conventions, and Build-Script Patterns

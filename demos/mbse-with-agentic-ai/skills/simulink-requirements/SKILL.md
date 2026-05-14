@@ -1,14 +1,10 @@
 ---
 name: simulink-requirements
-description: >
-  Use this skill for all requirements-related work in a MATLAB MBSE project using
-  the Requirements Toolbox (slreq). Covers creating and populating requirement sets,
-  derivation links, test case requirements, verification coverage, reading and tracing
-  links across requirement sets and models, checking link health, allocating requirements
-  to components (Implement links), and building traceability reports. Trigger when the user
-  asks about slreq API, slreqx files, slmx link files, outLinks/inLinks, traceability
-  matrices, coverage analysis, broken links, or mapping requirements to architecture
-  components. Use proactively for any requirements or traceability task.
+description: Use this skill for all requirements-related work in a MATLAB MBSE project using the Requirements Toolbox (slreq). Covers creating and populating requirement sets, derivation links, test case requirements, verification coverage, reading and tracing links across requirement sets and models, checking link health, allocating requirements to components (Implement links), and building traceability reports. Trigger when the user asks about slreq API, slreqx files, slmx link files, outLinks/inLinks, traceability matrices, coverage analysis, broken links, or mapping requirements to architecture components. Use proactively for any requirements or traceability task.
+license: MathWorks BSD-3-Clause (see LICENSE)
+metadata:
+  author: MathWorks
+  version: "1.0"
 ---
 
 # MATLAB Requirements Toolbox — Requirements & Traceability

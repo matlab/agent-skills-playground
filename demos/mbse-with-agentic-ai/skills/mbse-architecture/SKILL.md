@@ -1,15 +1,10 @@
 ---
 name: mbse-architecture
-description: >
-  Use this skill for the architecture phases of an MBSE workflow in MATLAB, when writing
-  idempotent buildXxx.m scripts that produce a three-layer RFLPV architecture (Functional,
-  Logical, Physical) with interface dictionaries, stereotype profiles, allocation sets, and
-  requirements Implement links. Trigger for defining stereotype properties, functional-to-logical
-  / logical-to-physical allocation, mapping requirements to components via slreq Implement links,
-  or running quantitative roll-up analysis on the architecture. Do NOT trigger for ad-hoc
-  structural edits to an already-built System Composer model (adding one component, rewiring
-  a port) — use `building-simulink-models` with `model_edit` for that. Works alongside the
-  `system-composer` skill for detailed SC API patterns.
+description: Use this skill for the architecture phases of an MBSE workflow in MATLAB, when writing idempotent buildXxx.m scripts that produce a three-layer RFLPV architecture (Functional, Logical, Physical) with interface dictionaries, stereotype profiles, allocation sets, and requirements Implement links. Trigger for defining stereotype properties, functional-to-logical / logical-to-physical allocation, mapping requirements to components via slreq Implement links, or running quantitative roll-up analysis on the architecture. Do NOT trigger for ad-hoc structural edits to an already-built System Composer model (adding one component, rewiring a port) — use `building-simulink-models` with `model_edit` for that. Works alongside the `system-composer` skill for detailed SC API patterns.
+license: MathWorks BSD-3-Clause (see LICENSE)
+metadata:
+  author: MathWorks
+  version: "1.0"
 ---
 
 # MBSE Architecture, Allocation & Analysis (Phases 3–6)

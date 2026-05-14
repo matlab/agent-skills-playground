@@ -25,6 +25,7 @@ demos/                       # multi-skill bundles with their own tutorial READM
 ## Demos
 
 - **[mbse-with-agentic-ai](demos/mbse-with-agentic-ai/)**: agent-driven Model-Based Systems Engineering workflow in MATLAB and Simulink (RFLP methodology). Based on the [MathWorks blog post](https://blogs.mathworks.com/simulink/2026/04/26/model-based-systems-engineering-and-agentic-ai/).
+- **[engineering-an-agent-skill](demos/engineering-an-agent-skill/)**: a test-first process for authoring your own Agent Skills, with a meta-skill that walks an agent through the five stages. Based on the [MathWorks blog post](https://blogs.mathworks.com/matlab/2026/05/11/how-to-engineer-an-ai-skill-for-matlab/).
 
 ## About Agent Skills
 

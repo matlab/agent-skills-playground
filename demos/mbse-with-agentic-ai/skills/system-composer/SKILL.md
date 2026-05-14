@@ -1,15 +1,10 @@
 ---
 name: system-composer
-description: >
-  Use this skill when authoring reusable, idempotent MATLAB scripts that build System Composer
-  architecture models via the architecture-modeling API — `systemcomposer.createModel`,
-  `addComponent`, `addPort`, `setInterface`, `connect(srcPort, dstPort)`, interface dictionaries
-  (.sldd) with `addInterface`/`addElement`, profiles/stereotypes with `Profile.createProfile`
-  and `addStereotype`, or `systemcomposer.allocation.createAllocationSet`. Also trigger when
-  debugging these APIs (connections that don't appear, interfaces that don't resolve, profile
-  save errors, `createAllocationSet` signature-mismatch errors). Do NOT trigger for ad-hoc
-  structural edits to an already-built model (adding one SubSystem, rewiring a port) — use
-  `building-simulink-models` with `model_edit` for that.
+description: Use this skill when authoring reusable, idempotent MATLAB scripts that build System Composer architecture models via the architecture-modeling API — `systemcomposer.createModel`, `addComponent`, `addPort`, `setInterface`, `connect(srcPort, dstPort)`, interface dictionaries (.sldd) with `addInterface`/`addElement`, profiles/stereotypes with `Profile.createProfile` and `addStereotype`, or `systemcomposer.allocation.createAllocationSet`. Also trigger when debugging these APIs (connections that don't appear, interfaces that don't resolve, profile save errors, `createAllocationSet` signature-mismatch errors). Do NOT trigger for ad-hoc structural edits to an already-built model (adding one SubSystem, rewiring a port) — use `building-simulink-models` with `model_edit` for that.
+license: MathWorks BSD-3-Clause (see LICENSE)
+metadata:
+  author: MathWorks
+  version: "1.0"
 ---
 
 # MATLAB System Composer — Programmatic Authoring Guide
