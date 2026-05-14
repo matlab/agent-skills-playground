@@ -30,7 +30,7 @@ Each stage has decision criteria built into the `agent-skill-author` skill.
 
 ## Prerequisites
 
-- A coding agent that supports Agent Skills (Claude Code recommended).
+- A coding agent that supports Agent Skills.
 - Whatever you need to actually run the agent's output: MATLAB, a database, an API, a Simulink model. The process depends on running generated code against reality.
 - A short list of real user prompts to test with. 5 to 10 is enough to start.
 
@@ -100,10 +100,3 @@ Once you've built one skill this way, the second is faster. Reuse:
 - Your prompt test set (with additions for the new domain).
 - Your test-log format.
 - The conventions from `agent-skill-author`: section order, frontmatter shape, code-example pattern.
-
-If a skill matures past prototype, consider proposing it for the [MATLAB Agentic Toolkit](https://github.com/matlab/matlab-agentic-toolkit) or [Simulink Agentic Toolkit](https://github.com/matlab/simulink-agentic-toolkit), depending on the domain.
-
-## Notes
-
-- The process is general; the playground's flavor is MATLAB and Simulink. The same five stages apply to skills for any domain.
-- This demo is part of the [Agent Skills Playground](../../README.md). The blog post is the authoritative narrative; the `agent-skill-author` skill is the operational checklist.

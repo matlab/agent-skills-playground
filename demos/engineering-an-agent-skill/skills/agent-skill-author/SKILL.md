@@ -1,6 +1,6 @@
 ---
 name: agent-skill-author
-description: Use this skill when the user wants to author, design, scope, or refine an Agent Skill (a SKILL.md file). Trigger phrases include "build a new skill", "design an agent skill", "scope a SKILL.md", "how should I structure this skill", "write a skill for X", "my skill isn't working well", or any request to improve an existing SKILL.md. Walks the user through an empirical, test-first process: probe the agent for real failures, design only for genuine knowledge gaps, iterate against runnable examples, and verify across models.
+description: Use this skill when the user wants to author, design, scope, or refine an Agent Skill (a SKILL.md file). Trigger phrases include "build a new skill", "design an agent skill", "scope a SKILL.md", "how should I structure this skill", "write a skill for X", "my skill isn't working well", or any request to improve an existing SKILL.md. Walks the user through an empirical, test-first process — probe the agent for real failures, design only for genuine knowledge gaps, iterate against runnable examples, and verify across models.
 license: MathWorks BSD-3-Clause (see LICENSE)
 metadata:
   author: MathWorks
@@ -58,7 +58,9 @@ matters.
 
 1. **Frontmatter description is a trigger spec, not a summary.** It should describe
    when to invoke the skill, with concrete trigger phrases the agent will match on.
-   The agent reads this to decide whether to load you.
+   The agent reads this to decide whether to load you. Avoid `: ` (colon followed
+   by space) inside the description value — strict YAML parsers will read it as a
+   nested mapping and fail to load the skill. Use an em dash or comma instead.
 2. **Most critical rules first.** Put the rules that fix the most failures at the
    top of the body. Don't bury the load-bearing rule.
 3. **Progressive disclosure.** Common cases up front. Edge cases, exceptions, and

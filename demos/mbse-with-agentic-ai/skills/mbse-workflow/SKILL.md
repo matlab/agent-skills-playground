@@ -1,6 +1,6 @@
 ---
 name: mbse-workflow
-description: Use this skill for guided MBSE work in MATLAB — starting a new project, resuming work mid-workflow on an existing project, or answering orientation questions about how the MBSE skills fit together. Trigger when the user says they want to create, start, or set up a new MBSE project; work on a model-based systems engineering / RFLPV project; or asks which skill covers which phase. Walks through phases one at a time: propose → approve → generate → run → confirm. Use proactively whenever someone mentions starting or continuing an MBSE project.
+description: Use this skill for guided MBSE work in MATLAB — starting a new project, resuming work mid-workflow on an existing project, or answering orientation questions about how the MBSE skills fit together. Trigger when the user says they want to create, start, or set up a new MBSE project; work on a model-based systems engineering / RFLPV project; or asks which skill covers which phase. Walks through phases one at a time — propose → approve → generate → run → confirm. Use proactively whenever someone mentions starting or continuing an MBSE project.
 license: MathWorks BSD-3-Clause (see LICENSE)
 metadata:
   author: MathWorks
