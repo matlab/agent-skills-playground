@@ -26,3 +26,4 @@ npm-debug.log*
 # Temporary files
 *.tmp
 .cache/
+.claude/settings.local.json

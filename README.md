@@ -12,6 +12,20 @@ A sandbox for prototyping and demonstrating [Agent Skills](https://agentskills.i
 - **Prototyping**: trying out new skill ideas.
 - **Demos**: informal examples of what Agent Skills can do with MATLAB and Simulink.
 
+## Repo layout
+
+```
+skills/                      # standalone skills, installed individually
+demos/                       # multi-skill bundles with their own tutorial README
+```
+
+- **`skills/`** holds single-purpose skills (one folder per skill). Install one at a time.
+- **`demos/`** holds bundles: several skills that work together, plus a tutorial README and any supporting files. Use the whole folder.
+
+## Demos
+
+- **[mbse-with-agentic-ai](demos/mbse-with-agentic-ai/)**: agent-driven Model-Based Systems Engineering workflow in MATLAB and Simulink (RFLP methodology). Based on the [MathWorks blog post](https://blogs.mathworks.com/simulink/2026/04/26/model-based-systems-engineering-and-agentic-ai/).
+
 ## About Agent Skills
 
 Skills are modular, portable capabilities that work across coding agents:
@@ -22,9 +36,7 @@ Skills are modular, portable capabilities that work across coding agents:
 
 See the [Agent Skills specification](https://agentskills.io/specification) for the file format.
 
-## Using a skill from this repo
-
-Skills live under `skills/<skill-name>/`. To install one in Claude Code:
+## Install a single skill
 
 ```bash
 git clone https://github.com/matlab/agent-skills-playground.git
@@ -34,6 +46,15 @@ cp -r agent-skills-playground/skills/<skill-name> ~/.claude/skills/
 For Claude.ai (web) and Claude Desktop, zip a skill's directory (with `SKILL.md` at the root) and upload it via **Settings**, then **Capabilities**, then **Upload Skill**.
 
 For other agents, follow the host's instructions for installing user-defined skills.
+
+## Run a demo
+
+```bash
+git clone https://github.com/matlab/agent-skills-playground.git
+cd agent-skills-playground/demos/<demo-name>
+```
+
+Each demo folder is self-contained: it bundles its own skills under `skills/`, a tutorial README, and any supporting files. Open the folder in your agent (for Claude Code, run `claude` from inside the folder) and follow the demo's README.
 
 ## Skill development resources
 
