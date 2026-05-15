@@ -4,8 +4,8 @@ A sandbox for prototyping and demonstrating [Agent Skills](https://agentskills.i
 
 > **For official skills, use Agentic Toolkits for MATLAB and Simulink:**
 >
-> - **[MATLAB Agentic Toolkit](https://github.com/matlab/matlab-agentic-toolkit)**: official agent skills for MATLAB development, plus a live MATLAB session bridge so agents can evaluate code, run tests, and perform static analysis.
-> - **[Simulink Agentic Toolkit](https://github.com/matlab/simulink-agentic-toolkit)**: official agent skills and tooling for Simulink and Model-Based Design.
+> - **[MATLAB Agentic Toolkit](https://github.com/matlab/matlab-agentic-toolkit)**: Gives your AI agent the knowledge and context to work efficiently with MATLAB and its toolboxes
+> - **[Simulink Agentic Toolkit](https://github.com/matlab/simulink-agentic-toolkit)**: Give your AI coding agent the ability to read, build, edit, and test Simulink® models using Model-Based Design best practices.
 
 ## What this repo is for
 
