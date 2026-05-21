@@ -783,3 +783,7 @@ Before deploying a uihtml app, verify:
 - Event handling: `doc sendEventToHTMLSource`
 - Figure creation: `doc uifigure`
 - Debugging: Use browser Developer Tools (F12)
+
+## Related Skills
+
+- **matlab-uihtml-design** — Curated visual design styles (Clean, Material, Cosmic Dark, etc.) with ready-to-use HTML templates and design specifications. Use it to style your uihtml controls.
