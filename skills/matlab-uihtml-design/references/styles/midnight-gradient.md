@@ -2,13 +2,13 @@
 
 ## 1. Visual Theme & Atmosphere
 
-A premium, luxury aesthetic built on near-black backgrounds with rich blue-to-purple gradient accents. Inspired by automotive configurators, luxury product showcases, and high-end media apps.
+A luxury aesthetic built on near-black backgrounds with blue-to-purple gradient accents. Inspired by automotive configurators, luxury product showcases, and high-end media apps.
 
 - **Richness**: Gradient accents (blue → purple) used on interactive elements create visual depth
-- **Contrast**: Near-white text on near-black surfaces for maximum readability with dramatic presence
+- **Contrast**: Near-white text on near-black surfaces for high readability
 - **Float**: Cards appear to hover above the void with subtle bottom glow and generous rounded corners
 
-The overall feeling is exclusive, high-tech, and cinematic. Every interactive element has a gradient fill that catches the eye. Large rounded corners and generous spacing give a modern, spacious feel.
+The overall feeling is cinematic. Interactive elements use a gradient fill. Large rounded corners and generous spacing give a spacious feel.
 
 ## 2. Color Palette & Roles
 
@@ -243,9 +243,9 @@ Gradient border technique (for special cards):
 ## 7. Motion & Interaction
 
 **Timing curves:**
-- Standard: `cubic-bezier(0.4, 0, 0.2, 1)` — 280ms
-- Decelerate: `cubic-bezier(0, 0, 0.2, 1)` — 400ms (entering)
-- Spring: `cubic-bezier(0.34, 1.56, 0.64, 1)` — 350ms (bounce)
+- Standard: `cubic-bezier(0.4, 0, 0.2, 1)`, 280ms
+- Decelerate: `cubic-bezier(0, 0, 0.2, 1)`, 400ms (entering)
+- Spring: `cubic-bezier(0.34, 1.56, 0.64, 1)`, 350ms (bounce)
 
 **Key interactions:**
 - **Hover (buttons)**: Lift up 1px (`translateY(-1px)`), intensify glow
@@ -270,19 +270,19 @@ Gradient border technique (for special cards):
 ### Do
 - Use `linear-gradient(135deg, ...)` on primary buttons and active toggles
 - Apply accent-colored `box-shadow` for glow on interactive elements
-- Use 20px border-radius on cards for the premium rounded feel
-- Keep backgrounds near-black (#0c0c14) — never plain #000
+- Use 20px border-radius on cards for the rounded feel
+- Keep backgrounds near-black (#0c0c14); never plain #000
 - Include gradient-tinted borders on cards (`rgba` of accent color)
 - Use `translateY(-1px)` hover lift for buttons
 - Apply generous spacing (20-24px padding)
 
 ### Don't
-- Use flat solid accent colors on primary buttons — always gradient
+- Use flat solid accent colors on primary buttons; always gradient
 - Apply borders thicker than 1px
-- Use small border-radius (< 12px) — this style is smooth and rounded
+- Use small border-radius (< 12px); this style is rounded
 - Skip the glow shadow on active/gradient elements
-- Use warm colors for backgrounds — keep it cool (blue/purple undertones)
-- Apply blur/glass effects — this style is about gradients and glow, not transparency
+- Use warm colors for backgrounds; keep it cool (blue/purple undertones)
+- Apply blur/glass effects; this style relies on gradients and glow, not transparency
 - Use animations longer than 500ms for user-triggered interactions
 
 ## 9. Agent Prompt Guide

@@ -6,9 +6,9 @@ Inspired by modern platform Human Interface Guidelines. The core principles are 
 
 - **Depth**: Translucent layers, frosted glass (backdrop-filter: blur), subtle shadows that establish hierarchy
 - **Clarity**: Clean typography, generous whitespace, legible text at every size
-- **Deference**: The UI recedes to let content shine; controls feel light, not heavy
+- **Deference**: The UI recedes to let content show through; controls feel light, not heavy
 
-The overall feeling is calm, premium, and effortlessly functional. Surfaces float above backgrounds with luminous diffusion. Interactions feel physically grounded — controls respond with subtle compression and spring-back.
+The overall feeling is calm and premium. Surfaces float above backgrounds with luminous diffusion. Interactions feel physically grounded; controls respond with subtle compression and spring-back.
 
 ## 2. Color Palette & Roles
 
@@ -190,7 +190,7 @@ Track fill (colored portion) achieved via linear-gradient on the track backgroun
 - **Base unit**: 8px grid; common spacings are 8, 12, 16, 20, 24, 32
 - **Content margins**: 16px on compact widths, 20px on regular
 - **Component spacing**: 12px between related controls, 24px between sections
-- **Section structure**: Section label (Caption 2, uppercase, secondary color) → content group
+- **Section structure**: Section label (Caption 2, uppercase, secondary color) then content group
 - **Alignment**: Left-aligned labels; right-aligned values/accessories
 - **Grouping**: Related controls in a single card; visual separation via subtle borders, not whitespace alone
 
@@ -201,7 +201,7 @@ This style uses **materials** (translucent layers) rather than traditional eleva
 | Layer | Treatment |
 |-------|-----------|
 | Background | Solid color, no blur |
-| Grouped content | Slightly elevated, subtle shadow |
+| Grouped content | Slightly raised, subtle shadow |
 | Cards/Panels | `backdrop-filter: blur(20px) saturate(180%)`, translucent fill |
 | Overlays/Modals | Heavier blur (40px), darker scrim beneath |
 | Floating elements | Strong shadow: `0 10px 40px rgba(0,0,0,0.15)` |
@@ -237,7 +237,7 @@ box-shadow: 0 0.5px 1px rgba(0,0,0,0.04),
 - Use `backdrop-filter: blur()` for surface materials
 - Apply `-apple-system` font stack for native feel
 - Use CSS custom properties for all colors (easy light/dark switch)
-- Keep interactions subtle — compression, not explosion
+- Keep interactions subtle: compression, not explosion
 - Use `border-radius: 12-16px` for cards, `50%` for circular elements
 - Apply `transition` to transforms and opacity, not layout properties
 - Use semantic color naming (accent, surface, fill) not literal (blue, gray)
@@ -247,9 +247,9 @@ box-shadow: 0 0.5px 1px rgba(0,0,0,0.04),
 - Apply borders thicker than 1px (prefer 0.5px or box-shadow)
 - Use uppercase text except for section labels (Caption 2 level)
 - Add heavy text shadows or glow effects
-- Use jarring colors — clean palettes are vibrant but balanced
+- Use jarring colors; clean palettes are vibrant but balanced
 - Apply animations longer than 500ms for interactive elements
-- Use `outline` for focus — prefer subtle box-shadow or background change
+- Use `outline` for focus; prefer subtle box-shadow or background change
 
 ## 9. Agent Prompt Guide
 
@@ -264,4 +264,4 @@ When generating Clean-style uihtml components:
 7. Cards: translucent background + backdrop-filter + 0.5px border
 8. All interactive elements: `transform: scale(0.97)` on `:active`
 9. Stagger entrance animations with `animation-delay` increments of 0.05-0.1s
-10. Test both light and dark modes — ensure contrast ratios meet WCAG AA
+10. Test both light and dark modes; ensure contrast ratios meet WCAG AA

@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<title>Lorenz Controls</title>
+<style>
+:root {
+    /* Dark palette (Cosmic Dark) */
+    --bg-deep: #0a0a18;
+    --bg-mid: #10102a;
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-bg-hover: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.07);
+    --glass-highlight: rgba(255, 255, 255, 0.06);
+    --accent-primary: #7c6cf0;
+    --accent-secondary: #a78bfa;
+    --accent-glow: rgba(124, 108, 240, 0.35);
+    --accent-glow-strong: rgba(124, 108, 240, 0.55);
+    --danger: #f472b6;
+    --danger-glow: rgba(244, 114, 182, 0.35);
+    --text-primary: #e8e8f0;
+    --text-secondary: #8b8fa8;
+    --text-muted: #5a5e78;
+
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --t-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --t-med: 280ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="light"] {
+    --bg-deep: #f0f0f8;
+    --bg-mid: #e6e6f2;
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-bg-hover: rgba(255, 255, 255, 0.95);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-highlight: rgba(255, 255, 255, 0.7);
+    --accent-primary: #5b4cc4;
+    --accent-secondary: #7c6cf0;
+    --accent-glow: rgba(91, 76, 196, 0.22);
+    --accent-glow-strong: rgba(91, 76, 196, 0.4);
+    --text-primary: #1a1a2e;
+    --text-secondary: #4a4e68;
+    --text-muted: #8b8fa8;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', 'SF Pro Display', -apple-system, system-ui, sans-serif;
+    color: var(--text-primary);
+    background:
+        radial-gradient(ellipse at 20% 0%, rgba(60, 40, 120, 0.18) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 100%, rgba(30, 50, 100, 0.14) 0%, transparent 60%),
+        linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-mid) 100%);
+    overflow: hidden;
+}
+
+.app {
+    height: 100%;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+}
+
+.app::-webkit-scrollbar { width: 6px; }
+.app::-webkit-scrollbar-track { background: transparent; }
+.app::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 3px;
+    transition: background var(--t-fast);
+}
+.app::-webkit-scrollbar-thumb:hover { background: var(--accent-glow); }
+
+.title-bar {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 0 4px;
+}
+
+.title-bar .title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-primary);
+}
+
+.title-bar .subtitle-link {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--t-fast), text-shadow var(--t-fast);
+}
+
+.title-bar .subtitle-link:hover {
+    color: var(--accent-secondary);
+    text-shadow: 0 0 8px var(--accent-glow);
+}
+
+.toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.toggle-row label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.toggle {
+    width: 44px;
+    height: 24px;
+    border-radius: 12px;
+    background: var(--bg-deep);
+    border: 1px solid var(--glass-border);
+    position: relative;
+    cursor: pointer;
+    transition: all var(--t-med);
+    flex-shrink: 0;
+}
+
+.toggle.active {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.toggle::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--text-secondary);
+    top: 2px;
+    left: 2px;
+    transition: all var(--t-med);
+}
+
+.toggle.active::after {
+    transform: translateX(20px);
+    background: white;
+    box-shadow: 0 0 6px var(--accent-glow);
+}
+
+.speed-row { display: none; }
+.speed-row.visible { display: block; }
+
+.panel {
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    border: 1px solid var(--glass-border);
+    box-shadow:
+        inset 0 1px 0 var(--glass-highlight),
+        0 4px 24px rgba(0, 0, 0, 0.3),
+        0 0 1px rgba(255, 255, 255, 0.05);
+    animation: fadeSlideIn 0.4s ease-out both;
+}
+
+.panel:nth-of-type(1) { animation-delay: 0.0s; }
+.panel:nth-of-type(2) { animation-delay: 0.08s; }
+.panel:nth-of-type(3) { animation-delay: 0.16s; }
+.panel:nth-of-type(4) { animation-delay: 0.24s; }
+
+@keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.panel-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin: 0 0 10px 0;
+}
+
+.slider-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    margin-bottom: 4px;
+    gap: 8px;
+}
+
+.slider-row label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.slider-row .value {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent-secondary);
+    font-variant-numeric: tabular-nums;
+    min-width: 48px;
+    text-align: right;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--bg-deep);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+    outline: none;
+    margin: 4px 0 10px 0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, var(--accent-secondary) 0%, var(--accent-primary) 100%);
+    box-shadow: 0 0 8px var(--accent-glow), 0 2px 4px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: all var(--t-fast);
+    border: none;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, var(--accent-secondary) 0%, var(--accent-primary) 100%);
+    box-shadow: 0 0 8px var(--accent-glow), 0 2px 4px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    border: none;
+    transition: all var(--t-fast);
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 14px var(--accent-glow-strong);
+}
+
+input[type="range"]:active::-webkit-slider-thumb {
+    transform: scale(1.3);
+    box-shadow: 0 0 18px var(--accent-glow-strong);
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+}
+
+.cell .axis {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+}
+
+.cell .v {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent-secondary);
+    font-variant-numeric: tabular-nums;
+}
+
+.button-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.btn-primary {
+    flex: 2;
+    background: var(--accent-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    box-shadow: 0 0 16px var(--accent-glow), 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: all var(--t-med);
+    text-transform: uppercase;
+    font-family: inherit;
+}
+
+.btn-primary:hover {
+    background: var(--accent-secondary);
+    box-shadow: 0 0 24px var(--accent-glow-strong), 0 2px 12px rgba(0, 0, 0, 0.4);
+    transform: scale(1.03);
+}
+
+.btn-primary:active { transform: scale(0.97); }
+
+.btn-primary.busy {
+    animation: subtlePulse 1.6s ease-in-out infinite;
+    cursor: wait;
+}
+
+@keyframes subtlePulse {
+    0%, 100% { box-shadow: 0 0 12px var(--accent-glow); }
+    50% { box-shadow: 0 0 24px var(--accent-glow-strong); }
+}
+
+.btn-secondary {
+    flex: 1;
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all var(--t-med);
+    text-transform: uppercase;
+    font-family: inherit;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: var(--text-primary);
+    transform: scale(1.03);
+}
+
+.btn-secondary:active { transform: scale(0.97); }
+
+.status-line {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-top: 10px;
+    text-align: center;
+    min-height: 14px;
+}
+
+.status-line.error { color: var(--danger); }
+.status-line.ok { color: var(--accent-secondary); }
+</style>
+
+<script type="text/javascript">
+function setup(htmlComponent) {
+    window.htmlComponent = htmlComponent;
+
+    // MATLAB → JS: theme push from desktop
+    htmlComponent.addEventListener("SetTheme", function(event) {
+        const t = (event.Data && event.Data.theme) || "dark";
+        document.documentElement.setAttribute("data-theme", t);
+    });
+
+    // MATLAB → JS: simulation succeeded
+    htmlComponent.addEventListener("SimComplete", function(event) {
+        const d = event.Data;
+        setStat("statPoints", d.nPoints);
+        setStat("statFx",     fmt(d.finalX));
+        setStat("statFy",     fmt(d.finalY));
+        setStat("statFz",     fmt(d.finalZ));
+        setStat("statMs",     d.elapsedMs + " ms");
+        setRunning("idle");
+        setStatus("Trajectory rendered (" + d.nPoints + " pts)", "ok");
+    });
+
+    // MATLAB → JS: animation stopped early by user
+    htmlComponent.addEventListener("SimStopped", function(event) {
+        const d = event.Data;
+        setStat("statPoints", d.nPoints);
+        setStat("statFx",     fmt(d.finalX));
+        setStat("statFy",     fmt(d.finalY));
+        setStat("statFz",     fmt(d.finalZ));
+        setStat("statMs",     "stopped");
+        setRunning("idle");
+        setStatus("Stopped at " + d.nPoints + " pts", "ok");
+    });
+
+    // MATLAB → JS: simulation failed
+    htmlComponent.addEventListener("SimError", function(event) {
+        setRunning("idle");
+        setStatus("Error: " + event.Data, "error");
+    });
+
+    // MATLAB → JS: export result
+    htmlComponent.addEventListener("ExportComplete", function(event) {
+        setStatus("Exported: " + event.Data, "ok");
+    });
+
+    htmlComponent.addEventListener("ExportError", function(event) {
+        setStatus("Export failed: " + event.Data, "error");
+    });
+
+    // Wire slider value labels
+    document.querySelectorAll('input[type="range"]').forEach(function(el) {
+        const out = document.getElementById(el.id + "Val");
+        if (out) {
+            el.addEventListener("input", function() {
+                out.textContent = formatValue(el.id, el.value);
+            });
+        }
+    });
+
+    // Live speed updates during animation — throttled to ~12 events/sec
+    let speedSendTimer = null;
+    let lastSpeedSent = null;
+    document.getElementById("speed").addEventListener("input", function() {
+        if (!window.htmlComponent) return;
+        const v = parseInt(this.value, 10);
+        if (v === lastSpeedSent) return;
+        if (speedSendTimer) return;
+        speedSendTimer = setTimeout(function() {
+            const curr = parseInt(document.getElementById("speed").value, 10);
+            window.htmlComponent.sendEventToMATLAB("SetSpeed", curr);
+            lastSpeedSent = curr;
+            speedSendTimer = null;
+        }, 80);
+    });
+}
+
+function toggleAnimate() {
+    const t = document.getElementById("animateToggle");
+    const isActive = t.classList.toggle("active");
+    t.setAttribute("aria-checked", isActive ? "true" : "false");
+    document.getElementById("speedRow").classList.toggle("visible", isActive);
+}
+
+function isAnimating() {
+    return document.getElementById("animateToggle").classList.contains("active");
+}
+
+function exportImage() {
+    if (!window.htmlComponent) return;
+    setStatus("Choose a file…", null);
+    window.htmlComponent.sendEventToMATLAB("ExportImage", "");
+}
+
+function formatValue(id, v) {
+    const f = parseFloat(v);
+    if (id === "tEnd") return f.toFixed(0) + "s";
+    return f.toFixed(2);
+}
+
+function fmt(x) {
+    if (typeof x !== "number") x = parseFloat(x);
+    if (isNaN(x)) return "—";
+    return x.toFixed(2);
+}
+
+function setStat(id, v) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = v;
+}
+
+function setStatus(msg, kind) {
+    const el = document.getElementById("status");
+    el.textContent = msg;
+    el.classList.remove("ok", "error");
+    if (kind) el.classList.add(kind);
+}
+
+// Run-state machine: 'idle' | 'static' | 'animating'
+let runState = "idle";
+
+function setRunning(state) {
+    runState = state;
+    const b = document.getElementById("runBtn");
+    b.classList.remove("busy");
+    if (state === "idle") {
+        b.textContent = "Run";
+        b.disabled = false;
+    } else if (state === "static") {
+        b.textContent = "Run";
+        b.classList.add("busy");
+        b.disabled = true;
+    } else if (state === "animating") {
+        b.textContent = "Stop";
+        b.classList.add("busy");
+        b.disabled = false;
+    }
+}
+
+function runSim() {
+    if (runState === "animating") {
+        setStatus("Stopping…", null);
+        window.htmlComponent.sendEventToMATLAB("StopAnimation", "");
+        return;
+    }
+    const payload = {
+        x0:      parseFloat(document.getElementById("x0").value),
+        y0:      parseFloat(document.getElementById("y0").value),
+        z0:      parseFloat(document.getElementById("z0").value),
+        sigma:   parseFloat(document.getElementById("sigma").value),
+        rho:     parseFloat(document.getElementById("rho").value),
+        beta:    parseFloat(document.getElementById("beta").value),
+        tEnd:    parseFloat(document.getElementById("tEnd").value),
+        animate: isAnimating(),
+        speed:   parseInt(document.getElementById("speed").value, 10)
+    };
+    setRunning(payload.animate ? "animating" : "static");
+    setStatus(payload.animate ? "Tracing…" : "Integrating…", null);
+    window.htmlComponent.sendEventToMATLAB("RunSimulation", payload);
+}
+
+function resetSim() {
+    document.getElementById("x0").value = 0;
+    document.getElementById("y0").value = 1;
+    document.getElementById("z0").value = 0;
+    document.getElementById("sigma").value = 10;
+    document.getElementById("rho").value = 28;
+    document.getElementById("beta").value = 2.6667;
+    document.getElementById("tEnd").value = 25;
+    document.querySelectorAll('input[type="range"]').forEach(function(el) {
+        const out = document.getElementById(el.id + "Val");
+        if (out) out.textContent = formatValue(el.id, el.value);
+    });
+    setRunning("idle");
+    setStatus("Reset to defaults", null);
+    window.htmlComponent.sendEventToMATLAB("Reset", "");
+}
+</script>
+</head>
+<body>
+<div class="app">
+
+    <div class="title-bar">
+        <div class="title">Lorenz Attractor</div>
+        <a class="subtitle-link"
+           href="https://www.mathworks.com/matlabcentral/fileexchange/54611-solving-odes-in-matlab/files/lorenzgui.m"
+           target="_blank" rel="noopener">LORENZGUI in MATLAB</a>
+    </div>
+
+    <div class="panel">
+        <div class="panel-title">Initial Conditions</div>
+
+        <div class="slider-row">
+            <label for="x0">x<sub>0</sub></label>
+            <div class="value" id="x0Val">0.00</div>
+        </div>
+        <input type="range" id="x0" min="-20" max="20" step="0.1" value="0">
+
+        <div class="slider-row">
+            <label for="y0">y<sub>0</sub></label>
+            <div class="value" id="y0Val">1.00</div>
+        </div>
+        <input type="range" id="y0" min="-20" max="20" step="0.1" value="1">
+
+        <div class="slider-row">
+            <label for="z0">z<sub>0</sub></label>
+            <div class="value" id="z0Val">0.00</div>
+        </div>
+        <input type="range" id="z0" min="-20" max="20" step="0.1" value="0">
+    </div>
+
+    <div class="panel">
+        <div class="panel-title">Parameters</div>
+
+        <div class="slider-row">
+            <label for="sigma">σ (sigma)</label>
+            <div class="value" id="sigmaVal">10.00</div>
+        </div>
+        <input type="range" id="sigma" min="1" max="20" step="0.1" value="10">
+
+        <div class="slider-row">
+            <label for="rho">ρ (rho)</label>
+            <div class="value" id="rhoVal">28.00</div>
+        </div>
+        <input type="range" id="rho" min="0" max="100" step="0.1" value="28">
+
+        <div class="slider-row">
+            <label for="beta">β (beta)</label>
+            <div class="value" id="betaVal">2.67</div>
+        </div>
+        <input type="range" id="beta" min="0.1" max="10" step="0.01" value="2.6667">
+    </div>
+
+    <div class="panel">
+        <div class="panel-title">Simulation</div>
+
+        <div class="slider-row">
+            <label for="tEnd">Integration time</label>
+            <div class="value" id="tEndVal">25s</div>
+        </div>
+        <input type="range" id="tEnd" min="5" max="100" step="1" value="25">
+
+        <div class="toggle-row">
+            <label for="animateToggle">Animate trace</label>
+            <div id="animateToggle" class="toggle" role="switch" aria-checked="false"
+                 onclick="toggleAnimate()"></div>
+        </div>
+
+        <div class="speed-row" id="speedRow">
+            <div class="slider-row">
+                <label for="speed">Speed (pts/frame)</label>
+                <div class="value" id="speedVal">5</div>
+            </div>
+            <input type="range" id="speed" min="1" max="50" step="1" value="5">
+        </div>
+
+        <div class="button-row">
+            <button id="runBtn" class="btn-primary" onclick="runSim()">Run</button>
+            <button class="btn-secondary" onclick="resetSim()">Reset</button>
+        </div>
+        <div class="button-row" style="margin-top: 8px;">
+            <button class="btn-secondary" style="flex: 1;" onclick="exportImage()">Export PNG</button>
+        </div>
+
+        <div class="status-line" id="status">Ready</div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-title">Last Result</div>
+        <div class="grid-3">
+            <div class="cell">
+                <div class="axis">POINTS</div>
+                <div class="v" id="statPoints">—</div>
+            </div>
+            <div class="cell">
+                <div class="axis">ELAPSED</div>
+                <div class="v" id="statMs">—</div>
+            </div>
+            <div class="cell">
+                <div class="axis">FINAL X</div>
+                <div class="v" id="statFx">—</div>
+            </div>
+            <div class="cell">
+                <div class="axis">FINAL Y</div>
+                <div class="v" id="statFy">—</div>
+            </div>
+            <div class="cell">
+                <div class="axis">FINAL Z</div>
+                <div class="v" id="statFz">—</div>
+            </div>
+            <div class="cell">
+                <div class="axis">&nbsp;</div>
+                <div class="v">&nbsp;</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

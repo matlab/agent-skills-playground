@@ -12,20 +12,11 @@ A sandbox for prototyping and demonstrating [Agent Skills](https://agentskills.i
 - **Prototyping**: trying out new skill ideas.
 - **Demos**: informal examples of what Agent Skills can do with MATLAB and Simulink.
 
-## Repo layout
-
-```
-skills/                      # standalone skills, installed individually
-demos/                       # multi-skill bundles with their own tutorial README
-```
-
-- **`skills/`** holds single-purpose skills (one folder per skill). Install one at a time.
-- **`demos/`** holds bundles: several skills that work together, plus a tutorial README and any supporting files. Use the whole folder.
-
 ## Demos
 
 - **[mbse-with-agentic-ai](demos/mbse-with-agentic-ai/)**: agent-driven Model-Based Systems Engineering workflow in MATLAB and Simulink (RFLP methodology). Based on the [MathWorks blog post](https://blogs.mathworks.com/simulink/2026/04/26/model-based-systems-engineering-and-agentic-ai/).
 - **[engineering-an-agent-skill](demos/engineering-an-agent-skill/)**: a test-first process for authoring your own Agent Skills, with a meta-skill that walks an agent through the five stages. Based on the [MathWorks blog post](https://blogs.mathworks.com/matlab/2026/05/11/how-to-engineer-an-ai-skill-for-matlab/).
+- **[lorenz-uihtml-app](demos/lorenz-uihtml-app/)**: an interactive Lorenz attractor built by an agent using the [`matlab-uihtml-app-builder`](skills/matlab-uihtml-app-builder/) and [`matlab-uihtml-design`](skills/matlab-uihtml-design/) skills together. Cosmic Dark HTML control panel drives an `ode45` integration; supports animated tracing with live speed control, mid-run Stop, and PNG export.
 
 ## About Agent Skills
 

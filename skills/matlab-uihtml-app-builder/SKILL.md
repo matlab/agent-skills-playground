@@ -9,13 +9,13 @@ metadata:
 
 # MATLAB uihtml App Builder
 
-This skill provides comprehensive guidelines for building interactive web applications that combine HTML/JavaScript interfaces with MATLAB computational backends using the uihtml component. This architecture leverages modern web UI capabilities while harnessing MATLAB's powerful calculation engine.
+This skill covers how to build interactive web applications that combine HTML/JavaScript interfaces with MATLAB computational backends using the uihtml component. The HTML side handles the UI; MATLAB does the computation.
 
 ## When to Use This Skill
 
 - Building interactive MATLAB apps with HTML/JavaScript interfaces
 - Creating web-based UIs for MATLAB applications
-- Developing modern, responsive MATLAB GUIs using web technologies
+- Building responsive MATLAB GUIs with HTML/CSS/JS
 - When user mentions: uihtml, HTML, JavaScript, web app, web interface, interactive GUI
 - Combining web UI design with MATLAB computational power
 - Creating calculator apps, data visualizers, or form-based MATLAB tools
@@ -101,6 +101,13 @@ htmlComponent.Data.ItemName  // "Apple"
 htmlComponent.Data.Price     // 2
 htmlComponent.Data.Quantity  // 10
 ```
+
+**Important: decoding is automatic in both directions.**
+
+- A JS object sent via `sendEventToMATLAB` arrives on `event.HTMLEventData` already converted to a MATLAB struct. **Do not call `jsondecode`**; it will fail on a struct.
+- A MATLAB struct sent via `sendEventToHTMLSource` arrives on `event.Data` already as a JavaScript object. **Do not call `JSON.parse`**; it will fail on an object.
+- Field names round-trip exactly: a JS `{x0: 1}` becomes a MATLAB `struct('x0', 1)`, not `struct('x_0', ...)` or similar.
+- Numeric scalars arrive as MATLAB `double`. Wrap field reads with `double(data.x0)` if you want to be defensive about types.
 
 ## Critical Rules
 
@@ -607,7 +614,7 @@ end
 - **Implement hover effects** for better user experience and visual feedback
 - **Provide clear visual feedback** for user actions (button clicks, form submission, errors)
 - **Use semantic HTML elements** (button, input, form) for better accessibility
-- **Apply professional color schemes** using CSS gradients and modern design patterns
+- **Pick a color scheme deliberately** using CSS gradients and current design patterns (see `matlab-uihtml-design` for ready-made styles)
 
 ### Performance Optimization
 
@@ -717,6 +724,198 @@ end
 - Implement start/stop/pause controls
 - Use efficient data formats (arrays, structs)
 
+## Long-Running Operations
+
+When MATLAB drives an operation that takes more than a fraction of a second (an animation, an integration sweep, a streaming simulation), the patterns above need a few additions: a timer, resource cleanup, a way to cancel, and a way to tune the operation while it runs.
+
+### Timer-Driven Animation
+
+Use a MATLAB `timer` to drive the operation. Store the handle on `fig.UserData` so other event handlers (Reset, Stop, figure-close) can find and stop it.
+
+```matlab
+function startAnimation(fig, ax, data)
+    stopAnimTimer(fig);  % kill any prior run
+
+    state.data = data;
+    state.idx  = 1;
+    state.line = animatedline(ax, 'Color', [0.65 0.55 0.94], 'LineWidth', 1.4);
+    state.step = 5;  % points per tick (mutable from outside; see below)
+
+    tmr = timer( ...
+        'ExecutionMode', 'fixedSpacing', ...
+        'Period',        0.03, ...
+        'BusyMode',      'drop', ...      % skip ticks if callback overruns
+        'TimerFcn',      @(s, ~) animStep(s, fig));
+    tmr.UserData = state;
+    fig.UserData.AnimTimer = tmr;
+    start(tmr);
+end
+
+function animStep(tmr, fig)
+    if ~isvalid(fig) || ~isvalid(tmr), return; end
+    s = tmr.UserData;
+    iEnd = min(numel(s.data), s.idx + s.step - 1);
+    addpoints(s.line, s.data(s.idx:iEnd, 1), s.data(s.idx:iEnd, 2));
+    s.idx = iEnd + 1;
+    tmr.UserData = s;
+    drawnow limitrate;
+    if s.idx > numel(s.data)
+        stop(tmr); delete(tmr);
+        fig.UserData.AnimTimer = [];
+        % Notify JS that the operation completed
+        sendEventToHTMLSource(fig.UserData.UIHtml, 'OperationDone', struct('n', iEnd));
+    end
+end
+```
+
+Key choices:
+- **`BusyMode='drop'`**: if a callback takes longer than `Period`, the next tick is skipped rather than queued. This prevents callback pile-ups on slow systems.
+- **`drawnow limitrate`**: caps rendering at ~20 fps while still processing UI events, so the user can still interact (scroll, drag sliders, click Stop).
+- **Self-cleaning**: the last tick stops and deletes the timer, then nulls out the stored handle.
+
+### Resource Cleanup on Figure Close
+
+**Any timer, listener, or background resource must be torn down when the figure closes.** Otherwise it leaks across reruns and can fire callbacks against deleted graphics objects.
+
+```matlab
+fig.UserData = struct('AnimTimer', [], 'UIHtml', h, 'Axes', ax);
+fig.CloseRequestFcn = @(s, ~) closeFig(s);
+
+function closeFig(fig)
+    stopAnimTimer(fig);
+    delete(fig);
+end
+
+function stopAnimTimer(fig)
+    if ~isvalid(fig) || ~isfield(fig.UserData, 'AnimTimer'), return; end
+    tmr = fig.UserData.AnimTimer;
+    if ~isempty(tmr) && isvalid(tmr)
+        try, stop(tmr); catch, end
+        delete(tmr);
+    end
+    fig.UserData.AnimTimer = [];
+end
+```
+
+The same `stopAnimTimer` is reused by `Reset` and `Stop` handlers, so there's one cleanup path to maintain.
+
+### Cancellable Operations (Run ↔ Stop)
+
+For operations the user might want to cancel, repurpose the primary action button via a JS state machine. Don't add a separate Stop button; the panel gets crowded, and a context-aware single button matches play/pause UX.
+
+```javascript
+// JS state machine
+let runState = "idle";  // 'idle' | 'running' | 'cancellable'
+
+function setRunning(state) {
+    runState = state;
+    const b = document.getElementById("runBtn");
+    b.classList.remove("busy");
+    if (state === "idle") {
+        b.textContent = "Run";
+        b.disabled = false;
+    } else if (state === "running") {           // brief, non-cancellable
+        b.textContent = "Run";
+        b.classList.add("busy");
+        b.disabled = true;
+    } else if (state === "cancellable") {       // long, user can stop
+        b.textContent = "Stop";
+        b.classList.add("busy");
+        b.disabled = false;
+    }
+}
+
+function onRunClick() {
+    if (runState === "cancellable") {
+        window.htmlComponent.sendEventToMATLAB("StopOperation", "");
+        return;
+    }
+    setRunning("cancellable");
+    window.htmlComponent.sendEventToMATLAB("RunOperation", collectParams());
+}
+```
+
+On the MATLAB side, `StopOperation` stops the timer, **leaves any partial output in place** (so the user keeps what was computed), and emits an event so JS can flip the button back to "Run":
+
+```matlab
+case 'StopOperation'
+    stopAnimTimer(fig);
+    s = lastState(fig);  % whatever partial result you tracked
+    sendEventToHTMLSource(src, 'OperationStopped', s);
+```
+
+Distinguish three completion events back to JS:
+| Event | When |
+|---|---|
+| `OperationDone`    | Natural completion (full result) |
+| `OperationStopped` | User clicked Stop (partial result) |
+| `OperationError`   | Caught exception (error message) |
+
+All three should call `setRunning("idle")` in JS so the button returns to "Run".
+
+### Live Control During an Ongoing Operation
+
+When the user wants to tune a parameter *while* the operation runs (animation speed, simulation rate, plot range), the JS slider's `input` event needs to push updates to MATLAB **without restarting the operation**.
+
+Two rules:
+
+1. **Throttle** the JS-side send so dragging the slider doesn't flood MATLAB with events:
+
+   ```javascript
+   let sendTimer = null;
+   document.getElementById("speed").addEventListener("input", function() {
+       if (sendTimer) return;
+       sendTimer = setTimeout(function() {
+           const v = parseInt(document.getElementById("speed").value, 10);
+           window.htmlComponent.sendEventToMATLAB("SetSpeed", v);
+           sendTimer = null;
+       }, 80);  // ~12 events/sec max
+   });
+   ```
+
+2. **Patch the live timer's `UserData` in place.** Don't stop and restart:
+
+   ```matlab
+   case 'SetSpeed'
+       tmr = fig.UserData.AnimTimer;
+       if ~isempty(tmr) && isvalid(tmr)
+           s = tmr.UserData;
+           s.step = max(1, min(50, round(double(data))));  % clamp + sanitize
+           tmr.UserData = s;
+       end
+       % no-op if no animation running; the slider still updates its label
+   ```
+
+MATLAB serializes all callbacks on the main thread, so the timer tick and the `SetSpeed` handler never execute concurrently. The `UserData` update is atomic from the tick's point of view.
+
+### Saving the Output (Export from a uiaxes)
+
+A common requirement: a "Save Image" button in the HTML that exports the current plot. Use `uiputfile` + `exportgraphics`:
+
+```matlab
+case 'ExportImage'
+    ax = fig.UserData.Axes;
+    if isempty(ax.Children)
+        sendEventToHTMLSource(src, 'ExportError', 'Nothing to export');
+        return;
+    end
+    defaultName = sprintf('plot_%s.png', datestr(now, 'yyyymmdd_HHMMSS'));
+    [file, path] = uiputfile({'*.png';'*.jpg';'*.pdf'}, 'Export plot', defaultName);
+    if isequal(file, 0)
+        sendEventToHTMLSource(src, 'ExportComplete', 'cancelled');
+        return;
+    end
+    try
+        exportgraphics(ax, fullfile(path, file), 'Resolution', 300, ...
+            'BackgroundColor', fig.Color);
+        sendEventToHTMLSource(src, 'ExportComplete', file);
+    catch ME
+        sendEventToHTMLSource(src, 'ExportError', ME.message);
+    end
+```
+
+Pass `fig.Color` as `BackgroundColor` so the export matches the on-screen figure background. Important for dark themes, where the default white background looks wrong.
+
 ## Implementation Checklist
 
 Before deploying a uihtml app, verify:
@@ -729,12 +928,14 @@ Before deploying a uihtml app, verify:
 - [ ] Try-catch blocks wrap all MATLAB event handling
 - [ ] Input validation implemented for all user data
 - [ ] Error events sent back to JavaScript for user feedback
-- [ ] CSS styling applied for professional appearance
+- [ ] CSS styling applied consistently (see `matlab-uihtml-design`)
 - [ ] Responsive design tested at different window sizes
 - [ ] All user interactions provide visual feedback
 - [ ] Loading indicators shown for long operations
 - [ ] File organization follows project structure
 - [ ] Documentation (README) created with usage instructions
+- [ ] **Resource cleanup wired to `CloseRequestFcn`**: any `timer`, listener, or background task is stopped and deleted when the figure closes. Without this, callbacks fire against deleted graphics after the user closes the app.
+- [ ] **Long operations are cancellable**: if the operation can run more than ~1 second, the user can stop it without killing the figure.
 
 ## Troubleshooting
 
@@ -786,4 +987,4 @@ Before deploying a uihtml app, verify:
 
 ## Related Skills
 
-- **matlab-uihtml-design** — Curated visual design styles (Clean, Material, Cosmic Dark, etc.) with ready-to-use HTML templates and design specifications. Use it to style your uihtml controls.
+- **matlab-uihtml-design**: visual design styles (Clean, Material, Cosmic Dark, etc.) with ready-to-use HTML templates and design specs. Use it to style your uihtml controls.

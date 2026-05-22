@@ -4,11 +4,11 @@
 
 A soft, tactile interface where elements appear physically extruded from or pressed into a dark surface. Inspired by physical button panels, embossed controls, and premium audio equipment.
 
-- **Tactility**: Controls look and feel like physical objects — raised buttons, recessed tracks, embossed panels
+- **Tactility**: Controls look and feel like physical objects: raised buttons, recessed tracks, embossed panels
 - **Softness**: Paired light/dark shadows create the illusion of a continuous soft surface
-- **Physicality**: No flat colors — every surface interacts with a simulated overhead light source
+- **Physicality**: No flat colors. Every surface interacts with a simulated overhead light source
 
-The overall feeling is premium, tactile, and satisfying. Elements have weight and dimension. Interactions feel like pressing real buttons — surfaces compress inward on click. The monochromatic palette keeps the focus on form and shadow rather than color.
+The overall feeling is premium, tactile, and satisfying. Elements have weight and dimension. Interactions feel like pressing real buttons. Surfaces compress inward on click. The monochromatic palette keeps the focus on form and shadow rather than color.
 
 ## 2. Color Palette & Roles
 
@@ -228,9 +228,9 @@ input[type="range"]::-moz-range-thumb {
 - **Base unit**: 8px; common spacings: 8, 12, 16, 20, 24, 32
 - **Content margins**: 20px outer padding
 - **Panel padding**: 20px internal
-- **Panel gap**: 24px between panels (extra gap needed — shadows need breathing room)
+- **Panel gap**: 24px between panels (extra gap needed; shadows need breathing room)
 - **Border radius**: 16px on panels, 12px on buttons, 50% on circular elements
-- **Critical rule**: Card background MUST match page background color — neumorphism breaks if they differ
+- **Critical rule**: Card background MUST match page background color. Neumorphism breaks if they differ
 - **Alignment**: Left-aligned labels; right-aligned values
 
 ## 6. Depth & Elevation
@@ -245,7 +245,7 @@ Neumorphism creates depth exclusively through shadow pairs:
 | Recessed (track) | `inset 3px 3px 6px dark, inset -3px -3px 6px light` |
 | Floating thumb | `4px 4px 8px dark, -4px -4px 8px light, inset 1px 1px 2px light` |
 
-Light source is always **top-left** — dark shadows fall bottom-right, light highlights top-left.
+Light source is always **top-left**. Dark shadows fall bottom-right, light highlights top-left.
 
 **Never use:**
 - `border` (breaks the continuous-surface illusion)
@@ -255,17 +255,17 @@ Light source is always **top-left** — dark shadows fall bottom-right, light hi
 ## 7. Motion & Interaction
 
 **Timing curves:**
-- Standard: `cubic-bezier(0.4, 0, 0.2, 1)` — 200ms
-- Toggle: `cubic-bezier(0.4, 0, 0.2, 1)` — 300ms
-- Spring (optional): `cubic-bezier(0.34, 1.56, 0.64, 1)` — 250ms
+- Standard: `cubic-bezier(0.4, 0, 0.2, 1)`, 200ms
+- Toggle: `cubic-bezier(0.4, 0, 0.2, 1)`, 300ms
+- Spring (optional): `cubic-bezier(0.34, 1.56, 0.64, 1)`, 250ms
 
 **Key interactions:**
-- **Press (button)**: Shadow transitions from outset to inset — element "pushes in"
-- **Release**: Shadow returns to outset — element "pops back out"
+- **Press (button)**: Shadow transitions from outset to inset; element "pushes in"
+- **Release**: Shadow returns to outset; element "pops back out"
 - **Hover**: No visual change (neumorphism doesn't use hover highlights)
 - **Toggle**: Track fills with accent color, thumb slides
 - **Slider drag**: Thumb shadow slightly reduces (pressing down)
-- **Appear**: Simple opacity fade (0 → 1, 400ms) — no translation
+- **Appear**: Simple opacity fade (0 to 1, 400ms), no translation
 
 Motion is subtle and physical. The shadow shift on press IS the interaction feedback.
 
@@ -278,17 +278,17 @@ Motion is subtle and physical. The shadow shift on press IS the interaction feed
 - Keep the color palette monochromatic (one accent only)
 - Use inset shadows for recessed elements (tracks, inputs)
 - Apply larger shadow spreads on bigger elements, smaller on small ones
-- Use green accent for active/positive, red for danger — minimal color
+- Use green accent for active/positive, red for danger; minimal color
 
 ### Don't
-- Use borders — they break the continuous-surface illusion
+- Use borders; they break the continuous-surface illusion
 - Apply different background colors to cards vs page background
-- Use transparency/blur effects — this style is about solid surfaces
+- Use transparency/blur effects; this style is about solid surfaces
 - Apply colored shadows (except subtle accent glow on active elements)
 - Use more than one accent color family
-- Mix flat elements with neumorphic ones — commit fully to the style
-- Add gradient backgrounds — surfaces must be flat solid colors
-- Use translateY animations — this style is about shadow depth, not position
+- Mix flat elements with neumorphic ones; commit fully to the style
+- Add gradient backgrounds; surfaces must be flat solid colors
+- Use translateY animations; this style is about shadow depth, not position
 
 ## 9. Agent Prompt Guide
 
@@ -300,7 +300,7 @@ When generating Neumorphic Dark style uihtml components:
 4. Buttons: same bg, colored text, outset shadow → inset shadow on :active
 5. Sliders: inset recessed track (8px height), raised thumb with outset shadows
 6. Toggles: inset track, raised thumb, accent fill on active
-7. NO borders anywhere — depth comes purely from shadows
+7. NO borders anywhere; depth comes purely from shadows
 8. Accent color appears only as text color or fill, never as shadow
 9. Entry: opacity fade only, no translation
-10. Extra gap between panels (24px+) — shadows need visual breathing room
+10. Extra gap between panels (24px+); shadows need visual breathing room

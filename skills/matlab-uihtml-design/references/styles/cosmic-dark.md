@@ -8,11 +8,11 @@ Deep space aesthetic with a premium, immersive feel. Inspired by spacecraft inte
 - **Luminance**: Neon-like accent glows that cast soft colored light
 - **Mystery**: Deep purples and blues evoke infinite cosmic space
 
-The overall feeling is dramatic, immersive, and high-tech. Controls feel like they're floating in space, with subtle glow effects that make interactions feel energetic. Best suited for data visualization apps, 3D viewers, media players, and creative tools.
+The overall feeling is dramatic and high-tech. Controls feel like they're floating in space, with subtle glow effects that make interactions feel energetic. Best suited for data visualization apps, 3D viewers, media players, and creative tools.
 
 ## 2. Color Palette & Roles
 
-### Dark Mode (Primary — this style is dark-first)
+### Dark Mode (Primary; this style is dark-first)
 | Role | Value | Usage |
 |------|-------|-------|
 | Background Deep | `#0a0a18` | Page background base |
@@ -55,7 +55,7 @@ The overall feeling is dramatic, immersive, and high-tech. Controls feel like th
 | Button Text | 13px | 600 | 0.5px | Button labels |
 | Body | 13px | 400 | 0 | Descriptions |
 
-Typography is deliberately compact — this design favors dense information displays where controls take minimal visual space but remain legible.
+Typography is deliberately compact. This design favors dense information displays where controls take minimal visual space but remain legible.
 
 ## 4. Component Stylings
 
@@ -214,7 +214,7 @@ input[type="range"]:active::-webkit-slider-thumb {
 - **Component spacing**: 14-16px between controls within a section
 - **Section spacing**: 16px gap between panels
 - **Layout**: Flexbox column with gap; grid for multi-column slider arrangements
-- **Compact density**: This style favors information density — small fonts, tight spacing
+- **Compact density**: This style favors information density with small fonts and tight spacing
 - **Background**: Multi-layer radial gradients for cosmic depth effect:
 ```css
 background:
@@ -235,7 +235,7 @@ Uses glassmorphism layering:
 | Active elements | Colored glow halos (box-shadow with accent color) |
 | Floating | Stronger glow + larger shadow spread |
 
-Key depth technique — the **inset highlight**:
+Key depth technique: the **inset highlight**:
 ```css
 box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06); /* top-edge light catch */
 ```
@@ -274,14 +274,14 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06); /* top-edge light catch */
 - Use tabular-nums for numeric displays
 
 ### Don't
-- Use flat, solid backgrounds — always layer gradients
+- Use flat, solid backgrounds; always layer gradients
 - Apply borders thicker than 1px
 - Use bright/saturated colors without an accompanying glow
 - Make text larger than 13px for controls (this is a dense UI style)
-- Use white backgrounds — even light mode should be slightly tinted
-- Skip the backdrop-filter — it's essential to the glass effect
+- Use white backgrounds; even light mode should be slightly tinted
+- Skip the backdrop-filter; it's essential to the glass effect
 - Apply animations longer than 400ms for interactions (except ambient pulses)
-- Use stock border-radius values (like 4px) — prefer 8px or 14px
+- Use stock border-radius values (like 4px); prefer 8px or 14px
 
 ## 9. Agent Prompt Guide
 

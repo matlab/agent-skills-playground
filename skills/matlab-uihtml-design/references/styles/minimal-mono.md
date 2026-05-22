@@ -4,11 +4,11 @@
 
 An ultra-minimal, high-density aesthetic built on monochromatic dark teal-black with a single muted accent color. Inspired by fitness trackers, training apps, and developer tools.
 
-- **Restraint**: Color is used sparingly — almost everything is gray-scale with one muted lavender accent
+- **Restraint**: Color is used sparingly. Almost everything is gray-scale with one muted lavender accent
 - **Density**: Compact typography (11-13px), tight spacing, maximum information per pixel
 - **Precision**: Pill shapes, thin rules, mechanical consistency
 
-The overall feeling is technical, focused, and elegant in its simplicity. The monochromatic palette keeps attention on content and data. The single accent color (muted lavender) appears only where interaction is needed, making affordances immediately clear.
+The overall feeling is technical and focused. The monochromatic palette keeps attention on content and data. The single accent color (muted lavender) appears only where interaction is needed, making affordances immediately clear.
 
 ## 2. Color Palette & Roles
 
@@ -219,13 +219,13 @@ input[type="range"]::-moz-range-thumb {
 
 ## 6. Depth & Elevation
 
-Depth is almost non-existent — flatness IS the aesthetic:
+Depth is almost non-existent; flatness IS the aesthetic:
 
 | Layer | Treatment |
 |-------|-----------|
 | Background | Solid dark teal-black |
-| Panels | 2% white overlay + 1px border — barely distinguishable |
-| Hover | 4% white overlay — just noticeable |
+| Panels | 2% white overlay + 1px border, barely distinguishable |
+| Hover | 4% white overlay, just noticeable |
 | Active/Focus | Accent color border or background tint |
 | No shadows | This style never uses box-shadow for elevation |
 
@@ -234,11 +234,11 @@ The only depth cue is opacity variation in surfaces.
 ## 7. Motion & Interaction
 
 **Timing curves:**
-- Standard: `cubic-bezier(0.4, 0, 0.2, 1)` — 200ms
-- Quick: `ease` — 150ms
+- Standard: `cubic-bezier(0.4, 0, 0.2, 1)` at 200ms
+- Quick: `ease` at 150ms
 
 **Key interactions:**
-- **Press**: Scale 0.96 — quick, mechanical feel
+- **Press**: Scale 0.96 for a quick, mechanical feel
 - **Hover (button)**: Color/opacity shift only, no movement
 - **Hover (card)**: Surface opacity increase (0.02 → 0.04)
 - **Toggle**: Smooth slide, no bounce
@@ -252,21 +252,21 @@ Motion is deliberately minimal. No spring physics, no overshoot, no stagger.
 ### Do
 - Use `border-radius: 9999px` on ALL buttons (pill shape is mandatory)
 - Apply uppercase + wide letter-spacing (2-3px) on section labels
-- Keep accent color to ONE hue (lavender) — never introduce a second accent
+- Keep accent color to ONE hue (lavender); never introduce a second accent
 - Use monospace font for numeric values
 - Keep font sizes in 10-13px range for controls (compact density)
 - Use 3px track height for sliders and progress bars
 - Apply `font-variant-numeric: tabular-nums` on all numbers
 
 ### Don't
-- Use shadows — this style is shadow-free
+- Use shadows; this style is shadow-free
 - Apply gradients of any kind
 - Use font sizes above 14px for controls (except hero metrics)
 - Add glow effects or colored shadows
 - Use rounded corners other than 9999px (pills) or 12px (cards)
-- Apply entrance animations with translation — fade only
+- Apply entrance animations with translation; fade only
 - Use more than 6% white opacity for surfaces
-- Add decorative elements — every pixel must be functional
+- Add decorative elements; every pixel must be functional
 
 ## 9. Agent Prompt Guide
 
@@ -274,11 +274,11 @@ When generating Minimal Mono style uihtml components:
 
 1. Start with CSS variables: dark teal-black background, single lavender accent
 2. Background: solid #0a1a1a (dark teal-black, no gradients)
-3. Panels: `rgba(255,255,255,0.02)` + 1px border + 12px radius — barely visible
+3. Panels: `rgba(255,255,255,0.02)` + 1px border + 12px radius, barely visible
 4. ALL buttons: pill shape (9999px), small (8px 20px padding), 12px font
 5. Sliders: 3px track, 12px accent-colored thumb
 6. Toggles: compact 36x20px, accent when active
 7. Labels: 9-11px uppercase with 2-3px letter-spacing
-8. No shadows, no gradients, no glow — absolute flatness
+8. No shadows, no gradients, no glow; absolute flatness
 9. Monospace font for numeric displays
 10. Entry: simple fade only, no translateY, no stagger

@@ -8,7 +8,7 @@ A dark interface with warm neutral tones and energetic amber/yellow accents. Ins
 - **Energy**: Bright amber/yellow accents pop against dark surfaces, drawing attention to actions
 - **Friendliness**: Rounded shapes, comfortable spacing, and warm whites feel inviting rather than clinical
 
-The overall feeling is modern, approachable, and action-oriented. The amber accent is the star — used for CTAs, active states, and key data. Everything else recedes into warm neutral darks.
+The overall feeling is modern, approachable, and action-oriented. The amber accent is the star, used for CTAs, active states, and key data. Everything else recedes into warm neutral darks.
 
 ## 2. Color Palette & Roles
 
@@ -239,14 +239,14 @@ Warm shadows with no blue cast:
 | Active accent | `0 2px 12px rgba(251, 191, 36, 0.25)` (amber glow) |
 | Floating | `0 8px 32px rgba(0, 0, 0, 0.4)` |
 
-Key rule: shadows are always warm-neutral or accent-tinted — never cool/blue.
+Key rule: shadows are always warm-neutral or accent-tinted, never cool/blue.
 
 ## 7. Motion & Interaction
 
 **Timing curves:**
-- Standard: `cubic-bezier(0.4, 0, 0.2, 1)` — 200ms
-- Toggle/expand: `cubic-bezier(0.4, 0, 0.2, 1)` — 300ms
-- Bounce: `cubic-bezier(0.34, 1.56, 0.64, 1)` — 250ms (circular buttons)
+- Standard: `cubic-bezier(0.4, 0, 0.2, 1)` at 200ms
+- Toggle/expand: `cubic-bezier(0.4, 0, 0.2, 1)` at 300ms
+- Bounce: `cubic-bezier(0.34, 1.56, 0.64, 1)` at 250ms (circular buttons)
 
 **Key interactions:**
 - **Press (buttons)**: Scale 0.97
@@ -271,21 +271,21 @@ Key rule: shadows are always warm-neutral or accent-tinted — never cool/blue.
 ## 8. Do's and Don'ts
 
 ### Do
-- Use warm grays (#1a1a1a, #2a2a2a) — never blue-tinted darks
-- Apply amber/yellow (#fbbf24) as THE accent — it should feel energetic
+- Use warm grays (#1a1a1a, #2a2a2a); never blue-tinted darks
+- Apply amber/yellow (#fbbf24) as THE accent; it should feel energetic
 - Use amber-tinted shadows on accent elements (`rgba(251, 191, 36, ...)`)
 - Include circular button variants for media/playback controls
-- Use 16px card radius for friendly rounded feel
+- Use 16px card radius for a rounded feel
 - Apply warm white (#fafaf9) for text, not pure #FFF
 - Support 2-column grid layouts for stat cards
 
 ### Don't
-- Use cool blues or purples as primary accents — warm palette only
+- Use cool blues or purples as primary accents; warm palette only
 - Apply blue-tinted shadows or backgrounds
-- Use glass/blur effects — surfaces are opaque
+- Use glass/blur effects; surfaces are opaque
 - Mix more than two warm accent hues (amber + orange max)
 - Use border-radius smaller than 12px (except on small elements)
-- Apply heavy shadows by default — keep cards flat with border-only definition
+- Apply heavy shadows by default; keep cards flat with border-only definition
 - Use uppercase text except for section labels (10px level)
 
 ## 9. Agent Prompt Guide

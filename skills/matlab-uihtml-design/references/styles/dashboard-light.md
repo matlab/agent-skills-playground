@@ -8,7 +8,7 @@ A clean, professional, data-first aesthetic optimized for information density an
 - **Structure**: Clear visual hierarchy through card grouping, consistent spacing, and typographic scale
 - **Precision**: Tabular numbers, aligned data columns, and purposeful color coding for positive/negative values
 
-The overall feeling is trustworthy, professional, and efficient. Surfaces are crisp and clean — no blur, no glass, no gradients. Depth comes from subtle shadows and card stacking. The indigo accent provides a sophisticated, non-generic identity.
+The overall feeling is trustworthy, professional, and efficient. Surfaces are crisp and clean: no blur, no glass, no gradients. Depth comes from subtle shadows and card stacking. The indigo accent provides a distinct, non-generic identity.
 
 ## 2. Color Palette & Roles
 
@@ -205,7 +205,7 @@ input[type="range"]:active::-webkit-slider-thumb {
 
 ## 6. Depth & Elevation
 
-Depth via subtle shadows — no blur effects, no transparency:
+Depth via subtle shadows. No blur effects, no transparency:
 
 | Layer | Treatment |
 |-------|-----------|
@@ -218,9 +218,9 @@ Depth via subtle shadows — no blur effects, no transparency:
 ## 7. Motion & Interaction
 
 **Timing curves:**
-- Standard: `cubic-bezier(0.4, 0, 0.2, 1)` — 200ms
-- Decelerate: `cubic-bezier(0, 0, 0.2, 1)` — 250ms for entering
-- Spring: `cubic-bezier(0.34, 1.56, 0.64, 1)` — 300ms for chip selection
+- Standard: `cubic-bezier(0.4, 0, 0.2, 1)`, 200ms
+- Decelerate: `cubic-bezier(0, 0, 0.2, 1)`, 250ms for entering
+- Spring: `cubic-bezier(0.34, 1.56, 0.64, 1)`, 300ms for chip selection
 
 **Key interactions:**
 - **Press**: Scale 0.98, no other visual change
@@ -238,17 +238,17 @@ Depth via subtle shadows — no blur effects, no transparency:
 - Apply consistent 12px border-radius on cards
 - Right-align numeric data, left-align labels
 - Use green (#16a34a) for positive, red (#dc2626) for negative values
-- Keep shadows minimal — this style is flat-first
+- Keep shadows minimal; this style is flat-first
 - Use pill-shaped chips (9999px radius) for segmented selectors
 - Apply 1px borders on cards for crisp definition
 
 ### Don't
-- Use blur/glass effects — this style is about crisp clarity
+- Use blur/glass effects; this style is about crisp clarity
 - Apply gradients on backgrounds or buttons
 - Use rounded corners larger than 12px on cards
 - Add glow effects or colored shadows
 - Use more than 2 accent colors in one panel
-- Make text smaller than 11px — readability is priority
+- Make text smaller than 11px; readability is priority
 - Use uppercase except for section labels
 
 ## 9. Agent Prompt Guide
@@ -263,5 +263,5 @@ When generating Dashboard Light style uihtml components:
 6. Toggles: compact 44x24px with indigo active state
 7. Data values: large bold numbers with success/danger color coding
 8. Layout: 4px grid, 20px card padding, 12px card gaps
-9. No glass, no gradients, no glow — crisp and professional
-10. Test both light and dark — ensure data remains highly readable in both
+9. No glass, no gradients, no glow; crisp and professional
+10. Test both light and dark; ensure data remains highly readable in both

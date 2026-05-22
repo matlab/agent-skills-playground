@@ -8,11 +8,11 @@ Google's Material Design 3 (Material You). The core principles are **adaptive**,
 - **Expressive**: Rounded shapes, bold color accents, playful motion
 - **Personal**: Customizable color schemes derived from a single seed color
 
-The overall feeling is warm, modern, and approachable. Surfaces use tonal elevation (color shifts, not just shadows) to create depth. Interactions feature ripple effects and smooth state transitions.
+The overall feeling is warm and approachable. Surfaces use tonal elevation (color shifts, not just shadows) to create depth. Interactions feature ripple effects and smooth state transitions.
 
 ## 2. Color Palette & Roles
 
-### Light Mode (Baseline — Purple seed)
+### Light Mode (Baseline, Purple seed)
 | Role | Value | Usage |
 |------|-------|-------|
 | Background | `#FEF7FF` | Page background |
@@ -222,7 +222,7 @@ input[type="range"]:active::-webkit-slider-thumb {
 
 ## 6. Depth & Elevation
 
-Material 3 uses **tonal elevation** — surfaces get lighter (in light mode) or lighter (in dark mode) as they rise:
+Material 3 uses **tonal elevation**: surfaces get lighter (in light mode) or lighter (in dark mode) as they rise:
 
 | Level | Shadow | Surface Tint | Usage |
 |-------|--------|-------------|-------|
@@ -236,10 +236,10 @@ Material 3 uses **tonal elevation** — surfaces get lighter (in light mode) or 
 ## 7. Motion & Interaction
 
 **Timing curves:**
-- Emphasized: `cubic-bezier(0.2, 0, 0, 1)` (800ms) — large transitions
-- Emphasized Decelerate: `cubic-bezier(0.05, 0.7, 0.1, 1)` (400ms) — entering
-- Emphasized Accelerate: `cubic-bezier(0.3, 0, 0.8, 0.15)` (200ms) — exiting
-- Standard: `cubic-bezier(0.2, 0, 0, 1)` (300ms) — general
+- Emphasized: `cubic-bezier(0.2, 0, 0, 1)` (800ms) for large transitions
+- Emphasized Decelerate: `cubic-bezier(0.05, 0.7, 0.1, 1)` (400ms) for entering
+- Emphasized Accelerate: `cubic-bezier(0.3, 0, 0.8, 0.15)` (200ms) for exiting
+- Standard: `cubic-bezier(0.2, 0, 0, 1)` (300ms) for general use
 
 **Key interactions:**
 - **Ripple**: Circular expansion from touch point, opacity 0.12 of on-surface color
@@ -269,15 +269,15 @@ Material 3 uses **tonal elevation** — surfaces get lighter (in light mode) or 
 - Use tonal elevation (surface color shifts) rather than heavy shadows
 - Apply 20px border-radius on buttons (full pill shape)
 - Use state layers (semi-transparent overlays) for hover/focus/press
-- Keep shadows soft and minimal — Material 3 prefers color over shadow
+- Keep shadows soft and minimal; Material 3 prefers color over shadow
 - Use the `outline` and `outline-variant` tokens for borders
 - Apply font-weight 500 for interactive labels
 - Respect the 40px minimum touch target
 
 ### Don't
-- Use hard/dark shadows — Material 3 is flat-first
+- Use hard/dark shadows; Material 3 is flat-first
 - Apply border-radius less than 8px (feels dated)
-- Use pure black (`#000`) or pure white (`#FFF`) for text — use on-surface tokens
+- Use pure black (`#000`) or pure white (`#FFF`) for text; use on-surface tokens
 - Skip the ripple/state-layer on interactive elements
 - Use outline borders on filled buttons
 - Mix rounded and sharp corners in the same view
@@ -296,4 +296,4 @@ When generating Material 3 style uihtml components:
 7. All interactive elements need state layers (::before pseudo-element)
 8. Use 4px spacing grid; 16-24px content margins
 9. Motion: 300ms standard curve for most transitions
-10. Test both light and dark — tonal elevation should be visible in both
+10. Test both light and dark; tonal elevation should be visible in both
