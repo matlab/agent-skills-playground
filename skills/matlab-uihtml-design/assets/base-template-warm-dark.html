@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html data-theme="dark">
+<head>
+    <style>
+        /* ===== THEME VARIABLES — Warm Dark ===== */
+
+        :root {
+            /* Light mode */
+            --color-bg: #fafaf9;
+            --color-surface: #FFFFFF;
+            --color-surface-elevated: #f5f5f4;
+            --color-accent: #d97706;
+            --color-accent-hover: #b45309;
+            --color-accent-container: rgba(217, 119, 6, 0.1);
+            --color-on-accent: #FFFFFF;
+            --color-danger: #dc2626;
+            --color-success: #16a34a;
+            --color-text-primary: #1c1917;
+            --color-text-secondary: #78716c;
+            --color-text-muted: #a8a29e;
+            --color-border: rgba(28, 25, 23, 0.08);
+            --color-track: rgba(28, 25, 23, 0.12);
+
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --radius-card: 16px;
+            --radius-btn: 12px;
+            --transition-standard: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            --color-bg: #1a1a1a;
+            --color-surface: #2a2a2a;
+            --color-surface-elevated: #333333;
+            --color-accent: #fbbf24;
+            --color-accent-hover: #f59e0b;
+            --color-accent-container: rgba(251, 191, 36, 0.12);
+            --color-on-accent: #1a1a1a;
+            --color-danger: #ef4444;
+            --color-success: #22c55e;
+            --color-text-primary: #fafaf9;
+            --color-text-secondary: #a8a29e;
+            --color-text-muted: #57534e;
+            --color-border: rgba(168, 162, 158, 0.15);
+            --color-track: rgba(168, 162, 158, 0.2);
+        }
+
+        /* ===== BASE STYLES ===== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--color-bg);
+            color: var(--color-text-primary);
+            padding: 16px;
+            height: 100vh;
+            overflow-y: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-border);
+            border-radius: 2px;
+        }
+
+        /* ===== LAYOUT ===== */
+        .controls-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .panel {
+            background: var(--color-surface);
+            border-radius: var(--radius-card);
+            padding: 16px;
+            border: 1px solid var(--color-border);
+            transition: background var(--transition-standard);
+            animation: fadeSlideIn 0.4s ease-out both;
+        }
+
+        .panel:hover {
+            background: var(--color-surface-elevated);
+        }
+
+        .panel:nth-child(2) { animation-delay: 0.06s; }
+        .panel:nth-child(3) { animation-delay: 0.12s; }
+        .panel:nth-child(4) { animation-delay: 0.18s; }
+
+        .section-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-text-secondary);
+            margin-bottom: 12px;
+        }
+
+        /* ===== BUTTONS ===== */
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--radius-btn);
+            cursor: pointer;
+            transition: all var(--transition-standard);
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary {
+            background: var(--color-accent);
+            color: var(--color-on-accent);
+            box-shadow: 0 2px 8px rgba(251, 191, 36, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: var(--color-accent-hover);
+            box-shadow: 0 4px 16px rgba(251, 191, 36, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--color-surface-elevated);
+            color: var(--color-text-primary);
+            border: 1px solid var(--color-border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+        }
+
+        /* ===== SLIDERS ===== */
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .slider-label {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+            color: var(--color-text-secondary);
+        }
+
+        .slider-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-accent);
+            font-variant-numeric: tabular-nums;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 5px;
+            border-radius: 2.5px;
+            background: var(--color-track);
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--color-accent);
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(251, 191, 36, 0.3);
+            transition: transform 150ms ease;
+        }
+
+        input[type="range"]:active::-webkit-slider-thumb {
+            transform: scale(1.2);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--color-accent);
+            border: none;
+            box-shadow: 0 2px 6px rgba(251, 191, 36, 0.3);
+        }
+
+        /* ===== TOGGLES ===== */
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toggle-label {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--color-text-primary);
+        }
+
+        .toggle {
+            width: 48px;
+            height: 28px;
+            border-radius: 14px;
+            background: var(--color-track);
+            position: relative;
+            cursor: pointer;
+            transition: background 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+        }
+
+        .toggle.active {
+            background: var(--color-accent);
+            box-shadow: 0 0 8px rgba(251, 191, 36, 0.2);
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--color-text-secondary);
+            top: 3px;
+            left: 3px;
+            transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .toggle.active::after {
+            transform: translateX(20px);
+            background: var(--color-on-accent);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+    <script type="text/javascript">
+        // ===== MATLAB UIHTML INTEGRATION =====
+
+        function setup(htmlComponent) {
+            window.htmlComponent = htmlComponent;
+
+            htmlComponent.addEventListener("UpdateValues", function(event) {
+                const data = event.Data;
+            });
+
+            htmlComponent.addEventListener("SetTheme", function(event) {
+                document.documentElement.setAttribute('data-theme', event.Data.theme);
+            });
+
+            sendState();
+        }
+
+        // ===== STATE MANAGEMENT =====
+
+        let state = {
+            slider1: 50,
+            toggle1: false
+        };
+
+        function sendState() {
+            if (window.htmlComponent) {
+                window.htmlComponent.sendEventToMATLAB("StateChange", state);
+            }
+        }
+
+        // ===== COMPONENT HANDLERS =====
+
+        function onSliderChange(name, value) {
+            value = parseFloat(value);
+            state[name] = value;
+
+            const display = document.getElementById(name + "Value");
+            if (display) {
+                display.textContent = value.toFixed(1);
+            }
+
+            if (window.htmlComponent) {
+                window.htmlComponent.sendEventToMATLAB("SliderChange", {
+                    control: name,
+                    value: value
+                });
+            }
+        }
+
+        function onToggle(name) {
+            state[name] = !state[name];
+            const el = document.getElementById(name);
+            el.classList.toggle('active');
+
+            if (window.htmlComponent) {
+                window.htmlComponent.sendEventToMATLAB("ToggleChange", {
+                    control: name,
+                    value: state[name]
+                });
+            }
+        }
+
+        function onButtonClick(action) {
+            if (window.htmlComponent) {
+                window.htmlComponent.sendEventToMATLAB("ButtonClick", {
+                    action: action
+                });
+            }
+        }
+
+        // ===== THEME TOGGLE =====
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+
+            if (window.htmlComponent) {
+                window.htmlComponent.sendEventToMATLAB("ThemeChange", { theme: next });
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="controls-container">
+
+        <!-- Buttons Panel -->
+        <div class="panel">
+            <div class="section-label">Actions</div>
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="onButtonClick('play')">Play</button>
+                <button class="btn btn-secondary" onclick="onButtonClick('reset')">Reset</button>
+            </div>
+        </div>
+
+        <!-- Slider Panel -->
+        <div class="panel">
+            <div class="section-label">Parameters</div>
+            <div class="slider-group">
+                <div class="slider-header">
+                    <span class="slider-label">Speed</span>
+                    <span id="slider1Value" class="slider-value">50.0</span>
+                </div>
+                <input type="range" id="slider1" min="0" max="100" step="0.1" value="50"
+                       oninput="onSliderChange('slider1', this.value)">
+            </div>
+        </div>
+
+        <!-- Toggle Panel -->
+        <div class="panel">
+            <div class="section-label">Options</div>
+            <div class="toggle-group">
+                <span class="toggle-label">Auto-rotate</span>
+                <div id="toggle1" class="toggle" onclick="onToggle('toggle1')"></div>
+            </div>
+        </div>
+
+        <!-- Theme Toggle -->
+        <div class="panel">
+            <div class="section-label">Appearance</div>
+            <div class="toggle-group">
+                <span class="toggle-label">Dark Mode</span>
+                <div id="themeToggle" class="toggle active" onclick="toggleTheme()"></div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
