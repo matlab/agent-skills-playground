@@ -36,7 +36,7 @@ MATLAB and Simulink.
 - Use `networkDistributionDiscriminator` for OOD detection (not custom implementations)
 - Use `exportNetworkToSimulink` with the **compressed** model when compression is applied
 - For fixed-point C: export the **quantized** network (`quantize()` output) to Simulink
-- For float32 C via direct MATLAB Coder: call `unpackProjectedLayers` first (quantized networks not supported by `coder.loadDeepLearningNetwork`)
+- For float32 C via direct MATLAB Coder: `lstmProjectedLayer` and `gruProjectedLayer` are codegen-supported; `ProjectedLayer` is supported when its contents are stateless. Call `unpackProjectedLayers` if a `ProjectedLayer` wraps a stateful LSTM/GRU. Quantized networks (`quantize()` output) are not supported by `coder.loadDeepLearningNetwork` — use the Simulink path instead.
 - Generate MEX for desktop validation before generating C code for target
 - Verify training calls with a tiny input (2-5 samples, 1-2 epochs) before full training
 - Warn about missing Embedded Coder when doing code generation
@@ -158,11 +158,10 @@ and confirm with the user before applying any technique.
 Load [`compression.md`](compression.md) for the technique-level details.
 - Compression order when multiple techniques apply: **(1) Pruning, (2) Projection, (3) Quantization**
 - Use official functions only -- no custom implementations
-- After each compression step, **explicitly state accuracy lost**: MAE, max error, % accuracy drop relative to uncompressed model
+- After each compression step, **report the accuracy delta vs the uncompressed baseline** on a held-out set. The compressed network is not expected to be numerically equivalent to the original; the relevant question is how much the deployment-relevant metric (classification accuracy, regression MAE/RMSE, etc.) has degraded and whether the budget from Project Discovery still holds.
 - Revisit verification (Phase 4) after compression
 - Re-check accuracy requirements from Project Discovery against compressed model
-- **Run numerical equivalency tests** comparing compressed vs. uncompressed model outputs
-- If accuracy-vs-size tradeoff is unacceptable: iterate back to Phase 3
+- If the accuracy-vs-size tradeoff is unacceptable: iterate back to Phase 3
 
 **Step 5.3 — Try alternative paths when retraining is acceptable.**
 For an LSTM-heavy flash-bound model, generate both project+quantize and quantize-only
@@ -178,7 +177,9 @@ Load [`simulink-integration.md`](simulink-integration.md).
   (produces fixed-point Simulink blocks → integer C code)
 - For float32 deployment: export the projected (or pruned) network directly. In R2026a,
   `exportNetworkToSimulink` accepts projected networks; `unpackProjectedLayers` is no
-  longer required for the Simulink path (still required for the direct MATLAB Coder path).
+  longer required for the Simulink path. For the direct MATLAB Coder path,
+  `lstmProjectedLayer` and `gruProjectedLayer` are codegen-supported; unpack only
+  when a `ProjectedLayer` wraps a stateful LSTM/GRU.
 - If placeholder layers appear, load [`placeholder-blocks.md`](placeholder-blocks.md)
 - For `fitcnet`/`fitrnet`: use Stats/ML Predict blocks
 - Open-loop fallback if no Simulink model available

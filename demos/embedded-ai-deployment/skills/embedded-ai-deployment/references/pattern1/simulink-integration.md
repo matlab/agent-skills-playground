@@ -98,13 +98,17 @@ before export is no longer required for the Simulink path.
 
 ```matlab
 % Project, then export directly — no unpack needed for the Simulink path
-projectedNet = compressNetworkUsingProjection(net, stats);
+projectedNet = compressNetworkUsingProjection(net, calibData);
 exportNetworkToSimulink(projectedNet, ModelName="model_projected", ...
     Stateful=true, InputDataType="single", SampleTime="1");
 ```
 
-`unpackProjectedLayers` is still required for the **direct MATLAB Coder path**
-(`coder.loadDeepLearningNetwork` does not accept projected networks).
+For the **direct MATLAB Coder path**, `lstmProjectedLayer` and
+`gruProjectedLayer` are supported by `coder.loadDeepLearningNetwork` for
+generic C/C++ codegen. A `ProjectedLayer` wrapper is supported only when
+its contents are stateless (conv/FC, or LSTM/GRU in stateful-I/O mode); a
+wrapped stateful LSTM/GRU is not. When in doubt, call
+`unpackProjectedLayers` first to produce the most codegen-friendly form.
 
 ### Exporting Non-Quantized Compressed Networks
 
