@@ -36,7 +36,7 @@ Before creating a predict function, ensure the network is codegen-compatible:
 | Network Type | Direct MATLAB Coder (`coder.loadDeepLearningNetwork`) | Simulink Path (`exportNetworkToSimulink` → `slbuild`) |
 |-------------|----------------|-----------------|
 | Standard `dlnetwork` | Supported (float32 C) | Supported (float32 C) |
-| Projected network (`ProjectedLayer`, `lstmProjectedLayer`) | **NOT supported** — call `unpackProjectedLayers(net)` first | **NOT supported** — unpack first |
+| Projected network (`lstmProjectedLayer`, `gruProjectedLayer`, or `ProjectedLayer` over conv/FC/stateful-I/O LSTM/GRU) | **Supported** — generic C/C++ only, no MKL-DNN / ARM Compute acceleration. A `ProjectedLayer` over a stateful LSTM/GRU is not supported; unpack with `unpackProjectedLayers(net)` first | **Supported directly in R2026a** — `exportNetworkToSimulink` accepts projected networks; no unpack required |
 | Quantized network from `quantize()` | **NOT supported** — use the pre-quantized network | **SUPPORTED** — generates fixed-point C (int8/int16/int32). This is the recommended path for quantized deployment. See [Export Quantized Network to Simulink](https://www.mathworks.com/help/deeplearning/ug/export-quantized-network-to-simulink.html) |
 
 ### Validate Codegen Compatibility
