@@ -32,11 +32,11 @@ Auto-detect when possible: if Simulink is not on the toolbox list from
 
 | Option | Recommended techniques | Caveats |
 |---|---|---|
-| **Reduce flash / ROM footprint** | Pruning + projection + quantization (combined) | Projection requires retraining. Up to ~77% combined savings. |
+| **Reduce flash / ROM footprint** | Pruning + projection + quantization (combined) | Both pruning and projection require retraining (pruning calls `trainnet` between iterations; projection needs fine-tuning after). Combined savings are model-dependent; ~77% has been reported on representative CNN+FC examples — see the combined pipeline in `compression.md`. |
 | **Reduce SRAM / runtime memory** | Pruning + quantization (skip projection) | Projection does not reduce activation memory. |
-| **Lowest latency on target** | Hardware-dependent. **Cortex-M + CNN/FC**: INT8 + CMSIS-NN. **Cortex-M + LSTM/GRU**: float32 + CMSIS-DSP. | Quantizing an LSTM for Cortex-M shrinks flash but does **not** speed up inference — there is no INT8 CMSIS kernel for recurrent layers. |
+| **Lowest latency on target** | Hardware-dependent. **Cortex-M + CNN/FC**: INT8 + CMSIS-NN. **Cortex-M + LSTM/GRU**: float32 + CMSIS-DSP. **Also worth trying:** structural compression (pruning, projection) — fewer MACs typically means lower latency, and on MCU targets the structural savings can dominate kernel-replacement gains. | Quantizing an LSTM for Cortex-M shrinks flash but does **not** speed up inference — there is no INT8 CMSIS kernel for recurrent layers. |
 | **Pure integer arithmetic required** (no FPU, MISRA-int) | Quantization is mandatory | LSTM + integer-only on Cortex-M generates plain fixed-point code; expect slower runtime than the float32+CMSIS-DSP path. |
-| **Maximize accuracy (no compression)** | Skip compression, deploy float32 baseline | Use this when accuracy budget is tighter than the size budget. |
+| **Maximize accuracy** | Try compression with accuracy gating before falling back to the float32 baseline. `compressNetworkUsingTaylorPruning` exposes a `ValidationThreshold` NVP that stops the pruning loop as soon as the validation metric drops below the threshold; quantization with proper calibration often preserves accuracy on overparameterized models. | Whether compression preserves accuracy is model-dependent — measure on a held-out set before committing. Skip compression entirely only when the accuracy budget is tighter than the size budget. |
 
 ---
 
@@ -49,8 +49,8 @@ already covered in Project Discovery).
 | Option | Available techniques | Reason |
 |---|---|---|
 | **Yes — full retraining** | Pruning, projection, quantization | Pruning and projection both call `trainnet` after compression. |
-| **Limited — light fine-tuning only** | Projection at conservative goal (≤ 10%) + quantization | Projection at 10% reduction often recovers accuracy with a few epochs; pruning typically needs more. |
-| **No — post-training only** | Quantization only (calibration, no training) | Pruning and projection are off the table. |
+| **Limited — light fine-tuning only** | Projection (conservative goal) + quantization | Projection typically recovers accuracy with a few epochs; pruning typically needs more. Choose the goal empirically — sweep a few values of `LearnablesReductionGoal`, or use the default `ExplainedVarianceGoal=0.95`. |
+| **No — post-training only** | Quantization (calibration, no training). Also worth a trade-off pass: projection on the calibration data, with no fine-tuning afterward. | Pruning is off the table without retraining. Projection without fine-tuning is not the documented happy path, but on overparameterized models — including most networks shown in MathWorks doc examples — modest projection often holds accuracy within a small margin. For a single goal, call `compressNetworkUsingProjection(net, calibData)` directly (it runs PCA internally) using either the default (driven by `ExplainedVarianceGoal=0.95`) or a single `LearnablesReductionGoal` value. For a sweep across multiple goals, precompute `neuronPCA` once and reuse it. Skip the `trainnet` step and measure accuracy on a held-out set. Keep the most aggressive goal whose accuracy delta stays within budget. |
 
 ---
 
@@ -82,7 +82,7 @@ recipe should always be presented as a recommendation the user can override.
 | Cortex-M + Simulink | Latency | Any | Yes | **Skip quantization** for LSTM → float32 export → `slbuild` (LSTM gets `mw_arm_mat_mult_f32`) |
 | Cortex-M + Simulink | Latency | Yes | No (CNN/FC only) | Quantize → export → `slbuild` (CMSIS-NN INT8, ~2.8x speedup) |
 | Cortex-M + Simulink | Integer-only | Any | Any | Quantize → export → `slbuild` (FC INT8, LSTM fixed-point) |
-| Cortex-M + Simulink | Max accuracy | Any | Any | No compression → float32 export → `slbuild` |
+| Cortex-M + Simulink | Max accuracy | Any | Any | Try pruning with `ValidationThreshold` and/or post-training quantization with held-out validation; fall back to float32 export only if accuracy degrades beyond budget |
 | Cortex-M, no Simulink | Latency | Any | No | Calibrate (no `quantize()`) → `coder.DeepLearningConfig('cmsis-nn')` → `codegen` (~1.3x) |
 | Cortex-A | Flash | Yes | Any | Project → quantize → MATLAB Coder + ARM Compute Library |
 | Generic CPU | Flash | Yes | Any | Project → quantize → MATLAB Coder |
@@ -100,10 +100,13 @@ recipe should always be presented as a recommendation the user can override.
   users who answered "No" to retraining.
 - **`exportNetworkToSimulink` accepts projected networks directly in R2026a.**
   Calling `unpackProjectedLayers` before export is no longer required.
-- **For the direct MATLAB Coder path**, projected networks (`ProjectedLayer`,
-  `lstmProjectedLayer`, `gruProjectedLayer`) are still NOT supported by
-  `coder.loadDeepLearningNetwork` — call `unpackProjectedLayers` first for that
-  path.
+- **For the direct MATLAB Coder path**, `lstmProjectedLayer` and
+  `gruProjectedLayer` are supported by `coder.loadDeepLearningNetwork` for
+  generic C/C++ codegen. A `ProjectedLayer` wrapper is codegen-compatible
+  only when its contents are stateless (conv/FC, or LSTM/GRU in
+  stateful-I/O mode); a wrapped stateful LSTM/GRU is not. When in doubt,
+  call `unpackProjectedLayers` first — that always produces a
+  codegen-compatible form.
 - **Try multiple paths and compare** when retraining is acceptable. For an
   LSTM-heavy flash-bound model, generate both project+quantize and quantize-only
   variants, measure flash and MAE, and let the user choose.
