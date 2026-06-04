@@ -13,13 +13,6 @@ description: >
   loadPyTorchExportedProgram, importNetworkFromPyTorch, dlquantizer,
   exportNetworkToSimulink, or Embedded Coder with AI models.
 license: MathWorks BSD-3-Clause (see LICENSE)
-compatibility: >
-  Requires MATLAB R2026a or newer. Core toolboxes: Deep Learning Toolbox, Statistics
-  and Machine Learning Toolbox, MATLAB Coder, Embedded Coder, Simulink, Fixed-Point
-  Designer. Several Deep Learning Toolbox converters and MATLAB/Embedded Coder support
-  packages are also needed depending on the workflow; the skill body lists them and
-  detects what is installed. Also requires the MATLAB and Simulink Agentic Toolkits
-  (MCP servers).
 metadata:
   author: MathWorks
   version: "1.0"
@@ -32,6 +25,12 @@ written specifically for **MATLAB R2026a** and uses APIs, functions, and workflo
 introduced in that release. It covers the complete lifecycle: model creation or
 import, verification, compression, system-level simulation, and code generation
 for resource-constrained targets.
+
+Requires MATLAB R2026a or newer. Core toolboxes: Deep Learning Toolbox, Statistics
+and Machine Learning Toolbox, MATLAB Coder, Embedded Coder, Simulink, and
+Fixed-Point Designer. Workflow-specific support packages are checked during
+Environment Discovery. The MATLAB and Simulink Agentic Toolkits must be available
+so Codex can drive a live MATLAB and Simulink session through MCP tools.
 
 ## Workflow Pattern Selection
 
@@ -135,7 +134,7 @@ Project Discovery determines the workflow pattern via the decision tree above.
 - Generate MEX for desktop validation before generating C code for target
 - Use `arguments` blocks in all codegen-ready functions
 - Use `single` precision for all inference inputs
-- **Script-based execution:** For each workflow step done in MATLAB, create a `.m` script file and use `evaluate_matlab_function` (or `run_matlab_file`) to execute it. Do NOT run ad-hoc commands directly in the MATLAB MCP server. If a script needs changes, edit the script file and re-run it. This gives users full visibility into what code is being executed and enables reproducibility. **IMPORTANT:** `run_matlab_file` sets the working directory to the script's folder. Always use **absolute paths** (via `fullfile`) for model files, data, and saved outputs — never rely on `pwd` or relative paths.
+- **Script-based execution:** For each workflow step done in MATLAB, create a `.m` script file and execute it with `run_matlab_file` or `evaluate_matlab_code`. Do NOT run ad-hoc MATLAB commands without first writing the script file. If a script needs changes, edit the script file and re-run it. This gives users full visibility into what code is being executed and enables reproducibility. **IMPORTANT:** `run_matlab_file` sets the working directory to the script's folder. Always use **absolute paths** (via `fullfile`) for model files, data, and saved outputs — never rely on `pwd` or relative paths.
 - **Pause after each workflow step:** After every workflow step completes, pause and explicitly ask the user for permission to proceed to the next step. The goal is to let the user read/inspect the MATLAB scripts you created, review results, and ask questions before moving on.
 - **Deep Network Designer:** When a model is trained in MATLAB, imported, or rebuilt as a native dlnetwork, load it in Deep Network Designer (`deepNetworkDesigner(net)`) so the user can visually inspect the architecture. Announce this action and wait for user acknowledgment before proceeding.
 - **Numerical equivalency tests (import workflows):** For any import from PyTorch or ONNX:
@@ -147,7 +146,7 @@ Project Discovery determines the workflow pattern via the decision tree above.
 - **Code generation report:** After code generation is complete and the project is done, open the code generation report (`open(reportPath)` or `web(reportPath)`) so the user can inspect the generated code, warnings, and metrics.
 - **Look up function signatures from MATLAB's help or the online reference page, not from this skill.** Argument lists, name-value pair (NVP) defaults, and supported-layer enumerations live in MATLAB's `help <function>` output and on the function's reference page. Use those as the source of truth instead of any inline parameter table in this skill — inline tables go stale across releases and burn context. This skill only flags name-value arguments that materially change the recipe (e.g., `ValidationThreshold` for accuracy-budgeted pruning). Lookup procedure:
   1. **First** try `help <function>` in the live MATLAB session. Fast and reflects the actually-installed release of the toolbox or support package.
-  2. If `help` returns only a stub like "Run doc <function> for more information." — common for support-package functions whose help redirects to the browser doc — **fall back to a WebFetch of the online reference page** at `https://www.mathworks.com/help/<product>/ref/<funcname>.html` (lower-case function name). Ask the fetch prompt to "list every name-value argument with its default value, format as a markdown table, quote defaults verbatim."
+  2. If `help` returns only a stub like "Run doc <function> for more information." — common for support-package functions whose help redirects to the browser doc — **fall back to Codex web browsing of the online reference page** at `https://www.mathworks.com/help/<product>/ref/<funcname>.html` (lower-case function name). Extract every name-value argument with its default value, formatted as a markdown table, quoting defaults verbatim.
   3. If the function is not found at all (`which <func>` returns "not found") on a system that has the relevant support package installed, the support package is likely on a stale build. Ask the user to update via Add-On Explorer rather than working around the missing function.
 - **Compression decision flow:** At the start of Phase 5 (Pattern 1), load `references/pattern1/compression-decision.md` and walk the user through the question flow (hardware + Simulink availability, primary goal, retraining tolerance). Pick the compression and code generation path based on the answers. Compression is not mandatory and the optimal combination of pruning, projection, and quantization depends on the goal — for example, on Cortex-M with a latency-bound LSTM model, the float32 path with CMSIS-DSP outperforms the quantized path because CMSIS-NN provides no INT8 kernel for recurrent layers.
 

@@ -1,0 +1,16 @@
+interface:
+  display_name: "Embedded AI Deployment"
+  short_description: "Deploy embedded AI with MATLAB and Simulink"
+  default_prompt: "Use $embedded-ai-deployment to deploy an AI model to embedded hardware with MATLAB and Simulink."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "matlab"
+      description: "MATLAB MCP tools for toolbox detection and MATLAB script execution"
+    - type: "mcp"
+      value: "simulink"
+      description: "Simulink MCP tools for model inspection, editing, simulation, and testing"
+
+policy:
+  allow_implicit_invocation: true

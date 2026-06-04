@@ -72,6 +72,23 @@ If Python is not configured, set it with the path to your Python executable:
 
 For Pattern 2: Python environment must have `torch >= 2.0`.
 
+If local Codex instructions or an `AGENTS.md` file specify a Python environment,
+follow those instructions. On MATLAB installations with the PyTorch converter
+support package, a read-only Python 3.11 environment with PyTorch may be available
+under the support package root:
+
+```matlab
+spRoot = matlabshared.supportpkg.getSupportPackageRoot;
+pyExe = fullfile(spRoot, '3P.instrset', ...
+    'pythonstandalone_3.11.instrset', 'win64', 'python', 'python.exe');
+torchRoot = fullfile(spRoot, '3P.instrset', ...
+    'pytorch_mlir_python_3.11.instrset', 'win64');
+```
+
+Use this bundled Python for PyTorch reference-vector generation or `.pt2` export
+when the project instructions prefer it. Do not install packages into this
+support-package Python; it is managed by MATLAB.
+
 ### Python/MATLAB Interop Pitfall: Numpy Array Dimensions
 
 When loading numpy `.npy` files into MATLAB via `py.numpy.load` or `single(npArray)`:

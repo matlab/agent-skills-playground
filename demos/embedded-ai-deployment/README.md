@@ -47,6 +47,7 @@ Also install the [MATLAB Agentic Toolkit](https://github.com/matlab/matlab-agent
    ```
 2. **Open the demo folder** in your agent:
    - **Claude Code**: from a terminal, `cd` into `demos/embedded-ai-deployment/` and run `claude`. The agent picks up the `embedded-ai-deployment` skill in this folder's `skills/` directory.
+   - **Codex**: install the repo-level copy from `skills/embedded-ai-deployment/` into your Codex user skills directory, then open this demo folder in Codex. The skill includes `agents/openai.yaml` metadata for Codex.
    - **Other agents**: point the agent at `demos/embedded-ai-deployment/skills/` per the agent's instructions for user-defined skills.
 
 ## Walkthrough
