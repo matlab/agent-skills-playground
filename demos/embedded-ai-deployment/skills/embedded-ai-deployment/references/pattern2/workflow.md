@@ -121,7 +121,7 @@ are already completed before this file is loaded.
 
 ### Phase 1: Export
 Export PyTorch model to .pt2 (load `pytorch-export.md`)
-- Create `.m` scripts for each step; execute via `evaluate_matlab_function`
+- Create `.m` scripts for each step; execute via `run_matlab_file`
 - **Pause** and ask user permission before proceeding to next step
 
 ### Phase 2: Configure

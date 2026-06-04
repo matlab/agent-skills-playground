@@ -28,7 +28,7 @@ MATLAB and Simulink.
 ### ALWAYS
 - Complete Environment Discovery + Project Discovery (from shared/) before any technical work
 - Check toolboxes and support packages before every phase
-- **Create `.m` scripts** for each workflow step; execute via `evaluate_matlab_function` or `run_matlab_file` -- never run ad-hoc commands in the MCP server
+- **Create `.m` scripts** for each workflow step; execute via `run_matlab_file` -- never run ad-hoc MATLAB commands without first writing the script file
 - **Pause after each step** and ask user for permission to proceed; let them inspect scripts
 - Use `trainnet` for DL training (produces `dlnetwork`), `fitcnet`/`fitrnet` for MLPs
 - Use `rng("default")` before data splitting
@@ -107,7 +107,7 @@ Load [`data-preparation.md`](data-preparation.md).
 
 Load [`training-native.md`](training-native.md).
 - Confirm approach from Phase 1 (Workflow Plan)
-- Create a training script (`.m` file) and execute via `evaluate_matlab_function`
+- Create a training script (`.m` file) and execute via `run_matlab_file`
 - Train with `trainnet` (DL) or `fitcnet`/`fitrnet` (MLP)
 - Verify training call with tiny input before full run
 - Evaluate on test set; check accuracy requirements from Project Discovery
@@ -208,7 +208,7 @@ When generating scripts, organize as:
 project_name/
   embeddedAIWorkflow.mlx          Main Live Script (orchestration)
   scripts/
-    step01_prepareData.m          Data preprocessing (executed via evaluate_matlab_function)
+    step01_prepareData.m          Data preprocessing (executed via run_matlab_file)
     step02_buildNetwork.m         Network construction
     step03_trainModel.m           Training wrapper
     step04_evaluateModel.m        Evaluation metrics
@@ -223,7 +223,7 @@ project_name/
 ```
 
 **Script-based execution:** Each `stepXX_*.m` script is self-contained and executed
-via `evaluate_matlab_function` or `run_matlab_file`. This gives users full visibility
+via `run_matlab_file`. This gives users full visibility
 into what code runs at each step and enables them to inspect, modify, and re-run
 individual steps. Never run ad-hoc commands in the MCP server.
 

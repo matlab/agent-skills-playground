@@ -8,7 +8,7 @@ Detailed training patterns for Embedded AI Pattern 1 (lean hardware, <500KB mode
 - **NEVER** produce `DAGNetwork`, `SeriesNetwork`, or `network` objects
 - **ALWAYS** use `trainnet` for deep learning (produces `dlnetwork`)
 - **ALWAYS** use `fitcnet` / `fitrnet` for MLPs (Stats/ML Toolbox)
-- **ALWAYS** create `.m` scripts for training steps; execute via `evaluate_matlab_function`
+- **ALWAYS** create `.m` scripts for training steps; execute via `run_matlab_file`
 - **ALWAYS** load the trained model in Deep Network Designer after training completes:
   ```matlab
   deepNetworkDesigner(net)

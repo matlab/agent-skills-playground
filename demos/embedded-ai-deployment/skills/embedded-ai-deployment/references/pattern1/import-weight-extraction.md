@@ -426,7 +426,8 @@ For PyTorch models, generate reference test vectors using the bundled Python:
 ```matlab
 % Generate reference data from PyTorch model
 % Create a script: generate_reference_vectors.py
-% Run via bundled Python (see CLAUDE.md for paths)
+% Run via the configured project Python or MATLAB support-package bundled Python.
+% See references/shared/environment-setup.md for discovery guidance.
 ```
 
 For ONNX models, use the MATLAB ONNX import directly with known test inputs.
