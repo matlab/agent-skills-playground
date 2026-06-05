@@ -89,7 +89,7 @@ end
 function writeReport(path, results, caps)
     fid = fopen(path, 'w'); c = onCleanup(@() fclose(fid));
     fprintf(fid, '# Trade Study Report\n\n');
-    fprintf(fid, 'Generated %s\n\n', datestr(now, 'yyyy-mm-dd HH:MM:SS'));
+    fprintf(fid, 'Generated %s\n\n', string(datetime('now', 'Format', 'yyyy-MM-dd HH:mm:ss')));
 
     fprintf(fid, '## Variants\n\n');
     for i = 1:numel(results)

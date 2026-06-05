@@ -457,12 +457,13 @@ fprintf("RMSE: %.4f\n", rmseVal);
 fprintf("Max absolute error: %.4f\n", maxError);
 
 figure;
-subplot(2,1,1);
+tiledlayout(2,1);
+nexttile;
 plot(reference.Time, reference.Data, "b", aiOutput.Time, aiOutput.Data, "r--");
 legend("Reference", "AI Output");
 title("AI vs. Reference Signal");
 
-subplot(2,1,2);
+nexttile;
 plot(aiOutput.Time, error);
 ylabel("Error");
 xlabel("Time (s)");

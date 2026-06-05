@@ -899,7 +899,7 @@ case 'ExportImage'
         sendEventToHTMLSource(src, 'ExportError', 'Nothing to export');
         return;
     end
-    defaultName = sprintf('plot_%s.png', datestr(now, 'yyyymmdd_HHMMSS'));
+    defaultName = sprintf('plot_%s.png', string(datetime('now', 'Format', 'yyyyMMdd_HHmmss')));
     [file, path] = uiputfile({'*.png';'*.jpg';'*.pdf'}, 'Export plot', defaultName);
     if isequal(file, 0)
         sendEventToHTMLSource(src, 'ExportComplete', 'cancelled');
