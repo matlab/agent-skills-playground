@@ -23,13 +23,12 @@ embedded targets.
 ## How It Works
 
 ```
-PyTorch model (.pt2) --> MLIR --> TOSA primitives --> MATLAB Coder --> C/C++
+PyTorch model (.pt2) --> Support Package --> Intermediate Operations --> MATLAB Coder --> C/C++
 ```
 
-The PyTorch Support Package takes a `.pt2` exported model and lowers it through
-TOSA (Tensor Operator Set Architecture) primitive ops (`tosa.matmul`, `tosa.sigmoid`,
-`tosa.relu`, etc.) before MATLAB Coder sees it. This path **never uses MATLAB's
-Deep Learning Toolbox layer system**. The loaded object is NOT a `dlnetwork`.
+The PyTorch Support Package takes a `.pt2` exported model and represents it as
+intermediate operations that MATLAB Coder compiles to C/C++. This path **does not use
+Deep Learning Toolbox layers**. The loaded object is NOT a `dlnetwork`.
 
 ## Prerequisites
 
