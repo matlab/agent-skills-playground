@@ -252,10 +252,40 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+
+        /* ===== FOCUS-VISIBLE (keyboard) — uihtml design guardrails ===== */
+        .btn:focus-visible,
+        .toggle:focus-visible {
+            outline: 2px solid var(--color-accent, var(--accent-secondary, var(--color-primary, var(--md-primary, Highlight))));
+            outline-offset: 2px;
+        }
+        input[type="range"]:focus-visible::-webkit-slider-thumb {
+            box-shadow: 0 0 0 3px var(--color-accent, var(--accent-secondary, var(--color-primary, var(--md-primary, Highlight))));
+        }
+        input[type="range"]:focus-visible::-moz-range-thumb {
+            box-shadow: 0 0 0 3px var(--color-accent, var(--accent-secondary, var(--color-primary, var(--md-primary, Highlight))));
+        }
+
+        /* ===== REDUCED MOTION — uihtml design guardrails ===== */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
     </style>
 
     <script type="text/javascript">
         // ===== MATLAB UIHTML INTEGRATION =====
+
+        function handleToggleKey(event) {
+            if (event.key === ' ' || event.key === 'Enter') {
+                event.preventDefault();
+                event.currentTarget.click();
+            }
+        }
 
         function setup(htmlComponent) {
             window.htmlComponent = htmlComponent;
@@ -307,6 +337,7 @@
             state[name] = !state[name];
             const el = document.getElementById(name);
             el.classList.toggle('active');
+            el.setAttribute('aria-checked', el.classList.contains('active'));
 
             if (window.htmlComponent) {
                 window.htmlComponent.sendEventToMATLAB("ToggleChange", {
@@ -331,6 +362,7 @@
             const current = html.getAttribute('data-theme');
             const next = current === 'dark' ? 'light' : 'dark';
             html.setAttribute('data-theme', next);
+            document.getElementById('themeToggle').setAttribute('aria-checked', next === 'dark');
 
             if (window.htmlComponent) {
                 window.htmlComponent.sendEventToMATLAB("ThemeChange", { theme: next });
@@ -368,7 +400,7 @@
             <div class="section-label">Options</div>
             <div class="toggle-group">
                 <span class="toggle-label">Auto-rotate</span>
-                <div id="toggle1" class="toggle" onclick="onToggle('toggle1')"></div>
+                <div id="toggle1" class="toggle" onclick="onToggle('toggle1')" tabindex="0" role="switch" onkeydown="handleToggleKey(event)" aria-checked="false"></div>
             </div>
         </div>
 
@@ -377,7 +409,7 @@
             <div class="section-label">Appearance</div>
             <div class="toggle-group">
                 <span class="toggle-label">Dark Mode</span>
-                <div id="themeToggle" class="toggle" onclick="toggleTheme()"></div>
+                <div id="themeToggle" class="toggle" onclick="toggleTheme()" tabindex="0" role="switch" onkeydown="handleToggleKey(event)" aria-checked="false"></div>
             </div>
         </div>
 

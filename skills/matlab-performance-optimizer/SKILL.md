@@ -9,7 +9,7 @@ metadata:
 
 # MATLAB Performance Optimizer
 
-This skill provides comprehensive guidelines for optimizing MATLAB code performance. Apply vectorization techniques, memory optimization strategies, and profiling tools to make code faster and more efficient.
+Optimize MATLAB code performance with vectorization, memory management, and profiling tools.
 
 ## When to Use This Skill
 

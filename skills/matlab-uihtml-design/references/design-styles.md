@@ -35,6 +35,8 @@ To add a new built-in style, create a new `.md` file in `references/styles/` fol
 8. Do's and Don'ts
 9. Agent Prompt Guide
 
+Every style, built-in or custom, must still satisfy the cross-cutting **Design Guardrails** in `SKILL.md` (contrast, reduced-motion fallback, focus-visible, tabular numerals, no side-stripe/gradient-text/ghost-card/over-rounding tells). A style's own aesthetic may deliberately use glass, glow, or gradients as its identity; the guardrails only forbid reaching for those by reflex outside a style that calls for them.
+
 ## Style Selection Logic
 
 1. If user explicitly names a built-in style → load that style's reference file

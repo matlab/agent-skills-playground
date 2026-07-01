@@ -591,7 +591,7 @@ function handleEvent(src, event)
 
                 % Send success message
                 result = struct('status', 'success', ...
-                               'message', 'Form submitted successfully!');
+                               'message', 'Form submitted');
                 sendEventToHTMLSource(src, 'FormResult', result);
 
             case 'ClearForm'
@@ -610,11 +610,15 @@ end
 
 ### UI Design Principles
 
-- **Use CSS Grid or Flexbox** for responsive layouts that adapt to different window sizes
+> The HTML in the examples below is deliberately minimal to keep the focus on the **MATLAB↔JS wiring**. The inline styling (Arial, `#667eea → #764ba2` purple-blue gradients, generic cards) is *not* a design reference. Those are exactly the "AI slop" tells to avoid. For any panel a user will actually see, take the visual system from `matlab-uihtml-design` and follow its **Design Guardrails**.
+
+- **Use CSS Grid or Flexbox** for responsive layouts that adapt to different window sizes. Flexbox for 1D, Grid for 2D; don't default to Grid when `flex-wrap` is simpler
 - **Implement hover effects** for better user experience and visual feedback
-- **Provide clear visual feedback** for user actions (button clicks, form submission, errors)
+- **Provide clear visual feedback** for user actions (button clicks, form submission, errors), plus a visible `:focus-visible` state for keyboard users
 - **Use semantic HTML elements** (button, input, form) for better accessibility
-- **Pick a color scheme deliberately** using CSS gradients and current design patterns (see `matlab-uihtml-design` for ready-made styles)
+- **Pick a color scheme deliberately** (see `matlab-uihtml-design` for ready-made styles). Avoid the default reflexes: Inter/Roboto/Arial fonts, purple-to-blue gradients, side-stripe `border-left` accents, gradient text, and over-rounded (≥32px) cards
+- **Verify contrast**: body/label text ≥4.5:1, large text and UI boundaries ≥3:1. Give numeric readouts `font-variant-numeric: tabular-nums` so values don't jitter width
+- **Respect reduced motion**: wrap non-essential animation in `@media (prefers-reduced-motion: reduce)` with a crossfade/instant fallback
 
 ### Performance Optimization
 
@@ -928,7 +932,10 @@ Before deploying a uihtml app, verify:
 - [ ] Try-catch blocks wrap all MATLAB event handling
 - [ ] Input validation implemented for all user data
 - [ ] Error events sent back to JavaScript for user feedback
-- [ ] CSS styling applied consistently (see `matlab-uihtml-design`)
+- [ ] CSS styling applied consistently (see `matlab-uihtml-design`), free of AI-slop tells (purple-blue gradients, side-stripe borders, gradient text, over-rounded cards, generic Arial/Inter)
+- [ ] Contrast verified (body/label ≥4.5:1, large text and UI boundaries ≥3:1)
+- [ ] Reduced-motion fallback present (`@media (prefers-reduced-motion: reduce)`)
+- [ ] Keyboard focus is visible (`:focus-visible`), not removed with a bare `outline: none`
 - [ ] Responsive design tested at different window sizes
 - [ ] All user interactions provide visual feedback
 - [ ] Loading indicators shown for long operations

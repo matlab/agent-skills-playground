@@ -20,12 +20,12 @@
     --danger-glow: rgba(244, 114, 182, 0.35);
     --text-primary: #e8e8f0;
     --text-secondary: #8b8fa8;
-    --text-muted: #5a5e78;
+    --text-muted: #767a94;   /* ~4.7:1 on --bg-deep, WCAG AA for the stat captions/status line */
 
     --radius-sm: 8px;
     --radius-md: 14px;
-    --t-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-    --t-med: 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    --t-fast: 150ms cubic-bezier(0.22, 1, 0.36, 1);   /* ease-out-quint */
+    --t-med: 280ms cubic-bezier(0.22, 1, 0.36, 1);    /* ease-out-quint */
 }
 
 [data-theme="light"] {
@@ -41,7 +41,7 @@
     --accent-glow-strong: rgba(91, 76, 196, 0.4);
     --text-primary: #1a1a2e;
     --text-secondary: #4a4e68;
-    --text-muted: #8b8fa8;
+    --text-muted: #5f6379;   /* ~5.4:1 on the light bg, AA for muted captions */
 }
 
 * { box-sizing: border-box; }
@@ -139,6 +139,11 @@ html, body {
     background: var(--accent-primary);
     border-color: var(--accent-primary);
     box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.toggle:focus-visible {
+    outline: 2px solid var(--accent-secondary);
+    outline-offset: 3px;
 }
 
 .toggle::after {
@@ -264,6 +269,15 @@ input[type="range"]:active::-webkit-slider-thumb {
     box-shadow: 0 0 18px var(--accent-glow-strong);
 }
 
+/* restores focus ring hidden by outline:none above */
+input[type="range"]:focus-visible::-webkit-slider-thumb {
+    box-shadow: 0 0 0 3px var(--accent-secondary), 0 0 10px var(--accent-glow-strong);
+}
+
+input[type="range"]:focus-visible::-moz-range-thumb {
+    box-shadow: 0 0 0 3px var(--accent-secondary), 0 0 10px var(--accent-glow-strong);
+}
+
 .grid-3 {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -351,6 +365,23 @@ input[type="range"]:active::-webkit-slider-thumb {
 
 .btn-secondary:active { transform: scale(0.97); }
 
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible {
+    outline: 2px solid var(--accent-secondary);
+    outline-offset: 2px;
+}
+
+/* Disabled: dim, block the pointer, and suppress hover feedback */
+.btn-primary:disabled,
+.btn-secondary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.btn-primary:disabled:hover,
+.btn-secondary:disabled:hover {
+    transform: none;
+}
+
 .status-line {
     font-size: 10px;
     font-weight: 500;
@@ -364,6 +395,15 @@ input[type="range"]:active::-webkit-slider-thumb {
 
 .status-line.error { color: var(--danger); }
 .status-line.ok { color: var(--accent-secondary); }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
 </style>
 
 <script type="text/javascript">
@@ -425,7 +465,7 @@ function setup(htmlComponent) {
         }
     });
 
-    // Live speed updates during animation — throttled to ~12 events/sec
+    // Live speed updates during animation, throttled to ~12 events/sec
     let speedSendTimer = null;
     let lastSpeedSent = null;
     document.getElementById("speed").addEventListener("input", function() {
@@ -449,6 +489,13 @@ function toggleAnimate() {
     document.getElementById("speedRow").classList.toggle("visible", isActive);
 }
 
+function toggleKey(e) {
+    if (e.key === " " || e.key === "Enter") {
+        e.preventDefault();   // Space would otherwise scroll the panel
+        toggleAnimate();
+    }
+}
+
 function isAnimating() {
     return document.getElementById("animateToggle").classList.contains("active");
 }
@@ -462,7 +509,10 @@ function exportImage() {
 function formatValue(id, v) {
     const f = parseFloat(v);
     if (id === "tEnd") return f.toFixed(0) + "s";
-    return f.toFixed(2);
+    // Integer-step sliders (e.g. speed) show no decimals; fractional-step sliders show 2
+    const el = document.getElementById(id);
+    const step = el ? parseFloat(el.step) : 0.1;
+    return Number.isInteger(step) ? f.toFixed(0) : f.toFixed(2);
 }
 
 function fmt(x) {
@@ -610,7 +660,7 @@ function resetSim() {
         <div class="toggle-row">
             <label for="animateToggle">Animate trace</label>
             <div id="animateToggle" class="toggle" role="switch" aria-checked="false"
-                 onclick="toggleAnimate()"></div>
+                 tabindex="0" onclick="toggleAnimate()" onkeydown="toggleKey(event)"></div>
         </div>
 
         <div class="speed-row" id="speedRow">
