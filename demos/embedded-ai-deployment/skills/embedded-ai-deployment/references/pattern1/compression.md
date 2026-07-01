@@ -366,7 +366,7 @@ save("deployableNet.mat", "unpackedNet");
 
 ## Quantization (Float32 to Int8)
 
-### Why Quantize?
+### When to Quantize
 
 Quantization reduces model size (4x for float32 → int8). On ARM Cortex-M targets with
 the Embedded Coder Support Package for ARM Cortex-M Processors, INT8 quantized models
