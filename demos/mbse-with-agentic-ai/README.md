@@ -50,14 +50,13 @@ Each layer implements or is allocated to the layer above. Traceability links run
 **Agent and MCP bridge:**
 
 - [Claude Code](https://claude.ai/code) (recommended) or another agent that supports Agent Skills.
-- One of:
-  - [Simulink Agentic Toolkit](https://github.com/matlab/simulink-agentic-toolkit) (recommended): bundles the Simulink MCP server plus official Simulink skills.
-  - [MATLAB MCP Core Server](https://github.com/matlab/matlab-mcp-core-server): minimal bridge that lets agents talk to a live MATLAB session.
+- [MATLAB MCP Server](https://github.com/matlab/matlab-mcp-server): lets agents talk to a live MATLAB session.
+- [Simulink Agentic Toolkit](https://github.com/matlab/simulink-agentic-toolkit) (recommended): extends the MATLAB MCP Server with tools for interacting with Simulink, and includes official Simulink agent skills.
 
 ## Setup
 
 1. **Install MATLAB** with the toolboxes listed above.
-2. **Install the Simulink Agentic Toolkit** (or the MATLAB MCP Core Server) following the instructions in its repository.
+2. **Install the MATLAB MCP Server**, and optionally the **Simulink Agentic Toolkit** on top of it, following the instructions in their repositories.
 3. **Clone this repo** if you haven't already:
    ```bash
    git clone https://github.com/matlab/agent-skills-playground.git

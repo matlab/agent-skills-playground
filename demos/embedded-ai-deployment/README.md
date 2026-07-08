@@ -37,7 +37,7 @@ Support packages, installed via Add-On Explorer as needed: Deep Learning Toolbox
 
 Third-party, for the PyTorch import/export workflows: Python&trade; 3.9+ with PyTorch&reg; 2.0 or newer.
 
-Also install the [MATLAB Agentic Toolkit](https://github.com/matlab/matlab-agentic-toolkit) and [Simulink Agentic Toolkit](https://github.com/matlab/simulink-agentic-toolkit) so the agent can drive a live MATLAB and Simulink session.
+Also install the [MATLAB MCP Server](https://github.com/matlab/matlab-mcp-server) so the agent can drive a live MATLAB session, plus the [MATLAB Agentic Toolkit](https://github.com/matlab/matlab-agentic-toolkit) and [Simulink Agentic Toolkit](https://github.com/matlab/simulink-agentic-toolkit) — the Simulink Agentic Toolkit extends the MATLAB MCP Server with tools for interacting with Simulink, and both toolkits include official agent skills.
 
 ## Setup
 
