@@ -455,6 +455,15 @@ function setup(htmlComponent) {
         setStatus("Export failed: " + event.Data, "error");
     });
 
+    // uihtml blocks target="_blank" navigation; route external links
+    // through MATLAB, which opens the system browser via web().
+    document.querySelectorAll('a[target="_blank"]').forEach(function(a) {
+        a.addEventListener("click", function(ev) {
+            ev.preventDefault();
+            htmlComponent.sendEventToMATLAB("OpenLink", a.href);
+        });
+    });
+
     // Wire slider value labels
     document.querySelectorAll('input[type="range"]').forEach(function(el) {
         const out = document.getElementById(el.id + "Val");

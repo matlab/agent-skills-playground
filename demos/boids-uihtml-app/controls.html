@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html data-theme="dark">
+<head>
+<style>
+    /* ===== THEME VARIABLES - Warm Dark ===== */
+
+    :root {
+        --color-bg: #fafaf9;
+        --color-surface: #FFFFFF;
+        --color-surface-elevated: #f5f5f4;
+        --color-accent: #d97706;
+        --color-accent-hover: #b45309;
+        --color-accent-container: rgba(217, 119, 6, 0.1);
+        --color-on-accent: #FFFFFF;
+        --color-danger: #dc2626;
+        --color-text-primary: #1c1917;
+        --color-text-secondary: #78716c;
+        --color-border: rgba(28, 25, 23, 0.08);
+        --color-track: rgba(28, 25, 23, 0.12);
+        --accent-shadow: rgba(217, 119, 6, 0.25);
+
+        --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+        --radius-card: 16px;
+        --radius-btn: 12px;
+        --t-standard: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="dark"] {
+        --color-bg: #1a1a1a;
+        --color-surface: #2a2a2a;
+        --color-surface-elevated: #333333;
+        --color-accent: #fbbf24;
+        --color-accent-hover: #f59e0b;
+        --color-accent-container: rgba(251, 191, 36, 0.12);
+        --color-on-accent: #1a1a1a;
+        --color-danger: #ef4444;
+        --color-text-primary: #fafaf9;
+        --color-text-secondary: #a8a29e;
+        --color-border: rgba(168, 162, 158, 0.15);
+        --color-track: rgba(168, 162, 158, 0.2);
+        --accent-shadow: rgba(251, 191, 36, 0.25);
+    }
+
+    /* ===== BASE ===== */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+        height: 100%;
+        overflow: hidden;
+    }
+
+    body {
+        font-family: var(--font-family);
+        background: var(--color-bg);
+        color: var(--color-text-primary);
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .app {
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+    }
+    .app::-webkit-scrollbar { width: 6px; }
+    .app::-webkit-scrollbar-track { background: transparent; }
+    .app::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.10);
+        border-radius: 3px;
+    }
+    .app::-webkit-scrollbar-thumb:hover { background: var(--accent-shadow); }
+
+    /* ===== HEADER ===== */
+    .header { padding: 2px 2px 4px; }
+
+    .title {
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+    }
+
+    .subtitle {
+        font-size: 12px;
+        letter-spacing: 0.2px;
+        color: var(--color-text-secondary);
+        margin-top: 2px;
+    }
+
+    .external-link {
+        color: var(--color-text-secondary);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+        transition: color var(--t-standard);
+    }
+    .external-link:hover { color: var(--color-accent); }
+
+    /* ===== PANELS ===== */
+    .panel {
+        background: var(--color-surface);
+        border-radius: var(--radius-card);
+        padding: 12px 14px;
+        border: 1px solid var(--color-border);
+        transition: background var(--t-standard);
+        animation: fadeSlideIn 0.4s ease-out both;
+        flex-shrink: 0;
+    }
+    .panel:nth-child(2) { animation-delay: 0.06s; }
+    .panel:nth-child(3) { animation-delay: 0.12s; }
+    .panel:nth-child(4) { animation-delay: 0.18s; }
+    .panel:nth-child(5) { animation-delay: 0.24s; }
+
+    .section-label {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: var(--color-text-secondary);
+        margin-bottom: 8px;
+    }
+
+    /* ===== BUTTONS ===== */
+    .transport {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .btn {
+        padding: 11px 16px;
+        font-size: 13px;
+        font-weight: 600;
+        font-family: var(--font-family);
+        border: none;
+        border-radius: var(--radius-btn);
+        cursor: pointer;
+        transition: all var(--t-standard);
+    }
+    .btn:active { transform: scale(0.97); }
+
+    .btn-secondary {
+        background: var(--color-surface-elevated);
+        color: var(--color-text-primary);
+        border: 1px solid var(--color-border);
+        flex: 1;
+    }
+    .btn-secondary:hover {
+        border-color: var(--color-accent);
+        color: var(--color-accent);
+    }
+
+    .btn-circle {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        border-radius: 50%;
+        background: var(--color-accent);
+        color: var(--color-on-accent);
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 12px var(--accent-shadow);
+        transition: all 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .btn-circle:hover { transform: scale(1.05); background: var(--color-accent-hover); }
+    .btn-circle:active { transform: scale(0.95); }
+    .btn-circle svg { display: block; }
+
+    .btn:focus-visible,
+    .btn-circle:focus-visible,
+    .chip:focus-visible,
+    .toggle:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+
+    /* ===== SLIDERS ===== */
+    .slider-group { margin-bottom: 8px; }
+    .slider-group:last-child { margin-bottom: 0; }
+
+    .slider-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+    }
+
+    .slider-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 6px;
+    }
+
+    .slider-label {
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.2px;
+        color: var(--color-text-secondary);
+    }
+
+    .slider-value {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--color-accent);
+        font-variant-numeric: tabular-nums;
+    }
+
+    .slider-caption {
+        font-size: 11px;
+        letter-spacing: 0.2px;
+        color: var(--color-text-secondary);
+        margin-top: 4px;
+    }
+
+    input[type="range"] {
+        appearance: none;
+        -webkit-appearance: none;
+        accent-color: var(--color-accent);
+        width: 100%;
+        height: 5px;
+        border-radius: 2.5px;
+        background: var(--color-track);
+        outline: none;
+        cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--color-accent);
+        cursor: pointer;
+        box-shadow: 0 2px 6px var(--accent-shadow);
+        transition: transform 150ms ease;
+    }
+    input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.2); }
+    input[type="range"]::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--color-accent);
+        border: none;
+        box-shadow: 0 2px 6px var(--accent-shadow);
+    }
+    input[type="range"]:focus-visible::-webkit-slider-thumb {
+        box-shadow: 0 0 0 3px var(--color-accent);
+    }
+    input[type="range"]:focus-visible::-moz-range-thumb {
+        box-shadow: 0 0 0 3px var(--color-accent);
+    }
+
+    /* ===== PRESET CHIPS ===== */
+    .chip-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .chip {
+        padding: 9px 10px;
+        font-size: 13px;
+        font-weight: 500;
+        font-family: var(--font-family);
+        background: var(--color-surface-elevated);
+        color: var(--color-text-primary);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-btn);
+        cursor: pointer;
+        transition: all var(--t-standard);
+    }
+    .chip:hover {
+        border-color: var(--color-accent);
+        color: var(--color-accent);
+    }
+    .chip:active { transform: scale(0.97); }
+    .chip.selected {
+        background: var(--color-accent-container);
+        border-color: var(--color-accent);
+        color: var(--color-accent);
+    }
+
+    .panel-caption {
+        font-size: 11px;
+        letter-spacing: 0.2px;
+        color: var(--color-text-secondary);
+        margin-top: 10px;
+    }
+
+    /* ===== TOGGLE ===== */
+    .toggle-group {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 8px;
+    }
+
+    .toggle-label {
+        font-size: 13px;
+        color: var(--color-text-primary);
+    }
+
+    .toggle {
+        width: 48px;
+        height: 28px;
+        border-radius: 14px;
+        background: var(--color-track);
+        position: relative;
+        cursor: pointer;
+        transition: background 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        flex-shrink: 0;
+    }
+    .toggle.active {
+        background: var(--color-accent);
+        box-shadow: 0 0 8px var(--accent-shadow);
+    }
+    .toggle::after {
+        content: '';
+        position: absolute;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: var(--color-text-secondary);
+        top: 3px;
+        left: 3px;
+        transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .toggle.active::after {
+        transform: translateX(20px);
+        background: var(--color-on-accent);
+    }
+
+    /* ===== TELEMETRY ===== */
+    .order-row {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        margin-top: 8px;
+    }
+
+    .order-value {
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        color: var(--color-accent);
+        font-variant-numeric: tabular-nums;
+    }
+
+    .order-name {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--color-text-secondary);
+    }
+
+    .order-bar {
+        height: 4px;
+        border-radius: 2px;
+        background: var(--color-track);
+        margin-top: 6px;
+        overflow: hidden;
+    }
+
+    .order-fill {
+        height: 100%;
+        width: 0%;
+        border-radius: 2px;
+        background: var(--color-accent);
+        transition: width 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .stat-row {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 8px;
+        font-size: 12px;
+        color: var(--color-text-secondary);
+    }
+
+    .stat-row .stat-value {
+        font-weight: 600;
+        color: var(--color-text-primary);
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* ===== ANIMATION ===== */
+    @keyframes fadeSlideIn {
+        from { opacity: 1; transform: translateY(6px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+</style>
+
+<script type="text/javascript">
+    // ===== State =====
+    let params = { sep: 1.5, ali: 1.0, coh: 1.0, radius: 10, speed: 25 };
+    let running = false;
+    let paramTimer = null;
+    let countTimer = null;
+
+    const PRESETS = {
+        murmuration: { sep: 1.5, ali: 1.0, coh: 1.0, radius: 10, speed: 25 },
+        schooling:   { sep: 1.2, ali: 2.6, coh: 0.8, radius: 16, speed: 35 },
+        swarming:    { sep: 1.8, ali: 0.0, coh: 1.6, radius: 12, speed: 20 },
+        dispersal:   { sep: 2.6, ali: 0.2, coh: 0.0, radius: 8,  speed: 25 }
+    };
+
+    // ===== MATLAB integration =====
+    function setup(htmlComponent) {
+        window.htmlComponent = htmlComponent;
+
+        htmlComponent.addEventListener("SetTheme", function(event) {
+            document.documentElement.setAttribute('data-theme', event.Data.theme);
+        });
+
+        htmlComponent.addEventListener("SimState", function(event) {
+            running = !!event.Data.running;
+            updatePlayButton();
+        });
+
+        htmlComponent.addEventListener("Stats", function(event) {
+            const d = event.Data;
+            document.getElementById("orderValue").textContent = d.order.toFixed(2);
+            document.getElementById("orderFill").style.width = Math.round(d.order * 100) + "%";
+            document.getElementById("fpsValue").textContent = Math.round(d.fps);
+            document.getElementById("nValue").textContent = d.n;
+        });
+
+        htmlComponent.addEventListener("SimError", function(event) {
+            console.error("MATLAB error:", event.Data);
+        });
+
+        // uihtml blocks target="_blank" navigation; route external links
+        // through MATLAB, which opens the system browser via web().
+        document.querySelectorAll('a[target="_blank"]').forEach(function(a) {
+            a.addEventListener("click", function(ev) {
+                ev.preventDefault();
+                htmlComponent.sendEventToMATLAB("OpenLink", a.href);
+            });
+        });
+
+        htmlComponent.sendEventToMATLAB("Ready", "");
+    }
+
+    function sendParamsThrottled() {
+        if (paramTimer) return;
+        paramTimer = setTimeout(function() {
+            paramTimer = null;
+            if (window.htmlComponent) {
+                window.htmlComponent.sendEventToMATLAB("SetParams", params);
+            }
+        }, 80);
+    }
+
+    // ===== Controls =====
+    function onRuleSlider(name, value) {
+        params[name] = parseFloat(value);
+        document.getElementById(name + "Value").textContent = params[name].toFixed(1);
+        clearPresetSelection();
+        sendParamsThrottled();
+    }
+
+    function onRadiusSlider(value) {
+        params.radius = parseFloat(value);
+        document.getElementById("radiusValue").textContent = params.radius.toFixed(0);
+        clearPresetSelection();
+        sendParamsThrottled();
+    }
+
+    function onSpeedSlider(value) {
+        params.speed = parseFloat(value);
+        document.getElementById("speedValue").textContent = params.speed.toFixed(0);
+        clearPresetSelection();
+        sendParamsThrottled();
+    }
+
+    function onCountSlider(value) {
+        document.getElementById("countValue").textContent = value;
+        if (countTimer) return;
+        countTimer = setTimeout(function() {
+            countTimer = null;
+            if (window.htmlComponent) {
+                const n = parseInt(document.getElementById("count").value, 10);
+                window.htmlComponent.sendEventToMATLAB("SetCount", n);
+            }
+        }, 120);
+    }
+
+    function onPlayPause() {
+        if (!window.htmlComponent) return;
+        window.htmlComponent.sendEventToMATLAB(running ? "Pause" : "Start", "");
+    }
+
+    function updatePlayButton() {
+        document.getElementById("iconPlay").style.display = running ? "none" : "block";
+        document.getElementById("iconPause").style.display = running ? "block" : "none";
+        document.getElementById("playBtn").setAttribute("aria-label", running ? "Pause" : "Start");
+    }
+
+    function onScatter() {
+        if (window.htmlComponent) {
+            window.htmlComponent.sendEventToMATLAB("Scatter", "");
+        }
+    }
+
+    function onReset() {
+        if (window.htmlComponent) {
+            window.htmlComponent.sendEventToMATLAB("Reset", "");
+        }
+    }
+
+    function onInspectToggle() {
+        const el = document.getElementById("inspectToggle");
+        el.classList.toggle('active');
+        const on = el.classList.contains('active');
+        el.setAttribute('aria-checked', on);
+        if (window.htmlComponent) {
+            window.htmlComponent.sendEventToMATLAB("SetInspect", on);
+        }
+    }
+
+    function handleToggleKey(event) {
+        if (event.key === ' ' || event.key === 'Enter') {
+            event.preventDefault();
+            event.currentTarget.click();
+        }
+    }
+
+    // ===== Presets =====
+    function applyPreset(name, btn) {
+        const p = PRESETS[name];
+        params = Object.assign({}, p);
+
+        setSlider("sep", p.sep, p.sep.toFixed(1));
+        setSlider("ali", p.ali, p.ali.toFixed(1));
+        setSlider("coh", p.coh, p.coh.toFixed(1));
+        setSlider("radius", p.radius, p.radius.toFixed(0));
+        setSlider("speed", p.speed, p.speed.toFixed(0));
+
+        clearPresetSelection();
+        btn.classList.add("selected");
+
+        if (window.htmlComponent) {
+            window.htmlComponent.sendEventToMATLAB("SetParams", params);
+        }
+    }
+
+    function setSlider(id, value, text) {
+        document.getElementById(id).value = value;
+        document.getElementById(id + "Value").textContent = text;
+    }
+
+    function clearPresetSelection() {
+        document.querySelectorAll(".chip").forEach(c => c.classList.remove("selected"));
+    }
+</script>
+</head>
+<body>
+<div class="app">
+
+    <div class="header">
+        <div class="title">Boids</div>
+        <div class="subtitle">
+            Craig Reynolds' flocking model, 1986.
+            <a class="external-link" href="https://en.wikipedia.org/wiki/Boids" target="_blank" rel="noopener">Background</a>
+        </div>
+    </div>
+
+    <!-- Flight -->
+    <div class="panel">
+        <div class="section-label">Flight</div>
+        <div class="transport">
+            <button id="playBtn" class="btn-circle" onclick="onPlayPause()" aria-label="Start">
+                <svg id="iconPlay" width="18" height="18" viewBox="0 0 18 18" style="display:none">
+                    <path d="M5 3 L15 9 L5 15 Z" fill="currentColor"/>
+                </svg>
+                <svg id="iconPause" width="18" height="18" viewBox="0 0 18 18">
+                    <rect x="4" y="3" width="3.5" height="12" rx="1" fill="currentColor"/>
+                    <rect x="10.5" y="3" width="3.5" height="12" rx="1" fill="currentColor"/>
+                </svg>
+            </button>
+            <button class="btn btn-secondary" onclick="onScatter()"
+                    title="Send a predator strike at the flock center. Clicking the sky strikes there.">Scatter</button>
+            <button class="btn btn-secondary" onclick="onReset()"
+                    title="Re-seed the flock at random positions">Reset</button>
+        </div>
+        <div class="order-row">
+            <span id="orderValue" class="order-value">0.00</span>
+            <span class="order-name">flock order</span>
+        </div>
+        <div class="order-bar"><div id="orderFill" class="order-fill"></div></div>
+        <div class="panel-caption">1.00 when every boid flies the same heading.</div>
+        <div class="stat-row">
+            <span>Frame rate <span id="fpsValue" class="stat-value">0</span> fps</span>
+            <span>Boids <span id="nValue" class="stat-value">120</span></span>
+        </div>
+    </div>
+
+    <!-- Rules -->
+    <div class="panel">
+        <div class="section-label">Rules</div>
+
+        <div class="slider-group">
+            <div class="slider-header">
+                <span class="slider-label">Separation</span>
+                <span id="sepValue" class="slider-value">1.5</span>
+            </div>
+            <input type="range" id="sep" min="0" max="3" step="0.1" value="1.5"
+                   oninput="onRuleSlider('sep', this.value)">
+            <div class="slider-caption">Steer away from neighbors that crowd in close.</div>
+        </div>
+
+        <div class="slider-group">
+            <div class="slider-header">
+                <span class="slider-label">Alignment</span>
+                <span id="aliValue" class="slider-value">1.0</span>
+            </div>
+            <input type="range" id="ali" min="0" max="3" step="0.1" value="1.0"
+                   oninput="onRuleSlider('ali', this.value)">
+            <div class="slider-caption">Match the average heading of nearby boids.</div>
+        </div>
+
+        <div class="slider-group">
+            <div class="slider-header">
+                <span class="slider-label">Cohesion</span>
+                <span id="cohValue" class="slider-value">1.0</span>
+            </div>
+            <input type="range" id="coh" min="0" max="3" step="0.1" value="1.0"
+                   oninput="onRuleSlider('coh', this.value)">
+            <div class="slider-caption">Drift toward the local center of the flock.</div>
+        </div>
+    </div>
+
+    <!-- Experiments -->
+    <div class="panel">
+        <div class="section-label">Experiments</div>
+        <div class="chip-grid">
+            <button class="chip selected" onclick="applyPreset('murmuration', this)">Murmuration</button>
+            <button class="chip" onclick="applyPreset('schooling', this)">Schooling</button>
+            <button class="chip" onclick="applyPreset('swarming', this)">Swarming</button>
+            <button class="chip" onclick="applyPreset('dispersal', this)">Dispersal</button>
+        </div>
+        <div class="panel-caption">Presets set the rule weights above.</div>
+    </div>
+
+    <!-- Flock -->
+    <div class="panel">
+        <div class="section-label">Flock</div>
+
+        <div class="slider-row">
+            <div class="slider-group">
+                <div class="slider-header">
+                    <span class="slider-label">Boids</span>
+                    <span id="countValue" class="slider-value">120</span>
+                </div>
+                <input type="range" id="count" min="10" max="300" step="10" value="120"
+                       oninput="onCountSlider(this.value)">
+            </div>
+
+            <div class="slider-group">
+                <div class="slider-header">
+                    <span class="slider-label">Speed</span>
+                    <span id="speedValue" class="slider-value">25</span>
+                </div>
+                <input type="range" id="speed" min="5" max="80" step="1" value="25"
+                       oninput="onSpeedSlider(this.value)">
+            </div>
+        </div>
+
+        <div class="slider-group">
+            <div class="slider-header">
+                <span class="slider-label">Perception radius</span>
+                <span id="radiusValue" class="slider-value">10</span>
+            </div>
+            <input type="range" id="radius" min="2" max="30" step="1" value="10"
+                   oninput="onRadiusSlider(this.value)">
+            <div class="slider-caption">Each boid reacts only to neighbors inside this radius.</div>
+        </div>
+
+        <div class="toggle-group">
+            <span class="toggle-label">Inspect one boid</span>
+            <div id="inspectToggle" class="toggle" onclick="onInspectToggle()"
+                 tabindex="0" role="switch" onkeydown="handleToggleKey(event)" aria-checked="false"></div>
+        </div>
+    </div>
+
+
+</div>
+</body>
+</html>

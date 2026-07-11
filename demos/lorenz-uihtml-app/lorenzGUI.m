@@ -74,6 +74,12 @@ function handleEvent(src, event, fig)
             case 'StopAnimation'
                 stopAnimationGracefully(fig, src);
 
+            case 'OpenLink'
+                url = char(data);
+                if startsWith(url, 'https://')
+                    web(url, '-browser');
+                end
+
             otherwise
                 fprintf('Unknown event: %s\n', name);
         end

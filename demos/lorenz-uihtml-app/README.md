@@ -7,6 +7,10 @@ An interactive Lorenz-system explorer built with the two MATLAB uihtml skills in
 
 The control panel is HTML/CSS/JS embedded via `uihtml`. The 3D plot is a native MATLAB `uiaxes`. Inspired by Cleve Moler's `lorenzgui` from *Numerical Computing with MATLAB*.
 
+![The Lorenz app: sliders for initial conditions and parameters drive an ode45 run; the time-colored butterfly trajectory renders on a native uiaxes](lorenz-app.png)
+
+The screenshot shows the default parameters (σ=10, ρ=28, β=8/3) after one Run: the classic butterfly, colored from indigo to magenta along the trajectory.
+
 ## What you can do
 
 - Pick initial conditions `x₀, y₀, z₀` with sliders
@@ -20,8 +24,7 @@ The control panel is HTML/CSS/JS embedded via `uihtml`. The 3D plot is a native 
 
 ## Requirements
 
-- MATLAB R2021a or newer (R2025a+ for automatic light/dark theme sync)
-- No toolboxes required. Uses only base MATLAB (`ode45`, `uifigure`, `uihtml`, `uiaxes`)
+MATLAB R2021a or newer (R2025a+ for automatic light/dark theme sync)
 
 ## Run it
 
@@ -34,16 +37,6 @@ lorenzGUI
 
 Then press **Run** in the control panel.
 
-## Files
-
-```
-lorenz-uihtml-app/
-├── CLAUDE.md          # Build process for an agent (read this first if you want to extend)
-├── README.md          # This file
-├── lorenzGUI.m        # MATLAB entry point
-└── controls.html      # Cosmic Dark control panel (self-contained)
-```
-
 ## How it works
 
 | Event | Direction | Payload |
@@ -53,6 +46,7 @@ lorenz-uihtml-app/
 | `StopAnimation` | JS → MATLAB | `""` (halts animation, preserves partial trace) |
 | `ExportImage`   | JS → MATLAB | `""` (opens a `uiputfile` dialog) |
 | `SetSpeed`      | JS → MATLAB | integer pts/frame. Adjusts speed of a running animation live (no-op if idle) |
+| `OpenLink`      | JS → MATLAB | URL string; uihtml blocks `target="_blank"`, so MATLAB opens the system browser via `web` |
 | `SimComplete`   | MATLAB → JS | `{nPoints, finalX, finalY, finalZ, elapsedMs}` |
 | `SimStopped`    | MATLAB → JS | `{nPoints, finalX, finalY, finalZ, elapsedMs}` for the partial trace at stop |
 | `SimError`      | MATLAB → JS | error message string |

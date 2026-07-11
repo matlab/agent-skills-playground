@@ -20,6 +20,7 @@ A sandbox for prototyping and demonstrating [Agent Skills](https://agentskills.i
 | **[mbse-with-agentic-ai](demos/mbse-with-agentic-ai/)** | Agent-driven Model-Based Systems Engineering workflow in MATLAB and Simulink (RFLP methodology). Accompanies the [blog post](https://blogs.mathworks.com/simulink/2026/04/26/model-based-systems-engineering-and-agentic-ai/). |
 | **[embedded-ai-deployment](demos/embedded-ai-deployment/)** | Agent-driven deployment of AI models to embedded hardware with MATLAB, Simulink, and Embedded Coder. Routes between native models compressed for lean targets (Cortex-M, DSP) and direct C/C++ generation from PyTorch and LiteRT models for high-performance hardware. Requires MATLAB R2026a. |
 | **[lorenz-uihtml-app](demos/lorenz-uihtml-app/)** | An interactive Lorenz attractor, built by an agent using the [`matlab-uihtml-app-builder`](skills/matlab-uihtml-app-builder/) and [`matlab-uihtml-design`](skills/matlab-uihtml-design/) skills. An HTML control panel drives an `ode45` integration, with animated tracing, live speed control, mid-run stop, and PNG export. |
+| **[boids-uihtml-app](demos/boids-uihtml-app/)** | An interactive Boids flocking simulator for learning emergence, built with the same two uihtml skills in the Warm Dark style. Live rule-weight sliders, behavior presets, a flock-order readout, per-boid inspection, and predator strikes. The README teaches the model through guided experiments. |
 
 ## About Agent Skills
 
