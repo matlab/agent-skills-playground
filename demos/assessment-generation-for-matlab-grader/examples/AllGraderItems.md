@@ -57,6 +57,17 @@ Learner Template:
 % YOUR CODE HERE
 ```
 
+Student Template Line Locks:
+```Copy
+| Line(s) | Lock? | Exact template text | Reason |
+| --- | --- | --- | --- |
+| 1 | Yes | `% Create powerValues.` | Keeps the scaffold task label visible. |
+| 4 | Yes | `% Create imaginaryRoot.` | Keeps the scaffold task label visible. |
+| 7 | Yes | `% Create eValue.` | Keeps the scaffold task label visible. |
+| 10 | Yes | `% Create radianCosine.` | Keeps the scaffold task label visible. |
+| 13 | Yes | `% Create degreeCosine.` | Keeps the scaffold task label visible. |
+```
+
 ## Tests
 
 ### Test #1
@@ -170,6 +181,16 @@ function greeting = greetUser(name) %#ok<INUSD>
     greeting = "";
     % YOUR CODE HERE
 end
+```
+
+Student Template Line Locks:
+```Copy
+| Line(s) | Lock? | Exact template text | Reason |
+| --- | --- | --- | --- |
+| 1 | Yes | `function greeting = greetUser(name) %#ok<INUSD>` | Keeps the required function signature unchanged. |
+| 2 | Yes | `%greetUser Create and display a greeting for one person.` | Keeps the function help summary visible. |
+| 4 | Yes | `    greeting = "";` | Preserves the provided starter output assignment. |
+| 6 | Yes | `end` | Preserves the required function structure. |
 ```
 
 How to call the function (when the learner clicks 'Run'):

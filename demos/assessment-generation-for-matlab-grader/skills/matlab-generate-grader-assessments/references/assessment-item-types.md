@@ -13,7 +13,7 @@ Learner-authored `classdef` files must be plain `.m` files, not Live Script `.m`
 
 Each item folder contains `description.txt`, `solution.m`, `template.m`, and `assessments.md`. Add `function_call.m` only for Function, Class Definition, Class Inheritance, and Class Methods items. Add `tests.m` only when an `assessments.md` row uses the MATLAB Code test type. List referenced files in `assessments.md` and place generated readable referenced source files in a documented referenced-file location. Do not generate `.p` files; educators may manually pcode reviewed helper `.m` files before upload when they need hidden helper logic.
 
-`assessments.md` is the source of truth for MATLAB Grader configuration. Its requirement-to-assessment matrix must show that every stated requirement has one distinct, objective-aligned assessment and may include feedback on a validated incorrect submission. Feedback is optional for each assessment.
+`assessments.md` is the source of truth for MATLAB Grader configuration. It must include student-template line-lock setup guidance derived from the final `template.m`. Its requirement-to-assessment matrix must show that every stated requirement has one distinct, objective-aligned assessment and may include feedback on a validated incorrect submission. Feedback is optional for each assessment.
 
 For Function items, do not configure **Variable equals reference solution**. Use **MATLAB Code** for each output check. In each assessment, assign test inputs, call the learner function and `reference.<functionName>` with those inputs, then compare the outputs with `assessVariableEqual`.
 

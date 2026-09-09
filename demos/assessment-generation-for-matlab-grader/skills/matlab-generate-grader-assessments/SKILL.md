@@ -91,7 +91,7 @@ For each objective, present exactly one recommended title and task statement. Ti
 After the requested item proposals are approved and before generating artifacts, ask once per batch whether the user wants a combined `AllGraderItems.md` output. Do not ask again when the user has already explicitly requested or declined it.
 
 - If the user selects combined output, read `references/all-grader-items-template.md` and create `AllGraderItems.md` in the profile output location.
-- The file is an instructor-facing companion, not a replacement for the native item folders. Include each generated item’s title, student description, submission type, referenced files, reference solution, learner template, assessment setup, and only optional feedback entries supported by validated incorrect variants. When the item is Function, Class Definition, Class Inheritance, or Class Methods, also include the standard field **How to call the function (when the learner clicks 'Run')** containing the `function_call.m` content.
+- The file is an instructor-facing companion, not a replacement for the native item folders. Include each generated item’s title, student description, submission type, referenced files, reference solution, learner template, template line-lock setup, assessment setup, and only optional feedback entries supported by validated incorrect variants. When the item is Function, Class Definition, Class Inheritance, or Class Methods, also include the standard field **How to call the function (when the learner clicks 'Run')** containing the `function_call.m` content.
 - If the user declines combined output, generate only the native item folders and their enabled QTI companions.
 
 ## Generate the native artifacts
@@ -105,6 +105,7 @@ Create one folder named with a snake_case title under the profile output locatio
 - For Class Definition, Class Inheritance, and Class Methods items, generate a plain `.m` `classdef` reference solution and learner template. The class name must match the submitted file name and any run-block constructor call exactly.
 - For Object Usage items, generate a Script submission that instantiates or modifies objects from referenced class files; do not ask learners to redefine the referenced class in the script.
 - Keep description and template requirements consistent with the solution.
+- After finalizing `template.m`, derive the student-template line-lock guidance from that exact file. Use 1-based line numbers and include the guidance in `assessments.md`; do not place hidden lock markers in `template.m`.
 - For **summative** items, descriptions must contain no hints, self-checks, suggested functions, solution approaches, or answer-revealing implementation guidance. State a function, construct, or approach directly in the numbered instructions only when the learning objective explicitly requires it.
 - For **formative** items, a brief non-answer-revealing self-check is allowed. For **both**, include only the formative guidance explicitly approved for revision use and do not reveal summative assessment details.
 - For Function and class-submission items, create `function_call.m` as a short student-facing run block with representative inputs, object construction, or method calls and no assertions. In combined single-file output, present this block under **How to call the function (when the learner clicks 'Run')**.
@@ -113,10 +114,25 @@ Create one folder named with a snake_case title under the profile output locatio
 
 ### MATLAB Grader assessment model
 
-`assessments.md` is the authoritative MATLAB Grader setup guide. It must contain a requirement-to-assessment matrix and one row per configured assessment with:
+`assessments.md` is the authoritative MATLAB Grader setup guide. It must contain a **Student Template Line Locks** section, a requirement-to-assessment matrix, and one row per configured assessment.
+
+The **Student Template Line Locks** section must appear before the requirement-to-assessment matrix and use this structure:
+
+```markdown
+## Student Template Line Locks
+
+Line numbers are 1-based and refer to the final `template.m` exactly as generated. After pasting `template.m` into MATLAB Grader, lock the listed lines in the student template editor.
+
+| Line(s) | Lock? | Exact template text | Reason |
+| --- | --- | --- | --- |
+```
+
+List every template line instructors should lock. Use inclusive ranges for contiguous locked lines, such as `1-3`, and comma-separated groups only when needed, such as `1-3, 7, 11-12`. For a single locked line, include that exact line text. For a range, include the first and last line text. Lock instructor-provided scaffolding that students should not change: required task comments, fixed function signatures, fixed class names and inheritance declarations, required property or method signatures, provided setup values, `end` lines that preserve required structure, and referenced-file usage scaffolding that must remain intact. Do not lock learner implementation placeholders, blank lines intended for student work, or code regions where students must edit. If no lines should be locked, write: `No template lines need to be locked for this item.`
+
+The requirement-to-assessment matrix must use this table:
 
 | Requirement / LO evidence | Grader Test Type | MATLAB Grader UI fields | Code to paste | Expected evidence | Optional feedback on incorrect submission | Traceability |
-| --- | --- | --- | --- | --- | --- |
+| --- | --- | --- | --- | --- | --- | --- |
 
 Use these test types precisely:
 
@@ -150,12 +166,13 @@ Before marking output ready:
 2. Invoke `matlab-validate-function-arguments` only for Function items whose objective or profile explicitly includes an input contract or argument-validation outcome. Do not add an `arguments` block merely because an item is a Function item.
 3. Inspect generated `assessments.md` and `tests.m` files for invalid tolerance parameter names. `AbsTol` and `RelTol` fail generation; replace them with `AbsoluteTolerance` and `RelativeTolerance` before validation.
 4. Inspect generated student-facing prose, MATLAB comments, learner-visible assessment names, and optional feedback for the resolved content language. If the resolved content language is not English and these surfaces are obviously still English, generation is not ready; localize them before validation. Do not translate MATLAB code, identifiers, Grader test type labels, or instructor-facing setup headings.
-5. In an operating-system temporary directory outside the repository and instructor-facing item folder, create a class-based `matlab.unittest` harness. Use `matlab-testing` and run it through MATLAB MCP against the reference solution, a completed learner template, and targeted incorrect variants. Confirm the reference and completed template pass, concept-specific mutants fail, every requirement in the matrix is represented, and every nonempty feedback entry is backed by its linked mutant.
-6. Do not leave the transient harness in the instructor-facing item folder. Report the MCP run result and its limits: it validates MATLAB behavior and the documented configuration model, while the instructor still pastes/configures the rows in MATLAB Grader.
+5. Validate the **Student Template Line Locks** section against the final `template.m`. Every listed line number must exist, ranges must be valid, and the quoted template text must match the generated file. Stale line numbers or mismatched text fail generation.
+6. In an operating-system temporary directory outside the repository and instructor-facing item folder, create a class-based `matlab.unittest` harness. Use `matlab-testing` and run it through MATLAB MCP against the reference solution, a completed learner template, and targeted incorrect variants. Confirm the reference and completed template pass, concept-specific mutants fail, every requirement in the matrix is represented, and every nonempty feedback entry is backed by its linked mutant.
+7. Do not leave the transient harness in the instructor-facing item folder. Report the MCP run result and its limits: it validates MATLAB behavior and the documented configuration model, while the instructor still pastes/configures the rows in MATLAB Grader.
 
 ## Output summary
 
-For each item, report its title, resolved content language, approved complexity, item mode, folder, files, referenced files, number and type of configured assessments, number of optional feedback entries, and the completed MATLAB MCP validation result. When created, also report the path to `AllGraderItems.md`. Never claim validation when MATLAB MCP did not complete.
+For each item, report its title, resolved content language, approved complexity, item mode, folder, files, referenced files, number of template lines to lock, number and type of configured assessments, number of optional feedback entries, and the completed MATLAB MCP validation result. When created, also report the path to `AllGraderItems.md`. Never claim validation when MATLAB MCP did not complete.
 
 ## Credits
 

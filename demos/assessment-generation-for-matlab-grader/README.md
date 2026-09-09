@@ -30,19 +30,19 @@ Each item has the following instructor-facing files:
 | `solution.m`         | Reference Solution                                                       |
 | `template.m`         | Learner Template                                                         |
 | `function_call.m`    | Code to run a Function or class-submission item                          |
-| `assessments.md`     | Authoritative setup guide and requirement-to-assessment matrix           |
+| `assessments.md`     | Authoritative setup guide, template line locks, and assessment matrix    |
 | `tests.m`            | Only for rows configured as MATLAB Code assessments                      |
 | `referenced_files/`  | Optional readable referenced `.m` files and data files such as `.mat`    |
 |  `AllGraderItems.md` | Optional single markdown file presenting all elements and files in order |
 | `qti3/`              | Optional companion interchange package                                   |
 
-`assessments.md` has one row per assessment. It identifies the Grader Test Type, exact UI fields, any code to paste, expected evidence, optional feedback on incorrect submissions, and learning-objective traceability.
+`assessments.md` includes **Student Template Line Locks** setup guidance followed by one row per assessment. The line-lock table identifies 1-based `template.m` line numbers that instructors should lock in the MATLAB Grader student template editor after pasting the generated template. Assessment rows identify the Grader Test Type, exact UI fields, any code to paste, expected evidence, optional feedback on incorrect submissions, and learning-objective traceability.
 
 Generated referenced helper code must remain human-readable `.m` files. Every referenced file must be listed in the setup instructions. The generator does not create `.p` files. Educators who need hidden helper logic may manually pcode reviewed helper `.m` files before uploading them to MATLAB Grader.
 
 ## Configuring MATLAB Grader
 
-For each row in `assessments.md`, select the listed test type and enter its UI fields exactly:
+First paste `template.m` into the student template editor and lock the lines listed in **Student Template Line Locks**. The line numbers refer to the final generated `template.m`; verify them again if you edit the template manually. Then, for each assessment row in `assessments.md`, select the listed test type and enter its UI fields exactly:
 
 - **Variable equals reference solution**: enter the listed student variable or expression. Use this for direct output equality; MATLAB Grader compares it with the reference solution.
 - **MATLAB Code**: for Script items, derive custom expected values from
@@ -72,7 +72,7 @@ Before an item is ready, the workflow:
 1. Runs MATLAB Code Analyzer and applies MATLAB coding guidance to the solution, template, function-call block, and transient validation code.
 2. Rejects analyzer errors and resolves or reports warnings. Generated materials use descriptive names, modern string syntax, and no shadowed built-ins or unsafe dynamic-workspace functions.
 3. Creates a temporary, class-based `matlab.unittest` harness outside the item folder. MATLAB MCP runs it against the reference solution, a completed template, and targeted incorrect variants.
-4. Fails validation if the reference does not pass, a concept-specific mutant does not fail, a nonempty feedback entry lacks a linked mutant, localized student-facing text is obviously in the wrong language, or a description/template/assessment requirement disagrees.
+4. Fails validation if line-lock references do not match `template.m`, the reference does not pass, a concept-specific mutant does not fail, a nonempty feedback entry lacks a linked mutant, localized student-facing text is obviously in the wrong language, or a description/template/assessment requirement disagrees.
 
 This confirms MATLAB behavior and the documented Grader configuration model. It does not replace the instructor’s final paste/configuration and preview in MATLAB Grader. Function argument-validation guidance is used only when an objective explicitly includes an input-contract outcome; introductory functions do not receive an `arguments` block by default.
 

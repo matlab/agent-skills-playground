@@ -35,6 +35,11 @@ Learner Template:
 template.m content
 ```
 
+Student Template Line Locks:
+```Copy
+Line-lock table from assessments.md
+```
+
 How to call the function (when the learner clicks 'Run') [Function and class-submission items only]:
 ```Copy
 function_call.m content

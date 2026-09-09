@@ -86,6 +86,7 @@ Choose the best-fit context from the input.
 - `description.txt`:
 - `solution.m`:
 - `template.m`:
+- Template line locks:
 - `function_call.m` (Function assessment items only):
 - `tests.m`:
 - `qti3/` package (only when QTI 3 export is enabled):
@@ -129,6 +130,9 @@ portability or sharing; otherwise state "no QTI 3" in the prompt.
 - `solution.m`: runnable, concise, aligned to the stated objective.
 - `template.m`: same names as the solution; blanks only where students should
   work; comments use the configured content language.
+- Template line locks: `assessments.md` lists 1-based `template.m` line numbers
+  to lock in MATLAB Grader; verify the quoted text still matches after any
+  manual template edit.
 - `function_call.m` (Function assessment items only): the three instructor
   comments at the top localized to the configured content language,
   representative sample inputs, one plain call to the required function, and no

@@ -29,6 +29,7 @@ Run each scenario with the local skills loaded. A ready item requires a complete
 
 - [ ] The folder has `description.txt`, `solution.m`, `template.m`, and `assessments.md`, but no `function_call.m`.
 - [ ] `assessments.md` contains a requirement-to-assessment matrix and direct-output rows use Variable equals reference solution.
+- [ ] `assessments.md` contains **Student Template Line Locks** with valid 1-based `template.m` line numbers and matching exact template text.
 - [ ] `tests.m` is absent unless a genuinely custom MATLAB Code check is needed.
 - [ ] MATLAB MCP verifies the reference and completed template pass, a relevant mutant fails, and Code Analyzer errors are absent.
 
@@ -40,6 +41,7 @@ Run each scenario with the local skills loaded. A ready item requires a complete
 
 - [ ] The generator recommends Function and creates `function_call.m`.
 - [ ] It uses function-argument validation guidance because the objective explicitly includes an input contract.
+- [ ] `assessments.md` tells the instructor to lock the function signature line in `template.m` and leaves the learner implementation placeholder editable.
 - [ ] Each Function-output MATLAB Code assessment assigns test inputs, calls the learner function and `reference.<functionName>`, then uses `assessVariableEqual` to compare their outputs.
 - [ ] Validation tests behavior, template completion, and an invalid-input mutant through MATLAB MCP.
 
@@ -161,3 +163,15 @@ Run each scenario with the local skills loaded. A ready item requires a complete
 - [ ] MATLAB identifiers, file names, MATLAB keywords, and MATLAB Grader test type labels remain unchanged and valid.
 - [ ] With `content_language: es`, an English prompt still produces Spanish student-facing comments, assessment names, and optional feedback.
 - [ ] A legacy profile without `content_language` still defaults to auto-detection rather than failing setup.
+
+## EV-G12: Student template line locks
+
+**Prompt:** “Generate a Function item where learners complete the body of `scaleSignal(x, gain)` but must not change the function signature.”
+
+**Pass criteria:**
+
+- [ ] `template.m` has a fixed `function` signature line and an editable learner implementation placeholder.
+- [ ] `assessments.md` includes **Student Template Line Locks** before the assessment matrix.
+- [ ] The lock table uses 1-based line numbers from the final `template.m`, and the quoted template text matches exactly.
+- [ ] The function signature line is locked and the learner implementation placeholder is not locked.
+- [ ] The output summary reports the number of template lines to lock.
