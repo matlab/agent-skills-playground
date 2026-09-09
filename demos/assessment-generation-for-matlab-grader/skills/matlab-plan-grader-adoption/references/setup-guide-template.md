@@ -72,6 +72,8 @@ Choose the best-fit context from the input.
 ## Recommended Assessment Configuration
 - Assessment item type:
 - Assessment purpose:
+- Content language: [Use `auto` to match the problem description, or a language
+  code such as `en`, `es`, or `ko` to force generated comments and feedback.]
 - QTI 3 export: [Recommend only when the instructor asked for portability,
   LMS review, interchange, or instructional-design handoff. Otherwise state
   "No" with a one-line note on when to revisit.]
@@ -123,16 +125,17 @@ portability or sharing; otherwise state "no QTI 3" in the prompt.
 ## Review Gate Details
 
 - `description.txt`: clear task, required names, constraints, and non-revealing
-  hints.
+  hints; use the configured content language for student-facing prose.
 - `solution.m`: runnable, concise, aligned to the stated objective.
 - `template.m`: same names as the solution; blanks only where students should
-  work.
+  work; comments use the configured content language.
 - `function_call.m` (Function assessment items only): the three instructor
-  comments at the top, representative sample inputs, one plain call to the
-  required function, and no grading assertions; must run cleanly against the
-  reference solution.
+  comments at the top localized to the configured content language,
+  representative sample inputs, one plain call to the required function, and no
+  grading assertions; must run cleanly against the reference solution.
 - `tests.m`: only distinct, objective-aligned MATLAB Code sections, with
   randomized inputs, an edge or transfer case, and hardcoding detection when
-  those checks measure separate evidence.
+  those checks measure separate evidence; learner-visible assessment names and
+  optional feedback use the configured content language.
 - `qti3/`: one manifest and one item XML inside the same assessment item
   folder; metadata preserves description, template, solution, and tests.

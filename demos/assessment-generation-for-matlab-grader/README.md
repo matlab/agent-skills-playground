@@ -14,6 +14,8 @@ This demo generates MATLAB Grader assessment items from learning objectives that
 
 On first use, the generator conducts explicit setup for missing profile values. It never asks an instructor to press Enter for a default. On later uses it reads the profile, first evaluates whether the objective has observable code evidence, and then recommends Script, Function, or the appropriate class-related item mode with a rationale. If the objective is unsuitable, it stops with an assessable rewording or a better assessment modality. If the requested complexity is unsupported, it reports that rather than adding unrelated difficulty.
 
+The profile may set `content_language: auto` or a language code such as `en`, `es`, or `ko`. With `auto`, the generator uses the dominant language of the approved problem description. Student-facing descriptions, MATLAB comments, learner-visible assessment names, and optional feedback use that language. MATLAB code, identifiers, file names, MATLAB keywords, Grader test type labels, and instructor setup headings remain stable unless explicitly requested otherwise.
+
 Learner-authored `classdef` submissions must be plain `.m` files, not Live Script `.m` or `.mlx` files. Abstract classes may be used as referenced superclasses, but directly assessing a learner-authored abstract class is not supported when the assessment would need to instantiate it.
 
 The generator proposes one titled task and task statement per objective. The only follow-up is approval or revision, plus a complexity decision if the profile does not already specify one. “Both” is explained only when selected: the item is designed for formative revision and later summative use.
@@ -70,7 +72,7 @@ Before an item is ready, the workflow:
 1. Runs MATLAB Code Analyzer and applies MATLAB coding guidance to the solution, template, function-call block, and transient validation code.
 2. Rejects analyzer errors and resolves or reports warnings. Generated materials use descriptive names, modern string syntax, and no shadowed built-ins or unsafe dynamic-workspace functions.
 3. Creates a temporary, class-based `matlab.unittest` harness outside the item folder. MATLAB MCP runs it against the reference solution, a completed template, and targeted incorrect variants.
-4. Fails validation if the reference does not pass, a concept-specific mutant does not fail, a nonempty feedback entry lacks a linked mutant, or a description/template/assessment requirement disagrees.
+4. Fails validation if the reference does not pass, a concept-specific mutant does not fail, a nonempty feedback entry lacks a linked mutant, localized student-facing text is obviously in the wrong language, or a description/template/assessment requirement disagrees.
 
 This confirms MATLAB behavior and the documented Grader configuration model. It does not replace the instructor’s final paste/configuration and preview in MATLAB Grader. Function argument-validation guidance is used only when an objective explicitly includes an input-contract outcome; introductory functions do not receive an `arguments` block by default.
 

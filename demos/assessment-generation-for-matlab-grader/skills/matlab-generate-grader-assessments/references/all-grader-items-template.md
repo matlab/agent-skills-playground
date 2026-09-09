@@ -2,6 +2,8 @@
 
 This collection contains the MATLAB Grader items generated for this batch. For every item, paste the description, reference solution, learner template, run/call block when present, referenced-file instructions, and listed tests into MATLAB Grader. Paste optional feedback only where it is shown.
 
+Preserve localized item content exactly as generated. Do not translate descriptions, code comments, learner-visible assessment names, or optional feedback when copying them into this collection.
+
 ***
 # Item 1
 

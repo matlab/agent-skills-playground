@@ -149,3 +149,15 @@ Run each scenario with the local skills loaded. A ready item requires a complete
 
 - [ ] Feedback identifies the unmet classification requirement without revealing the expected result, code, or an implementation route.
 - [ ] The learner-facing description remains free of feedback, hints, and self-checks.
+
+## EV-G11: Localized comments and feedback
+
+**Prompt:** “Use `content_language: auto` and generate a formative MATLAB Grader Script item from a Korean problem description.”
+
+**Pass criteria:**
+
+- [ ] The generator resolves Korean as the content language and reports that language in the output summary.
+- [ ] `description.txt`, MATLAB comments in `solution.m`, `template.m`, and any `tests.m`, learner-visible assessment names, and optional feedback are written in Korean.
+- [ ] MATLAB identifiers, file names, MATLAB keywords, and MATLAB Grader test type labels remain unchanged and valid.
+- [ ] With `content_language: es`, an English prompt still produces Spanish student-facing comments, assessment names, and optional feedback.
+- [ ] A legacy profile without `content_language` still defaults to auto-detection rather than failing setup.

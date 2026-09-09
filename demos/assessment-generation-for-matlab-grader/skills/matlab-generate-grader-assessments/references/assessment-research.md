@@ -16,6 +16,11 @@ Every generated item must make four things explicit:
 4. **Test strategy**: randomized checks, edge cases, hardcoding detection, tolerance,
    and any required or prohibited constructs.
 
+Apply the resolved content language from the course profile to student-facing
+descriptions, MATLAB comments, learner-visible assessment names, and optional
+feedback. Preserve MATLAB identifiers, code, file names, keywords, and MATLAB
+Grader test type labels.
+
 This follows constructive alignment: assessment tasks should directly require the
 student behavior named in the learning objective. If the objective is about vectorized
 array operations, do not assess only numeric output if a loop-based solution would pass
@@ -37,6 +42,7 @@ recitation, lab preparation, self-checking, or revision.
   variable value, class, size, function output, object property, warning, or error.
 - Feedback implied by test names should identify goal, current evidence, and next
   action, such as "Check vector orientation for row and column inputs."
+- Test names and optional feedback should be in the resolved content language.
 
 ## Summative Assessment Rules
 
@@ -58,6 +64,7 @@ final submissions, or high-stakes grading.
   compute its expected value from the generated input.
 - Optional feedback may diagnose a validated misconception, but must not reveal an answer,
   hidden test, or implementation route.
+- Test names and optional feedback should be in the resolved content language.
 
 ## Mixed Formative and Summative Rules
 

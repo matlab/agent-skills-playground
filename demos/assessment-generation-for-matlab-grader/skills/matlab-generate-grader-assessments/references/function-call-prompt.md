@@ -18,9 +18,11 @@ Primary output or object variable: {SUGGESTED_VARIABLE}.
 
 Write the student-facing function-call block for MATLAB Grader.
 
+Use the resolved content language from the course profile for all comments in this block. Preserve MATLAB code, identifiers, function or class names, variable names, file names, and MATLAB keywords exactly.
+
 STRICT OUTPUT RULES:
 1. Return ONLY plain MATLAB code. No markdown fences and no explanation outside comments.
-2. Start with these comments:
+2. Start with localized equivalents of these comments:
    % This block is used by students to run and test their function before submitting.
    % A test scenario is provided by the instructor.
    % Next: click on "+Add Assessment" below.

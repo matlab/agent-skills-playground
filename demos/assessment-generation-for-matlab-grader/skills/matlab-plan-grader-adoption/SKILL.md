@@ -46,13 +46,14 @@ vague to identify an assessment goal.
    When the context mapping has a purpose emphasis, use it.
    Otherwise default to summative for graded or unspecified use, and both when
    the module serves practice first with grading reuse later.
-5. Provide an instructor-ready generation prompt for the `matlab-generate-grader-assessments` skill.
-6. Define review gates for `description.txt`, `solution.m`, `template.m`,
+5. Recommend `content_language: auto` unless the instructor requests a specific language code.
+6. Provide an instructor-ready generation prompt for the `matlab-generate-grader-assessments` skill.
+7. Define review gates for `description.txt`, `solution.m`, `template.m`,
    `function_call.m` when the recommended type is Function, and `tests.m`.
-7. Define QTI 3 export and sharing guidance when portability is requested.
-8. Propose a first pilot with one generated item, one review pass, and one
+8. Define QTI 3 export and sharing guidance when portability is requested.
+9. Propose a first pilot with one generated item, one review pass, and one
    revision loop.
-9. Include a concise instructor checklist.
+10. Include a concise instructor checklist.
 
 If the request requires a MATLAB class definition, class inheritance,
 object-usage, or class-method submission, include the generator's classdef

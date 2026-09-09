@@ -49,6 +49,13 @@ output_location: assessments
 assessment_purpose: summative
 qti3_export: false
 require_matlab_mcp: true
+content_language: auto
+language_policy:
+  comments: match_content_language
+  feedback: match_content_language
+  assessment_names: match_content_language
+  instructor_setup: english
+  preserve_code_identifiers: true
 coding_practice_progression:
   enabled: true
   low: [descriptive names, string literals for new text]
@@ -62,6 +69,10 @@ learning_objectives:
 ```
 
 Document that `low`, `moderate`, and `high` are the only complexity labels. The coding-practice progression is an authoring gate and learner guidance; it is not a student scoring criterion unless a future objective explicitly makes it assessable.
+
+`content_language` controls student-facing language. Use `auto` to infer the resolved content language from the approved problem description or task statement for each item. Use a BCP 47 or ISO-style language code such as `en`, `es`, or `ko` to force all generated items to that language. If an older profile omits `content_language`, default to `auto`. When auto-detection is ambiguous or the prompt mixes languages, use the dominant language of the student-facing problem description.
+
+Apply `language_policy` after resolving the content language. Generate student-facing prose, code comments, learner-visible assessment names, and optional feedback in the resolved content language. Preserve MATLAB code, identifiers, function signatures, class names, variable names, file names, MATLAB keywords, MATLAB Grader test type labels, and instructor-facing setup headings unless the user explicitly asks to localize them.
 
 ## Suitability and proposal gate
 
@@ -89,6 +100,7 @@ Create one folder named with a snake_case title under the profile output locatio
 
 ### Description, solution, template, and call block
 
+- Before writing artifacts, resolve the item language from `content_language`. Student-facing descriptions, MATLAB comments in generated code, learner-visible assessment names, and optional feedback must use that resolved content language.
 - Generate only code matching the approved item mode. Use descriptive names, modern string syntax for new text outside class-property defaults, and no shadowed built-ins, `eval`, `evalin`, or `assignin`.
 - For Class Definition, Class Inheritance, and Class Methods items, generate a plain `.m` `classdef` reference solution and learner template. The class name must match the submitted file name and any run-block constructor call exactly.
 - For Object Usage items, generate a Script submission that instantiates or modifies objects from referenced class files; do not ask learners to redefine the referenced class in the script.
@@ -137,12 +149,13 @@ Before marking output ready:
 1. Use `matlab-review-code` for every generated reference solution, template, function-call block, referenced helper `.m` file, and temporary validation code. Run MATLAB Code Analyzer and consult the MATLAB coding guidelines. Errors fail generation. Resolve warnings or report why they remain. Enforce descriptive names, modern string usage outside required character-array defaults, no shadowed built-ins, and no unsafe dynamic-workspace functions.
 2. Invoke `matlab-validate-function-arguments` only for Function items whose objective or profile explicitly includes an input contract or argument-validation outcome. Do not add an `arguments` block merely because an item is a Function item.
 3. Inspect generated `assessments.md` and `tests.m` files for invalid tolerance parameter names. `AbsTol` and `RelTol` fail generation; replace them with `AbsoluteTolerance` and `RelativeTolerance` before validation.
-4. In an operating-system temporary directory outside the repository and instructor-facing item folder, create a class-based `matlab.unittest` harness. Use `matlab-testing` and run it through MATLAB MCP against the reference solution, a completed learner template, and targeted incorrect variants. Confirm the reference and completed template pass, concept-specific mutants fail, every requirement in the matrix is represented, and every nonempty feedback entry is backed by its linked mutant.
-5. Do not leave the transient harness in the instructor-facing item folder. Report the MCP run result and its limits: it validates MATLAB behavior and the documented configuration model, while the instructor still pastes/configures the rows in MATLAB Grader.
+4. Inspect generated student-facing prose, MATLAB comments, learner-visible assessment names, and optional feedback for the resolved content language. If the resolved content language is not English and these surfaces are obviously still English, generation is not ready; localize them before validation. Do not translate MATLAB code, identifiers, Grader test type labels, or instructor-facing setup headings.
+5. In an operating-system temporary directory outside the repository and instructor-facing item folder, create a class-based `matlab.unittest` harness. Use `matlab-testing` and run it through MATLAB MCP against the reference solution, a completed learner template, and targeted incorrect variants. Confirm the reference and completed template pass, concept-specific mutants fail, every requirement in the matrix is represented, and every nonempty feedback entry is backed by its linked mutant.
+6. Do not leave the transient harness in the instructor-facing item folder. Report the MCP run result and its limits: it validates MATLAB behavior and the documented configuration model, while the instructor still pastes/configures the rows in MATLAB Grader.
 
 ## Output summary
 
-For each item, report its title, approved complexity, item mode, folder, files, referenced files, number and type of configured assessments, number of optional feedback entries, and the completed MATLAB MCP validation result. When created, also report the path to `AllGraderItems.md`. Never claim validation when MATLAB MCP did not complete.
+For each item, report its title, resolved content language, approved complexity, item mode, folder, files, referenced files, number and type of configured assessments, number of optional feedback entries, and the completed MATLAB MCP validation result. When created, also report the path to `AllGraderItems.md`. Never claim validation when MATLAB MCP did not complete.
 
 ## Credits
 

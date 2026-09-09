@@ -2,6 +2,8 @@
 
 Create `assessments.md`, not a padded test script. Start with a requirement-to-assessment matrix, then include exact MATLAB Grader setup directions for every row. Add an `Optional feedback on incorrect submission` column. Use `—` when no feedback is warranted; otherwise provide feedback tied to a validated incorrect variant.
 
+Resolve the content language from the course profile. Write learner-visible assessment names, expected-evidence prose, MATLAB Code comments, and optional feedback in the resolved content language. Keep MATLAB Grader test type labels, instructor-facing setup headings, UI field names, MATLAB code, identifiers, function signatures, class names, variable names, file names, and MATLAB keywords unchanged.
+
 Use **Variable equals reference solution** only for ordinary equality of one student variable in a Script submission. It cannot compare a vector, expression, or list of multiple variables, and it is not available for Function or class-submission items. Use **MATLAB Code** for a custom property that direct equality cannot check, whenever one assessment must compare multiple student variables, for every Function-submission output check, and for class-submission checks.
 
 Each Function assessment must assign its inputs, call both the learner function and its `reference.<functionName>` counterpart, then call `assessVariableEqual` on the learner output and reference output. Do not assume `function_call.m` variables or `referenceVariables` are available, and do not reproduce the solution algorithm. When class matters, compare to the class of the reference-function output.
