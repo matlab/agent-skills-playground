@@ -74,7 +74,7 @@ Each demo folder is self-contained: it bundles its own skills under `skills/`, a
 
 ## License
 
-Licensed under [LICENSE](LICENSE).
+Licensed under [LICENSE](LICENSE.md).
 
 Copyright (c) 2025-2026, The MathWorks, Inc. All rights reserved.
 
