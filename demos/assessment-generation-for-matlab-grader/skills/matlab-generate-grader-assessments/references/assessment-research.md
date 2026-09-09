@@ -95,7 +95,9 @@ Use MATLAB Grader-friendly checks:
 - `randperm(19)-10` when detecting swapped values, orientation mistakes, or hardcoding.
   Skew the sample when assessing location statistics; this distribution has mean and median exactly 0.
 - `randi([lo, hi])` when the range matters more than permutation.
-- Explicit numeric tolerance when comparing floating-point values.
+- Explicit numeric tolerance when comparing floating-point values. When using
+  `assessVariableEqual`, use the full parameter names `RelativeTolerance` and
+  `AbsoluteTolerance`; do not use shortened names such as `RelTol` or `AbsTol`.
 
 ## Assessment configuration pattern
 

@@ -10,7 +10,7 @@ For Class Definition, Class Inheritance, and Class Methods items, write MATLAB C
 
 For Object Usage Script items, assess variables created by the learner script. Use `exist`, `class`, and object property comparisons against `referenceVariables.<name>` for clear feedback. Use whole-variable **Variable equals reference solution** only when one object variable equality is truly the intended evidence and targeted property checks are not needed.
 
-For Script submissions, **Variable equals reference solution** allows ±0.1% relative tolerance or ±0.0001 absolute tolerance between the learner and reference values. Use **MATLAB Code** with `assessVariableEqual` and its `RelativeTolerance` or `AbsoluteTolerance` parameter to override that default.
+For Script submissions, **Variable equals reference solution** allows ±0.1% relative tolerance or ±0.0001 absolute tolerance between the learner and reference values. Use **MATLAB Code** with `assessVariableEqual` and the full parameter names `RelativeTolerance` or `AbsoluteTolerance` to override that default. Never generate `RelTol` or `AbsTol`; those shortened names are invalid for this MATLAB Grader assessment code.
 
 Use **Function or Keyword is present** only for an explicitly required named construct. Use **Function or Keyword is absent** only for an explicitly prohibited shortcut. Do not add construct tests merely to make a suite longer.
 

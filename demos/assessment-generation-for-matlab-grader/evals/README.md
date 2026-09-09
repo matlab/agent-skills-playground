@@ -139,6 +139,7 @@ Run each scenario with the local skills loaded. A ready item requires a complete
 - [ ] The generator validates that the reversed-comparison variant fails the linked assessment.
 - [ ] `assessments.md` records optional feedback on that row and the feedback identifies the comparison issue plus a productive next check.
 - [ ] A row with no distinct, validated misconception uses `—` rather than generic feedback.
+- [ ] Custom tolerance checks use `RelativeTolerance` or `AbsoluteTolerance` with `assessVariableEqual`; generated files do not contain `RelTol` or `AbsTol`.
 
 ## EV-G10: Summative feedback safety
 
