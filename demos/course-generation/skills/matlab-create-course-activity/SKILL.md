@@ -1,7 +1,7 @@
 ---
 name: matlab-create-course-activity
 description: Create MATLAB Course Designer MATLAB Exercise learning activities by wrapping the existing matlab-generate-grader-assessments skill, then validating generated solution.m, template.m, and tests.m files with MATLAB MCP Server tool calls. Use when the user asks to create a MATLAB Exercise, MATLAB course activity, Course Designer MATLAB activity, validated MATLAB solution file, or MATLAB Exercise component folder.
-license: MathWorks BSD-3-Clause (see LICENSE)
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "1.0"

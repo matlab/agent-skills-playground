@@ -1,7 +1,7 @@
 ---
 name: matlab-evaluate-tutor-quality
 description: Use when reviewing, auditing, scoring, or improving a real or synthetic MATLAB AI tutor transcript, tutoring prompt, generated lesson, exercise, feedback sequence, or skill behavior for MATLAB accuracy, active learning, assignment guardrails, feedback quality, debugging support, transfer prompts, and instructor-facing quality recommendations.
-license: MathWorks BSD-3-Clause (see LICENSE)
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "1.0"

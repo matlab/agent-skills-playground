@@ -1,7 +1,7 @@
 ---
 name: matlab-plan-grader-adoption
 description: Use when an instructor asks for a MATLAB Grader assessment setup guide, adoption guide, pilot plan, course-specific rollout, QTI 3 sharing workflow, or recommended MATLAB Grader assessment-item-generation configuration based on a learning objective, course title, course description, module description, lab description, or assessment goal.
-license: MathWorks BSD-3-Clause (see LICENSE)
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "1.0"

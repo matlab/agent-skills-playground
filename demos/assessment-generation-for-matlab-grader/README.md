@@ -1,6 +1,21 @@
 # MATLAB Grader assessment generation
 
-This demo generates MATLAB Grader assessment items from learning objectives that have observable MATLAB-code evidence. The workflow is profile-driven, supports Script, Function, Class Definition, Class Inheritance, Object Usage, and Class Methods items, and requires a working MATLAB MCP session for generation preflight and validation.
+A demo showing how an agent can generate MATLAB Grader assessment items from a learning objective.
+The workflow is profile-driven, supports Script, Function, Class Definition, Class Inheritance, Object Usage, and Class Methods items, and requires a working MATLAB MCP session for generation preflight and validation.
+It only accepts objectives with observable MATLAB-code evidence, and says so when an objective does not qualify.
+
+## What you'll do
+
+You'll open this folder in your agent and give it a learning objective for a MATLAB topic.
+The `matlab-generate-grader-assessments` skill checks whether the objective has observable code evidence, proposes a titled task and complexity for your approval, then generates the instructor-facing files and validates them against a live MATLAB session.
+If you are planning a course rollout rather than authoring one item, `matlab-plan-grader-adoption` produces an instructor setup guide instead.
+
+## Skills included
+
+| Skill | Role |
+|---|---|
+| [`matlab-generate-grader-assessments`](skills/matlab-generate-grader-assessments/SKILL.md) | Generator: suitability gate, item proposal, description, reference solution, learner template, assessment matrix, MATLAB Code tests, optional QTI 3 package, and MATLAB MCP validation. |
+| [`matlab-plan-grader-adoption`](skills/matlab-plan-grader-adoption/SKILL.md) | Planning path: restates the objective, recommends an item type and a formative or summative purpose, and produces an instructor setup guide for a course, module, or lab rollout. |
 
 ## Prerequisites
 
@@ -8,9 +23,36 @@ This demo generates MATLAB Grader assessment items from learning objectives that
 - MATLAB with a connected [MATLAB MCP](https://github.com/matlab/matlab-mcp-server) session. The generator verifies code, templates, mutants, and assessment traceability through that session; it does not mark an item ready when MCP validation cannot run.
 - Access to [MATLAB Grader](https://www.mathworks.com/products/matlab-grader.html) to configure the completed item.
 
+Browsing the skills and reading the packaged examples requires no MATLAB installation.
+
+## Setup
+
+1. **Clone this repo** if you haven't already:
+   ```bash
+   git clone https://github.com/matlab/agent-skills-playground.git
+   ```
+2. **Install the [MATLAB MCP Server](https://github.com/matlab/matlab-mcp-server)** and connect a MATLAB session. The generator will not mark an item ready when it cannot validate.
+3. **Open the demo folder** in your agent. Two options:
+   - **Claude Code**: from a terminal, `cd` into `demos/assessment-generation-for-matlab-grader/` and run `claude`. The agent will pick up the skills in this folder's `skills/` directory.
+   - **Other agents**: point the agent at `demos/assessment-generation-for-matlab-grader/skills/` per the agent's instructions for user-defined skills.
+
+## Walkthrough
+
+If you are planning adoption, start with the setup guide:
+
+> *Generate a MATLAB Grader setup guide for a first-year MATLAB programming course with weekly graded homework.*
+
+To author an item, give the generator an objective:
+
+> *Create a MATLAB Grader assessment item for this objective: students can write a function that returns the mean and standard deviation of a numeric vector.*
+
+On first use the generator completes the course profile setup described below.
+It then proposes one titled task, an item mode, and a complexity for your approval before generating any files.
+
 ## Course profile and suitability gate
 
-[`matlab-grader-course-profile.md`](matlab-grader-course-profile.md) is the committed, versioned source of reusable defaults: output location, purpose, QTI preference, MCP requirement, coding-practice guidance, and the allowed `low`, `moderate`, and `high` complexity levels for each objective.
+`matlab-grader-course-profile.md` is the committed, versioned source of reusable defaults: output location, purpose, QTI preference, MCP requirement, coding-practice guidance, and the allowed `low`, `moderate`, and `high` complexity levels for each objective.
+The generator writes it into your course-material root on first use, so it is not part of this repo.
 
 On first use, the generator conducts explicit setup for missing profile values. It never asks an instructor to press Enter for a default. On later uses it reads the profile, first evaluates whether the objective has observable code evidence, and then recommends Script, Function, or the appropriate class-related item mode with a rationale. If the objective is unsuitable, it stops with an assessable rewording or a better assessment modality. If the requested complexity is unsupported, it reports that rather than adding unrelated difficulty.
 
@@ -87,11 +129,6 @@ This confirms MATLAB behavior and the documented Grader configuration model. It 
 ## Evals
 
 [`evals/README.md`](evals/README.md) contains scenario-based checks, including unsuitable objectives, profile reuse, infeasible complexity, all four MATLAB Grader test types, reference-based custom checks, duplicate rejection, quality gates, and MCP failures.
-
-Before release, review the canonical skill files under `skills/`, the README, and
-the eval scenarios together to verify class-related scope, staged reference
-loading, readable referenced-file guidance, and current Function assessment
-guidance.
 
 ## Selected Sources
 

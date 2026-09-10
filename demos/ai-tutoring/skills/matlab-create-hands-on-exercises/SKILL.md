@@ -1,7 +1,7 @@
 ---
 name: matlab-create-hands-on-exercises
 description: Use when prompting a learner to complete hands-on MATLAB coding exercises, guided practice, debugging drills, code tracing, small MATLAB projects, or MATLAB-script assessment during tutoring. Use when the tutor should create a complete runnable MATLAB script, execute it through MATLAB tools, compare the produced outputs with expected outputs, and evaluate MATLAB programming style.
-license: MathWorks BSD-3-Clause (see LICENSE)
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "1.0"

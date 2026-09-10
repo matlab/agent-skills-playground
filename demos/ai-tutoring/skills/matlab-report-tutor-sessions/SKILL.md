@@ -1,7 +1,7 @@
 ---
 name: matlab-report-tutor-sessions
 description: Use when a learner or instructor asks for a report, summary, reflection, progress note, performance recap, activity metrics, instructor-shareable record of a MATLAB AI tutoring session, aggregate report across multiple MATLAB tutoring session reports, or instructor dashboard artifact with metric drilldowns. Supports optional start and end datetime arguments for multi-session report and dashboard ranges.
-license: MathWorks BSD-3-Clause (see LICENSE)
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "1.0"

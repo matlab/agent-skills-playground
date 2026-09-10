@@ -1,6 +1,6 @@
 # Example MCQ Set - Array Indexing
 
-<!-- Copyright 2026 - 2026 The MathWorks, Inc. -->
+<!-- Copyright 2026 The MathWorks, Inc. -->
 
 Use these questions with `matlab-create-mcq-practice`.
 

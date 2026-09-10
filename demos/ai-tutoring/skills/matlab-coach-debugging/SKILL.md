@@ -1,7 +1,7 @@
 ---
 name: matlab-coach-debugging
 description: Use when tutoring a learner through MATLAB debugging, error interpretation, failed tests, incorrect outputs, array-shape problems, indexing mistakes, function argument issues, or code repair practice. Use for guided debugging sessions, debugging drills, teach-the-agent critique, and evidence-based MATLAB troubleshooting.
-license: MathWorks BSD-3-Clause (see LICENSE)
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "1.0"

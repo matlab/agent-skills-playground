@@ -1,7 +1,7 @@
 ---
 name: matlab-plan-tutor-adoption
 description: Use when an instructor asks for a MATLAB AI tutor setup guide, adoption guide, pilot plan, course-specific rollout, or recommended tutor configuration based on a learning objective, course title, course description, module description, or lab description.
-license: MathWorks BSD-3-Clause (see LICENSE)
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "1.0"

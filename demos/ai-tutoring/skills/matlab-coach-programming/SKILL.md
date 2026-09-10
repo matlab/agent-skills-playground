@@ -1,7 +1,7 @@
 ---
 name: matlab-coach-programming
 description: Use when an AI tutor session concerns MATLAB programming concepts, MATLAB syntax, MATLAB errors, MATLAB code style, MATLAB projects, or MATLAB toolbox workflows.
-license: MathWorks BSD-3-Clause (see LICENSE)
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "1.0"

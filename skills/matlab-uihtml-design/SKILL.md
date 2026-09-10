@@ -1,7 +1,7 @@
 ---
 name: matlab-uihtml-design
-description: Generate beautiful, distinctive HTML/CSS/JS control panels for MATLAB uihtml components. 8 built-in styles (Clean, Material, Cosmic Dark, Neumorphic, Dashboard Light, Midnight Gradient, Minimal Mono, Warm Dark) plus custom aesthetics. Produces production-grade UI with sliders, buttons, toggles, and panels. Use when building visually polished MATLAB app UIs with uihtml.
-license: MathWorks BSD-3-Clause (see LICENSE)
+description: Generate beautiful, distinctive HTML/CSS/JS control panels for MATLAB uihtml components. 8 built-in styles (Clean, Material, Cosmic Dark, Neumorphic Dark, Dashboard Light, Midnight Gradient, Minimal Mono, Warm Dark) plus custom aesthetics. Produces production-grade UI with sliders, buttons, toggles, and panels. Use when building visually polished MATLAB app UIs with uihtml.
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "1.0"
@@ -177,7 +177,7 @@ html, body {
 
 | Style | Thumb default | Thumb hover |
 |---|---|---|
-| Dark styles (Cosmic Dark, Midnight, Neumorphic, Warm Dark, Minimal Mono) | `rgba(255,255,255,0.10)` | `var(--accent-glow)` |
+| Dark styles (Cosmic Dark, Midnight Gradient, Neumorphic Dark, Warm Dark, Minimal Mono) | `rgba(255,255,255,0.10)` | `var(--accent-glow)` |
 | Light styles (Clean, Dashboard Light, Material light mode) | `rgba(0,0,0,0.12)` | `rgba(0,0,0,0.22)` or `var(--accent)` |
 
 Keep the scrollbar `6px` wide and the thumb under 20% alpha; anything heavier breaks the style. Don't show track borders or arrows.

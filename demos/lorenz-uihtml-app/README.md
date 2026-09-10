@@ -31,7 +31,7 @@ MATLAB R2021a or newer (R2025a+ for automatic light/dark theme sync)
 From the MATLAB prompt:
 
 ```matlab
-cd C:\github\agent-skills-playground\demos\lorenz-uihtml-app
+cd agent-skills-playground/demos/lorenz-uihtml-app
 lorenzGUI
 ```
 

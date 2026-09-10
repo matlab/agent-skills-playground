@@ -1,6 +1,6 @@
 # Sample Tutoring Transcript - Array Indexing
 
-<!-- Copyright 2026 - 2026 The MathWorks, Inc. -->
+<!-- Copyright 2026 The MathWorks, Inc. -->
 
 - Transcript status: Synthetic
 - Course context: Introductory MATLAB® programming

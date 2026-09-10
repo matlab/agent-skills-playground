@@ -1,7 +1,7 @@
 ---
 name: matlab-tutor-learners
 description: Use when tutoring a student in MATLAB programming, coaching beginners, explaining MATLAB concepts interactively, or running a conversational AI tutor session.
-license: MathWorks BSD-3-Clause (see LICENSE)
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "1.0"

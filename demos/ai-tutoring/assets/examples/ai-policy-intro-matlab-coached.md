@@ -1,6 +1,6 @@
 # AI Use Policy for Introduction to MATLAB® Programming
 
-<!-- Copyright 2026 - 2026 The MathWorks, Inc. -->
+<!-- Copyright 2026 The MathWorks, Inc. -->
 
 **Term:** Example Fall Term
 **Instructor:** Course instructor

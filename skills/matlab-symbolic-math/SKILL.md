@@ -1,7 +1,7 @@
 ---
 name: matlab-symbolic-math
 description: Generate correct MATLAB code using the Symbolic Math Toolbox. Use when the user asks for symbolic computations, analytical solutions, symbolic differentiation/integration, equation solving, or converting symbolic results to numeric MATLAB functions. Also use when converting differential equations to transfer functions or state-space form.
-license: MathWorks BSD-3-Clause (see LICENSE)
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "1.0"

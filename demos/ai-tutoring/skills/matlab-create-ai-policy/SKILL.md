@@ -1,7 +1,7 @@
 ---
 name: matlab-create-ai-policy
 description: Use when an instructor wants to create, interview for, configure, install, update, or review a course AI-use policy for MATLAB AI tutoring. Produces an AI-POLICY.md file for LMS sharing and local tutoring-session enforcement by assignment guardrails.
-license: MathWorks BSD-3-Clause (see LICENSE)
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "1.0"

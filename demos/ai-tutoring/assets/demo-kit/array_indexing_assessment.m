@@ -1,4 +1,4 @@
-% Copyright 2026 - 2026 The MathWorks, Inc.
+% Copyright 2026 The MathWorks, Inc.
 %% MATLAB® AI Tutor Demo Kit: Array Indexing Assessment
 % Complete the learner section, then run the script.
 

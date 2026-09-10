@@ -1,6 +1,6 @@
 # Suggested Syllabus AI Use Language
 
-<!-- Copyright 2026 - 2026 The MathWorks, Inc. -->
+<!-- Copyright 2026 The MathWorks, Inc. -->
 
 Use this language as a starting point and adapt it to local institutional
 policy.
