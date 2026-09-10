@@ -50,16 +50,20 @@ function_call.m content
 Include **Optional Feedback on Incorrect Submission** only when a validated incorrect
 approach supports useful feedback for that test.
 
+Each fenced `Copy` block below must contain only the exact value to paste into
+the corresponding MATLAB Grader field. Do not include UI labels such as
+`Variable name:` or `Command or keyword:` inside a `Copy` block.
+
 ### Test #1
 ```Copy
 Test name
 ```
 
-Test type: Test type goes here
+Test type: **MATLAB Code**
 
-Test content:
+MATLAB Grader code to paste:
 ```Copy
-Assessment content goes here
+Assessment code goes here
 ```
 
 Optional Feedback on Incorrect Submission:
@@ -72,12 +76,16 @@ Feedback content goes here
 Test name
 ```
 
-Test type: Test type goes here
+Test type: **Variable equals reference solution**
 
-Test content:
+MATLAB Grader variable name to paste:
 ```Copy
-Assessment content goes here
+studentVariableName
 ```
+
+For **Function or Keyword is present** and **Function or Keyword is absent** tests,
+use the same pattern: name the MATLAB Grader field outside the fenced block, and
+put only the checked function or keyword inside the `Copy` block.
 
 Optional Feedback on Incorrect Submission:
 ```Copy
