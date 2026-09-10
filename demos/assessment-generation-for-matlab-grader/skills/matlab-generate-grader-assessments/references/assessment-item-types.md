@@ -1,60 +1,22 @@
-# Assessment Item Types Reference
+# Supported MATLAB Grader assessment item types
 
-## Assessment Item Types
+| Type | Learner submission | Primary observable evidence | Extra artifact |
+| --- | --- | --- | --- |
+| Script | `.m` script | Workspace variables and required/prohibited constructs | None |
+| Function | `.m` function | Outputs for specified calls and, when explicit, input-contract behavior; assessed with MATLAB Code | `function_call.m` |
+| Class Definition | Plain `.m` concrete `classdef` file | Instantiability, superclass/value-class behavior, constructor defaults, public properties, methods | `function_call.m` |
+| Class Inheritance | Plain `.m` concrete `classdef` file plus referenced superclass files | Required inheritance, inherited and added properties, methods, constructor behavior | `function_call.m`, referenced files |
+| Object Usage | `.m` script plus referenced class files | Objects created from referenced classes, object property values, copy/value behavior, required commands | Referenced files |
+| Class Methods | Plain `.m` concrete `classdef` file plus optional referenced class/data/helper files | Method behavior after construction and setup calls, object state changes | `function_call.m`, referenced files |
 
-| Type | What the student submits | How it's assessed | Key detail |
-|------|--------------------------|-------------------|------------|
-| Script | `.m` script | Variables in workspace | Direct state inspection |
-| Function | `.m` function | Input/output values | Student call block + assertions |
-| Class | `classdef ClassName.m` | Properties/methods via instantiation | Instantiation -> property checks -> method calls |
-| Object usage | `.m` script (provided class) | Computed output variable | Supporting class generated; student writes script only |
+Learner-authored `classdef` files must be plain `.m` files, not Live Script `.m` or `.mlx` files. The learner-submitted class must be concrete whenever assessments instantiate it. Do not generate directly auto-graded learner-authored abstract-class items when validation depends on instantiation; abstract classes are valid as referenced superclasses for concrete subclass exercises.
 
-## Class Assessment Types
+Each item folder contains `description.txt`, `solution.m`, `template.m`, and `assessments.md`. Add `function_call.m` only for Function, Class Definition, Class Inheritance, and Class Methods items. Add `tests.m` only when an `assessments.md` row uses the MATLAB Code test type. List referenced files in `assessments.md` and place generated readable referenced source files in a documented referenced-file location. Do not generate `.p` files; educators may manually pcode reviewed helper `.m` files before upload when they need hidden helper logic.
 
-When assessment item type is "Class", the user must also choose what to assess:
+`assessments.md` is the source of truth for MATLAB Grader configuration. It must include student-template line-lock setup guidance derived from the final `template.m`. Its requirement-to-assessment matrix must show that every stated requirement has one distinct, objective-aligned assessment and may include feedback on a validated incorrect submission. Feedback is optional for each assessment.
 
-| Assessment | What gets blanked in template | Description |
-|------------|-------------------------------|-------------|
-| Constructor - property assignment | `obj.prop = arg` lines in constructor | Students fill in property assignment lines |
-| Constructor - computed property | Derived property line(s) only | Students compute a property from other values |
-| Instance method | Method body | Students implement a method |
-| Constant property | Value inside `properties (Constant)` block | Students provide the correct constant value |
-| Operator overloading | Overloaded operator method body | Students implement an operator (plus, minus, etc.) |
+For Function items, do not configure **Variable equals reference solution**. Use **MATLAB Code** for each output check. In each assessment, assign test inputs, call the learner function and `reference.<functionName>` with those inputs, then compare the outputs with `assessVariableEqual`.
 
-## Object Usage Solution Format
+For Class Definition, Class Inheritance, and Class Methods items, use **MATLAB Code** for class behavior. Instantiate the learner class when concrete, instantiate `reference.<ClassName>` when needed, and compare observable behavior such as `superclasses(obj)`, `properties(obj)`, `methods(obj)`, constructor defaults, and method-updated property values. Use referenced files for abstract superclasses, data files, and readable helper `.m` checks.
 
-For "Object usage" assessment items, the solution file contains two sections separated by `%%%` delimiters:
-
-```
-%%% SUPPORTING FILE: ClassName.m %%%
-classdef ClassName
-...
-end
-%%% STUDENT SCRIPT SOLUTION %%%
-...script code...
-```
-
-The supporting class file goes into MATLAB Grader "Supporting Files".
-The script portion goes into "Reference Solution".
-The template contains only the script portion with blanks.
-
-## Output Files Per Assessment Item
-
-Each assessment item generates one self-contained assessment item folder. Native MATLAB Grader files
-live at the item folder root:
-
-| File | Contents |
-|------|----------|
-| `description.txt` | Student-facing assessment item instructions |
-| `solution.m` | Complete reference solution |
-| `template.m` | Scaffolded learner template with `% YOUR CODE HERE` blanks |
-| `function_call.m` | Student pre-submit code for calling a Function assessment item |
-| `tests.m` | 3-5 MATLAB Grader `assessVariableEqual` test cases |
-| `supporting_class.m` | (Object usage only) The classdef supporting file |
-
-When QTI 3 export is enabled, the same assessment item folder also contains a nested QTI 3
-interchange package with one manifest file and one item XML file.
-
-## Naming Convention
-
-Folder names use snake_case derived from the assessment item title.
+For Object Usage Script items, use MATLAB Code assessments for object existence, class, property values, and copy/value behavior. Compare expected object state with `referenceVariables.<name>` when the reference solution creates the same script variables. Use **Function or Keyword is present** only for explicit required commands such as `whos`.

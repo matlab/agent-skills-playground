@@ -1,168 +1,27 @@
-# Tests Generation Prompt
+# MATLAB Grader assessment configuration prompt
 
-This reference defines the system prompts for generating MATLAB Grader test cases, branched by assessment item type.
-The tests prompt always receives the reference solution as context.
+Create `assessments.md`, not a padded test script. Start with a **Student Template Line Locks** section, then add a requirement-to-assessment matrix, then include exact MATLAB Grader setup directions for every row. Add an `Optional feedback on incorrect submission` column. Use `—` when no feedback is warranted; otherwise provide feedback tied to a validated incorrect variant.
 
-## Shared Quality Rules (ALL assessment item types)
+Resolve the content language from the course profile. Write learner-visible assessment names, expected-evidence prose, MATLAB Code comments, and optional feedback in the resolved content language. Keep MATLAB Grader test type labels, instructor-facing setup headings, UI field names, MATLAB code, identifiers, function signatures, class names, variable names, file names, and MATLAB keywords unchanged.
 
-These rules MUST be included in every tests prompt:
+In **Student Template Line Locks**, list the final 1-based `template.m` line numbers that instructors should lock in MATLAB Grader after pasting the student template. Derive the line numbers from the final generated `template.m`. Use a table with columns `Line(s)`, `Lock?`, `Exact template text`, and `Reason`. Use inclusive ranges for contiguous locked lines and comma-separated groups only when needed. For a single line, quote the exact line text; for a range, quote the first and last line text. Lock required scaffold comments, fixed signatures, fixed class or inheritance declarations, required property or method signatures, provided setup values, structural `end` lines, and referenced-file usage scaffolding that must remain intact. Do not lock learner implementation placeholders or blank lines intended for student work. If no lines should be locked, write `No template lines need to be locked for this item.`
 
-```
-STRICT OUTPUT RULES - violating any rule means the test file is unusable:
-1. Return ONLY plain MATLAB code. No markdown fences, no triple backticks, no prose outside comments.
-2. Structure: each test is exactly one %% section:
-       %% Test N: one-line description
-       <setup - 1 to 3 lines maximum>
-       assessVariableEqual('expression', expected_value);
-3. No try/catch, no fprintf, no if/else, no whos, no dir, no script_ran flags.
-4. 3 to 5 tests maximum.
-5. Never use fixed numeric literals as assessed input data. Always use randi or randperm.
-   Fixed control parameters (tolerances, iteration budgets, option flags) are allowed.
-   Use randperm(19)-10 when swap/transposition detection matters (gives distinct values -9 to 9).
-   Use randi([lo, hi]) when swap detection is not the goal.
-   Caution: randperm(19)-10 is symmetric around zero, so its mean and median are both exactly 0.
-   When the assessed quantities are location statistics (mean, median, sums), skew the sample,
-   for example [randperm(19)-10, randi([40, 60], 1, 4)], so swapped statistics actually differ.
-6. Hardcoding detection is mandatory: include at least one test that uses a clearly different
-   numeric range from the first test, so a hardcoded expected value fails.
-7. assessVariableEqual('varname', value) - no Description parameter.
-   Tolerance arguments ('AbsTol', 'RelTol') are allowed and expected when comparing floating-point values.
-8. Separate %% sections are the only separators - no === comment banners.
-9. Align every test with the stated learning objective and assessment purpose.
-10. Do not assess coding style, required functions, or prohibited functions unless the objective explicitly requires that method.
-```
+Use **Variable equals reference solution** only for ordinary equality of one student variable in a Script submission. It cannot compare a vector, expression, or list of multiple variables, and it is not available for Function or class-submission items. Use **MATLAB Code** for a custom property that direct equality cannot check, whenever one assessment must compare multiple student variables, for every Function-submission output check, and for class-submission checks.
 
-## Assessment-Purpose Rules
+For **Variable equals reference solution** rows, the `assessments.md` matrix may describe the MATLAB Grader UI field as `Variable name: <name>`, but the row's `Code to paste` value must be `—` because there is no MATLAB assessment code. In combined `AllGraderItems.md` output, the fenced `Copy` block for that assessment field must contain only `<name>` as a bare MATLAB variable identifier, not `Variable name: <name>`.
 
-Apply these rules from `assessment-research.md`:
+Each Function assessment must assign its inputs, call both the learner function and its `reference.<functionName>` counterpart, then call `assessVariableEqual` on the learner output and reference output. Do not assume `function_call.m` variables or `referenceVariables` are available, and do not reproduce the solution algorithm. When class matters, compare to the class of the reference-function output.
 
-- **Formative**: Use diagnostic test names, basic correctness first, then one transfer or
-  hardcoding-detection case. Favor interpretable failures that help revision.
-- **Summative**: Use independent tests, randomized inputs, edge/transfer cases, and at least
-  one different-range hardcoding-detection case. Avoid revealing implementation hints in
-  comments.
-- **Both**: Include one clear progress-check test plus summative-grade edge and hardcoding
-  tests.
+For Class Definition, Class Inheritance, and Class Methods items, write MATLAB Code assessments that instantiate the learner class when concrete, instantiate `reference.<ClassName>` when needed, and compare observable class behavior. Use `superclasses(obj)` for inheritance, `properties(obj)` for required properties, `methods(obj)` for methods, and object properties for constructor defaults or method-updated state. For method tests, run the same referenced-file setup and method calls on learner and reference objects, then compare resulting properties with `assessVariableEqual`.
 
-## Script
+For Object Usage Script items, assess variables created by the learner script. Use `exist`, `class`, and object property comparisons against `referenceVariables.<name>` for clear feedback. Use whole-variable **Variable equals reference solution** only when one object variable equality is truly the intended evidence and targeted property checks are not needed.
 
-```
-You are an expert MATLAB educator creating MATLAB Grader assessment code.
-Assessment item: "{TITLE}". Assessment item type: Script.
-Assessment purpose: {ASSESSMENT_PURPOSE}.
+For Script submissions, **Variable equals reference solution** allows ±0.1% relative tolerance or ±0.0001 absolute tolerance between the learner and reference values. Use **MATLAB Code** with `assessVariableEqual` and the full parameter names `RelativeTolerance` or `AbsoluteTolerance` to override that default. Never generate `RelTol` or `AbsTol`; those shortened names are invalid for this MATLAB Grader assessment code.
 
-Assessment code runs AFTER student code has already executed. NEVER call run().
-{QUALITY_RULES}
+Use **Function or Keyword is present** only for an explicitly required named construct. Use **Function or Keyword is absent** only for an explicitly prohibited shortcut. Do not add construct tests merely to make a suite longer.
 
-Test order:
-  Test 1 - primary output variable exists and value is correct.
-  Test 2 - additional output or intermediate variable if assessed.
-  Test 3 - hardcoding detection using a second given data set in a clearly different range.
+For every assessment, include a concise learner-visible assessment name in the MATLAB Grader UI fields. For Function or Keyword presence/absence assessments, the name must describe the behavior being assessed and must not include the command or keyword checked by that row. Put the checked command or keyword only in its configuration field.
 
-Script randomization pattern: assessment code cannot feed input to a script that already ran.
-Put the randomized inputs in the template itself as given, unblanked lines
-(for example "data = randi([0, 50], 1, 12); % do not change"), have tests recompute
-expected values from those workspace variables, and add a second given data set in a
-clearly different range that the student code must also process for hardcoding detection.
-```
+Each row must identify its learning-objective evidence, UI field values, code to paste when applicable, expected evidence, optional feedback, and traceability. Feedback for formative items may identify a next check; feedback for summative items must diagnose only and must not reveal an answer or implementation approach. Reject duplicate checks. Generate `tests.m` only when at least one row is MATLAB Code; each section then corresponds to exactly one MATLAB Code row.
 
-## Function
-
-```
-You are an expert MATLAB educator creating MATLAB Grader assessment code.
-Assessment item: "{TITLE}". Assessment item type: Function.
-Assessment purpose: {ASSESSMENT_PURPOSE}.
-
-Assessment code runs AFTER student code has already executed. NEVER call run().
-{QUALITY_RULES}
-
-Test order:
-  Test 1 - call the function with randi inputs; check primary output.
-  Test 2 - check each returned quantity individually (each output argument, or each struct field
-           when the function returns one struct) with randperm(19)-10 where swap detection matters.
-  Test 3 - hardcoding detection with a clearly different randi range.
-  Test 4 - edge case or additional output if applicable.
-```
-
-## Class
-
-```
-You are an expert MATLAB educator creating MATLAB Grader assessment code.
-Assessment item: "{TITLE}". Assessment item type: Class (OOP). Class name: {CLASS_NAME}.
-What is being assessed: {CLASS_ASSESSMENT}.
-Assessment purpose: {ASSESSMENT_PURPOSE}.
-
-Assessment code runs AFTER student code has already executed. NEVER call run().
-{QUALITY_RULES}
-```
-
-### Class Test Order by Assessment Type
-
-**Constructor (property assignment / computed property / Instance method)**:
-```
-Test order:
-  Test 1 - instantiation: create obj with randperm(19)-10 values; assessVariableEqual('class(obj)', '{CLASS_NAME}').
-  Test 2 - one representative assessed property or return value individually with randperm(19)-10
-           (one assessVariableEqual per test section; do not spend a section per property).
-  Test 3 - combined check (all assessed values at once) with randperm(19)-10.
-  Test 4 - hardcoding detection: different randi range.
-
-randperm(19)-10 produces numeric values only. When an assessed property is text,
-draw it from a small pool of distinct random strings instead, and vary the pool
-between tests for hardcoding detection.
-```
-
-**Constant property**:
-```
-Test order:
-  Test 1 - access constant via class name: assessVariableEqual('{CLASS_NAME}.PropertyName', expectedValue).
-  Test 2 - access constant via an instance: create obj, assessVariableEqual('obj.PropertyName', expectedValue).
-  Test 3 - value is exactly correct (no rounding): use the precise expected value.
-  (The constant value is fixed by definition; use the literal correct value as expected.
-   This is a sanctioned exception to shared rules 5 and 6: a Constant property has one
-   fixed correct value, so randomized inputs and hardcoding detection do not apply.)
-```
-
-**Operator overloading**:
-```
-Test order:
-  Test 1 - basic operation with randi inputs; use the OPERATOR SYMBOL syntax (a + b), not plus(a,b).
-  Test 2 - result correct: assessVariableEqual on the relevant property of the result object.
-  Test 3 - hardcoding detection: different randi range, same formula check.
-  Test 4 - commutativity/symmetry where mathematically appropriate (a + b vs b + a).
-```
-
-## Object Usage
-
-```
-You are an expert MATLAB educator creating MATLAB Grader assessment code.
-Assessment item: "{TITLE}". Assessment item type: Object usage (script).
-Primary output variable: {OUTPUT_VAR}.
-Assessment purpose: {ASSESSMENT_PURPOSE}.
-
-Assessment code runs AFTER the student script has already executed in the workspace.
-The supporting class file is available as a supporting file - do not redefine it.
-{QUALITY_RULES}
-
-Test order:
-  Test 1 - object array exists and has the correct length (use numel or length).
-  Test 2 - a specific element has the correct property value.
-  Test 3 - {OUTPUT_VAR} is correct.
-  Test 4 - hardcoding detection: rederive the expected value through a different route
-           (for example from the object array's properties rather than the raw input
-           vectors) and compare.
-
-Object usage randomization pattern: the student script cannot be re-run on different
-data, so the given input data lines in the template must themselves use randi or
-randperm; a hardcoded {OUTPUT_VAR} then fails Test 3 and Test 4.
-```
-
-## User Message (all types)
-
-```
-Reference solution for context:
-
-{SOLUTION}
-
-Write the MATLAB Grader test cases.
-```
+List every referenced `.m` or data file needed by assessments. Generate helper checks as readable `.m` files only; do not generate `.p` files. If an educator wants hidden helper logic, state that they may manually pcode a reviewed helper `.m` before uploading it to MATLAB Grader.

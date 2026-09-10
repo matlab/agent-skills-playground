@@ -1,386 +1,181 @@
 ---
 name: matlab-generate-grader-assessments
-description: Generate MATLAB Grader assessment item sets. Use when the user asks to create MATLAB Grader assessment items, generate MATLAB assessment materials, build MATLAB homework assessment items, QTI 3 portable assessment items, or mentions "grader assessment items". Produces complete assessment item folders with description, solution, template, tests, Function call blocks, and optional QTI 3 interchange files.
+description: Generate MATLAB Grader assessment items that are suitability-gated, profile-driven, feedback-aware, and validated through MATLAB MCP. Produces Script, Function, Class Definition, Class Inheritance, Object Usage, and Class Methods items with MATLAB Grader assessment setup instructions.
 license: MathWorks BSD-3-Clause (see LICENSE)
 metadata:
   author: MathWorks
-  version: "1.0"
+  version: "2.0"
 ---
 
 # MATLAB Grader Assessment Item Generator
 
-Generate complete MATLAB Grader assessment item sets in the current agent session. Each assessment item produces
-a subfolder with native artifact files (description, solution, template, tests) ready to paste into
-MATLAB Grader. Function assessment items also include `function_call.m` for MATLAB Grader's
-"Code to call your function" area. An optional QTI 3 interchange package can be created for
-portability and sharing.
+Generate complete, reviewable MATLAB Grader assessment items from an observable MATLAB-code learning objective. This skill supports **Script**, **Function**, **Class Definition**, **Class Inheritance**, **Object Usage**, and **Class Methods** items.
 
-Terminology note: use "assessment item" in user-facing text. "Problem" may still appear
-only in legacy compatibility identifiers or when explaining older MATLAB Grader terminology.
+An item folder contains `description.txt`, `solution.m`, `template.m`, and `assessments.md`; for Function, Class Definition, Class Inheritance, and Class Methods items, it also contains `function_call.m`. `tests.m` is created only when the item needs one or more **MATLAB Code** assessments. Referenced class, helper, and data files must be human-readable source or data files and must be documented in `assessments.md`; do not generate `.p` files.
 
-## Input
+## Staged loading
 
-The user may have provided a learning objective in their request.
-If they did not, collect it in Step 1.
+Read `matlab-grader-course-profile.md` in the course-material root before
+proposing an item. If it is absent, complete the one-time setup below first.
 
-## Reference Files
+Load reference files only for the current stage:
 
-Before generating any artifacts, read the appropriate reference files from the `references/`
-directory alongside this skill:
-
-- `references/assessment-item-types.md` — assessment item type definitions, class assessments, output structure
-- `references/assessment-research.md` — research-informed formative and summative assessment method
-- `references/options-prompt.md` — how to generate assessment item options
-- `references/description-prompt.md` — how to generate descriptions (by assessment item type)
-- `references/solution-prompt.md` — how to generate solutions (by assessment item type)
-- `references/template-prompt.md` — how to generate templates (by assessment item type)
-- `references/function-call-prompt.md` — how to generate the student call block for Function assessment items
-- `references/tests-prompt.md` — how to generate test cases (by assessment item type)
-- `references/qti3-prompt.md` — how to generate optional QTI 3 item and manifest files
-
-Read `references/assessment-item-types.md` and `references/assessment-research.md` now to load the
-type definitions and assessment method.
-
-## Pipeline Overview
-
-```
-Step 1: Collect inputs (objective, assessment item type, class assessment if applicable, assessment purpose, output format)
-Step 2: Generate 4 assessment item options (varied difficulty)
-Step 3: User selects which assessment items to develop
-Step 4: For each selected assessment item, generate artifacts sequentially
-Step 5: Write files to output subfolders and optional QTI 3 package
-```
-
----
-
-## Step 1: Collect Inputs
-
-If the user provided a learning objective, confirm it. Otherwise, ask for one.
-
-Collect the following one at a time:
-
-### 1a. Learning Objective
-If the user has not already provided one, ask: "What is the learning objective for these MATLAB Grader assessment items?"
-
-### 1b. Assessment Item Type
-Ask the user to choose an assessment item type:
-- **Script** — student submits a .m script; assessed by workspace variables
-- **Function** — student submits a .m function; assessed by input/output values
-- **Class** — student submits a classdef .m file; assessed via instantiation
-- **Object usage** — student submits a .m script that uses a provided class
-
-### 1c. Class Assessment (only if assessment item type is Class)
-If the user chose "Class", ask which aspect to assess:
-1. Constructor - property assignment (blank: obj.prop = arg lines)
-2. Constructor - computed property (blank: derived property computation)
-3. Instance method (blank: method body)
-4. Constant property (blank: value in properties (Constant) block)
-5. Operator overloading (blank: overloaded operator method body)
-
-### 1d. Number of Options
-Ask: "How many assessment item options should I generate? (default: 4)"
-Accept 2-6. Default to 4 if the user just presses enter or says "default".
-
-### 1e. Output Directory
-Ask: "Where should I write the assessment item folders? (default: current directory)"
-Default to the current working directory. The user can specify a path.
-
-### 1f. Assessment Purpose
-Ask: "Is this assessment primarily formative, summative, or both? (default: summative)"
-Default to:
-- Formative if the user says practice, feedback, homework draft, tutoring, self-check,
-  revision, lab prep, or low-stakes.
-- Summative if the user says exam, grade, final submission, high-stakes,
-  or does not specify.
-- Both if the user explicitly wants practice and grading reuse.
-
-Use `references/assessment-research.md` to apply the correct design rules:
-- Formative: smaller scope, self-checks, diagnostic test names, and feedback-oriented
-  evidence.
-- Summative: objective-aligned independent tests, randomized hardcoding detection,
-  edge cases, and minimal answer-revealing hints.
-- Both: formative self-checks plus summative-grade tests.
-
-### 1g. Optional QTI 3 Export
-Ask: "Should I also create QTI 3 interchange files for portability? (default: no)"
-Default to no unless the user asks for QTI, portability, standards-based assessment items,
-interchange files, import/export payloads, or sharing between instructional designers.
-
-If enabled, tell the user:
-"I will create the normal MATLAB Grader files plus a QTI 3 package. The QTI files preserve
-the prompt, template, function call block when applicable, solution, tests, and metadata for interchange; they do not make a
-generic QTI player execute MATLAB grading logic."
-
----
-
-## Step 2: Generate Assessment Item Options
-
-Read `references/options-prompt.md` to construct the prompt.
-
-Build the system prompt by:
-1. Starting with the base system prompt from the reference
-2. Replacing {NUM_OPTIONS} with the user's choice
-3. Appending the assessment-item-type-specific note (Class, Function, Object usage, or nothing for Script)
-
-Build the user message with the learning objective and assessment item type.
-Use the assessment purpose to vary options:
-- Formative options should be short, diagnosable, and suitable for revision.
-- Summative options should measure a clear objective with reproducible evidence and
-  enough complexity to distinguish levels of mastery.
-- Both should be usable for practice first and grading later.
-
-**You ARE the AI generating these options.** Do not make an API call. Instead, directly generate
-the JSON array of assessment item options yourself, following the system prompt instructions exactly.
-
-Generate exactly {NUM_OPTIONS} assessment item options as a JSON array. Each must have:
-- `id` (1-based integer)
-- `title` (descriptive assessment item name)
-- `difficulty` ("Easy", "Medium", or "Hard" — spread across options)
-- `concept_focus` (the MATLAB concept being tested)
-- `brief_description` (1-2 sentence summary)
-- `suggested_variable` (the primary variable/class name)
-- `assessment_item_type` (must match the user's selected type)
-- `assessment_purpose` ("Formative", "Summative", or "Both")
-
-Present the options to the user in a readable table format:
-
-```
-| # | Title | Difficulty | Concept Focus | Description |
-|---|---|---|---|---|
-```
-
----
-
-## Step 3: User Selects Assessment Items
-
-Ask the user: "Which assessment items would you like me to develop? Enter the numbers separated by commas (e.g., 1,3,4), or 'all' for all of them."
-
-Parse the selection into a list of assessment item IDs.
-
----
-
-## Step 4: Generate Artifacts for Each Selected Assessment Item
-
-For each selected assessment item, generate artifacts **sequentially** (each builds on the previous).
-Tell the user which assessment item you're working on: "Generating artifacts for Assessment Item N: {title}..."
-
-### 4a. Description
-
-Read `references/description-prompt.md`. Select the correct branch for the assessment item type.
-Construct the system prompt by filling in {TITLE}, {DIFFICULTY}, {OBJECTIVE}, {ASSESSMENT_ITEM_TYPE},
-{ASSESSMENT_PURPOSE}, and for Class assessment items: {CLASS_NAME}, {ASSESSMENT_CONTEXT}, and the assessment-specific extra rules.
-For Object usage: {OUTPUT_VAR}.
-Placeholder definitions used across the reference prompts: {ASSESSMENT_CONTEXT} is a
-one-sentence restatement of the class aspect selected in Step 1c; {CLASS_ASSESSMENT}
-is that Step 1c option label verbatim.
-
-Generate the description following the prompt instructions exactly.
-The output must be plain text — no markdown headers, no bold/italic markers.
-
-### 4b. Solution
-
-Read `references/solution-prompt.md`. Select the correct branch for the assessment item type.
-Fill in {TITLE}, {DIFFICULTY}, {OBJECTIVE}, {SUGGESTED_VARIABLE}.
-For Function: compute {SNAKE_TITLE} from the assessment item title (lowercase, spaces to underscores, strip non-alphanumeric).
-For Class: {CLASS_NAME}.
-For Object usage: {OUTPUT_VAR}.
-
-Generate the solution following the prompt instructions exactly.
-The output must be pure MATLAB code — no markdown fences, no explanation text.
-
-### 4c. Template
-
-Read `references/template-prompt.md`. Select the correct branch for the assessment item type.
-The template prompt REQUIRES the solution from step 4b as context.
-For Class: select the correct blank rule based on the class assessment type.
-For Object usage: extract only the student script portion.
-
-Generate the template following the prompt instructions exactly.
-The output must be pure MATLAB code with `% YOUR CODE HERE` blanks.
-
-### 4d. Function Call (only if assessment item type is Function)
-
-Read `references/function-call-prompt.md`.
-
-Generate `function_call.m`, the student-facing pre-submit run block used in MATLAB Grader's
-"Code to call your function" area. Use the required function name and representative sample
-inputs from the generated solution. The output must be pure MATLAB code: comments plus a simple
-call that assigns the function output to the primary output variable. Do not include grading
-assertions, randomized hidden tests, or assessment logic.
-
-### 4e. Tests
-
-Read `references/tests-prompt.md`. Select the correct branch for the assessment item type.
-The tests prompt REQUIRES the solution from step 4b as context.
-Always include the shared quality rules.
-Select the correct test order based on assessment item type and class assessment.
-Apply the assessment-purpose rules from `references/assessment-research.md`:
-- Formative tests should be diagnostic and interpretable.
-- Summative tests should be independent, objective-aligned, randomized, and robust
-  against hardcoding.
-- Both should include a basic correctness test plus summative-grade edge and transfer
-  tests.
-
-Generate the tests following the prompt instructions exactly.
-The output must be pure MATLAB code with `%% Test N:` section headers and `assessVariableEqual` calls.
-
-### 4f. QTI 3 Item (only if QTI export is enabled)
-
-Read `references/qti3-prompt.md`.
-
-Generate one QTI 3 item XML document and one QTI 3 manifest for each selected assessment item after
-the description, solution, template, optional function call, and tests exist. Use those generated
-artifacts as source content.
-
-QTI 3 export intent:
-- Support portability, review, and sharing of self-describing assessment items.
-- Preserve enough MATLAB Grader-specific content for a future MATLAB Grader importer or
-  agent workflow to reconstruct the native assessment item folder.
-- Do not claim that a generic QTI runtime can execute MATLAB code or MATLAB Grader tests.
-
-Required source fields:
-- `{TITLE}`, `{SNAKE_TITLE}`, `{DIFFICULTY}`, `{OBJECTIVE}`, `{ASSESSMENT_ITEM_TYPE}`
-- `{ASSESSMENT_PURPOSE}`
-- `{CLASS_ASSESSMENT}` if applicable
-- `{DESCRIPTION}`, `{TEMPLATE}`, `{SOLUTION}`, `{TESTS}`
-- `{FUNCTION_CALL}` if assessment item type is Function
-- `{SUPPORTING_CLASS}` if object usage
-
-Generate the QTI item XML following the reference exactly. The output must be XML only:
-no markdown fences and no explanation text.
-
----
-
-## Step 5: Write Output Files
-
-For each generated assessment item, create one self-contained assessment item folder and write the
-native MATLAB Grader files at the folder root. If QTI 3 export is enabled, write the QTI 3
-package inside that same assessment item folder.
-
-### Folder Naming
-
-Convert the assessment item title to snake_case:
-- Lowercase all characters
-- Replace spaces with underscores
-- Remove non-alphanumeric characters (except underscores)
-
-### File Structure
-
-Create one `{snake_title}` assessment item folder under the output directory with these
-native MATLAB Grader files at the folder root:
-
-| File | Source |
+| Stage | Load |
 | --- | --- |
-| `description.txt` | Generated description artifact |
-| `solution.m` | Generated reference solution artifact |
-| `template.m` | Generated learner template artifact |
-| `function_call.m` | Generated student pre-submit function-call block (Function assessment items only) |
-| `tests.m` | Generated tests artifact |
+| Suitability and proposal | `references/assessment-item-types.md`, `references/options-prompt.md` |
+| Student artifacts | `references/description-prompt.md`, `solution-prompt.md`, `template-prompt.md` |
+| Function and class run artifacts | `references/function-call-prompt.md` |
+| Assessment configuration | `references/tests-prompt.md` |
+| Assessment rationale or feedback design | `references/assessment-research.md` |
+| QTI export | `references/qti3-prompt.md` |
+| Combined output | `references/all-grader-items-template.md` |
 
-For **Object usage** assessment items, the solution contains two sections separated by `%%%` delimiter lines.
-Split them so `supporting_class.m` contains everything between the
-"%%% SUPPORTING FILE ... %%%" line and the "%%% STUDENT SCRIPT SOLUTION %%%" line,
-and `solution.m` contains everything after the "%%% STUDENT SCRIPT SOLUTION %%%" line.
-Exclude the delimiter lines themselves from both files.
+Do not preload references for later stages.
 
-If QTI 3 export is enabled, also create a nested `qti3` package in the same
-assessment item folder: `imsmanifest.xml` at the package root and the item XML
-under `qti3/items/`.
+MATLAB MCP is mandatory. Confirm that a working MATLAB MCP session can run a small MATLAB command before proposing or generating an item. If it cannot, stop and say that generation is blocked; do not claim that code or assessments have been validated.
 
-For Object usage QTI 3 exports, keep `supporting_class.m` at the assessment item folder root
-alongside the other native MATLAB Grader files.
+Use `matlab-read-doc` when current MATLAB Grader behavior or MATLAB syntax needs verification. Use `matlab-debugging` only to diagnose a failed MATLAB MCP validation.
 
-The QTI `imsmanifest.xml` inside each assessment item folder must reference that folder's item
-XML using package-relative paths such as `items/{snake_title}.xml`. Use stable identifiers
-derived from `{snake_title}`.
+## One-time course profile setup
 
-Do not delete or replace the native MATLAB Grader files when QTI export is enabled. QTI 3 is a
-companion interchange representation, not the authoritative MATLAB Grader runtime format.
+Create `matlab-grader-course-profile.md` with YAML front matter and readable Markdown body. Ask explicit questions for only missing values; never present “press Enter for defaults.”
 
-### Writing Files
+The front matter must include:
 
-Create each file. Strip any leading/trailing markdown fences from
-generated code before writing (```matlab, ```, etc.).
-
-After writing all files for an assessment item, confirm to the user:
-"Wrote {N} files to {output_dir}/{snake_title}/"
-
-After writing QTI files, confirm:
-"Wrote QTI 3 package to {output_dir}/{snake_title}/qti3/ with 1 item file."
-
+```yaml
 ---
-
-## Step 6: Summary
-
-After all selected assessment items are generated and written, present a summary:
-
-```
-MATLAB Grader Assessment Item Generation Complete
-
-Generated {N} assessment item(s):
-
-  1. {title} ({difficulty}) -> {snake_title}/
-     - description.txt
-     - solution.m
-     - template.m
-     - function_call.m (Function assessment items only)
-     - supporting_class.m (Object usage assessment items only)
-     - tests.m
-     - qti3/items/{snake_title}.xml (if QTI 3 export was enabled)
-
-List only the lines that apply to the generated assessment item type; drop the
-parenthetical qualifiers from the printed summary.
-
-  2. ...
-
-Output directory: {output_dir}
-QTI 3 package(s): inside each generated {snake_title}/qti3/ folder (if enabled)
+profile_version: 1
+output_location: assessments
+assessment_purpose: summative
+qti3_export: false
+require_matlab_mcp: true
+content_language: auto
+language_policy:
+  comments: match_content_language
+  feedback: match_content_language
+  assessment_names: match_content_language
+  instructor_setup: english
+  preserve_code_identifiers: true
+coding_practice_progression:
+  enabled: true
+  low: [descriptive names, string literals for new text]
+  moderate: [descriptive names, string literals for new text, avoid unsafe dynamic-workspace functions]
+  high: [descriptive names, string literals for new text, avoid unsafe dynamic-workspace functions, concise functions]
+learning_objectives:
+  - objective: "..."
+    allowed_complexity: [low, moderate]
+    preferred_submission: Script
+---
 ```
 
-Remind the user:
-- Review all generated materials before using them in MATLAB Grader
-- The description goes into the "Assessment Item Description & Instructions" field
-- The solution goes into "Reference Solution"
-- The template goes into "Learner Template"
-- For Function assessment items, `function_call.m` goes into "Code to call your function"
-- Each `%% Test N:` section in tests.m becomes a separate "Assessment" test in MATLAB Grader
-- For Object usage assessment items: the supporting_class.m goes into "Supporting Files".
-  Upload or save it under the class's own name ({ClassName}.m); MATLAB resolves a class
-  only from a file whose name matches the classdef name, so supporting_class.m is a
-  packaging name, not a runnable filename
-- QTI 3 output is for interchange and review; MATLAB execution semantics are preserved as
-  metadata/supporting content for a future importer or agent workflow
+Document that `low`, `moderate`, and `high` are the only complexity labels. The coding-practice progression is an authoring gate and learner guidance; it is not a student scoring criterion unless a future objective explicitly makes it assessable.
 
----
+`content_language` controls student-facing language. Use `auto` to infer the resolved content language from the approved problem description or task statement for each item. Use a BCP 47 or ISO-style language code such as `en`, `es`, or `ko` to force all generated items to that language. If an older profile omits `content_language`, default to `auto`. When auto-detection is ambiguous or the prompt mixes languages, use the dominant language of the student-facing problem description.
 
-## Error Handling
+Apply `language_policy` after resolving the content language. Generate student-facing prose, code comments, learner-visible assessment names, and optional feedback in the resolved content language. Preserve MATLAB code, identifiers, function signatures, class names, variable names, file names, MATLAB keywords, MATLAB Grader test type labels, and instructor-facing setup headings unless the user explicitly asks to localize them.
 
-- If artifact generation produces markdown fences, strip them before writing
-- If the user wants to regenerate a specific artifact, regenerate just that one
-- If QTI XML generation produces markdown fences, strip them before writing
-- If QTI export is requested after native files already exist, generate only the QTI package
-  from the existing artifacts unless the user asks to regenerate native artifacts
-- If the user wants to modify an artifact, use Edit on the written file
-- If an assessment item title conflicts with an existing folder, ask the user before overwriting.
-  Exception: a QTI-only export into an existing item folder is additive, not an overwrite, so the
-  QTI-only rule above takes precedence and no confirmation is needed
+## Suitability and proposal gate
 
-## Quality Checklist
+Before generation, determine whether the objective has observable MATLAB-code evidence: a workspace variable, function output, required construct, prohibited shortcut, or input-contract behavior.
 
-Before writing each artifact, verify:
+- If it does not, stop. Explain why MATLAB Grader cannot directly observe the objective, propose an assessable rewording, or recommend another modality such as a written explanation, design review, or manual rubric.
+- If it does, recommend Script, Function, Class Definition, Class Inheritance, Object Usage, or Class Methods and give a brief rationale.
+- For learner-authored `classdef` work, warn that class definitions must be submitted as plain `.m` files, not Live Script `.m` or `.mlx` files. The submitted class must be concrete whenever assessments instantiate it.
+- Do not generate a directly auto-graded learner-authored abstract-class item when validation depends on instantiation. Abstract classes are allowed as referenced superclasses; recommend a concrete subclass, object-usage task, manual review, or design rubric when the learner's submitted class itself is abstract.
+- Read the objective’s allowed complexity from the profile. If the requested level is not supported, report that it is unsupported and do not add unrelated requirements to inflate complexity.
 
-**Description**: Plain text, no markdown formatting, includes all required sections for the assessment item type
-**Solution**: Pure MATLAB code, no fences, correct structure for assessment item type
-**Template**: Matches solution's variable/function/class names exactly, has `% YOUR CODE HERE` blanks only where assessed
-**Function Call**: For Function assessment items only, pure MATLAB code, calls the submitted function by its exact name with representative sample inputs, and contains no grading assertions
-**Tests**: 3-5 tests, uses `%% Test N:` sections, `assessVariableEqual` only, random inputs (randi/randperm), includes hardcoding detection test (exception: Constant property class items use the literal constant value and need no hardcoding test)
-**Assessment method**: Purpose is identified as formative, summative, or both; tests and hints follow `references/assessment-research.md`
-**QTI 3**: XML only, well-formed, one item per assessment item, manifest references the item XML inside `{snake_title}/qti3/`, native MATLAB Grader artifacts preserved in metadata/support blocks
+For each objective, present exactly one recommended title and task statement. Titles must describe the learning behavior and must not include a command or keyword checked by an assessment for that item. Ask only for approval or revision, and for a complexity decision only when the profile leaves it undecided. Explain “both” only when it is selected: the same item is designed for formative revision and later summative use.
+
+## Combined single-file output
+
+After the requested item proposals are approved and before generating artifacts, ask once per batch whether the user wants a combined `AllGraderItems.md` output. Do not ask again when the user has already explicitly requested or declined it.
+
+- If the user selects combined output, read `references/all-grader-items-template.md` and create `AllGraderItems.md` in the profile output location.
+- The file is an instructor-facing companion, not a replacement for the native item folders. Include each generated item’s title, student description, submission type, referenced files, reference solution, learner template, template line-lock setup, assessment setup, and only optional feedback entries supported by validated incorrect variants. When the item is Function, Class Definition, Class Inheritance, or Class Methods, also include the standard field **How to call the function (when the learner clicks 'Run')** containing the `function_call.m` content.
+- In combined output, every fenced `Copy` block for an assessment must contain only the exact value to paste into the corresponding MATLAB Grader field. Do not include UI labels inside the fenced block. For **MATLAB Code**, the block contains only MATLAB assessment code. For **Variable equals reference solution**, surrounding prose may identify the field as the variable-name field, but the fenced block must contain only the single variable identifier, such as `result`, never `Variable name: result`. For **Function or Keyword is present** and **Function or Keyword is absent**, the fenced block must contain only the checked command or keyword, not a label.
+- If the user declines combined output, generate only the native item folders and their enabled QTI companions.
+
+## Generate the native artifacts
+
+Create one folder named with a snake_case title under the profile output location.
+
+### Description, solution, template, and call block
+
+- Before writing artifacts, resolve the item language from `content_language`. Student-facing descriptions, MATLAB comments in generated code, learner-visible assessment names, and optional feedback must use that resolved content language.
+- Generate only code matching the approved item mode. Use descriptive names, modern string syntax for new text outside class-property defaults, and no shadowed built-ins, `eval`, `evalin`, or `assignin`.
+- For Class Definition, Class Inheritance, and Class Methods items, generate a plain `.m` `classdef` reference solution and learner template. The class name must match the submitted file name and any run-block constructor call exactly.
+- For Object Usage items, generate a Script submission that instantiates or modifies objects from referenced class files; do not ask learners to redefine the referenced class in the script.
+- Keep description and template requirements consistent with the solution.
+- After finalizing `template.m`, derive the student-template line-lock guidance from that exact file. Use 1-based line numbers and include the guidance in `assessments.md`; do not place hidden lock markers in `template.m`.
+- For **summative** items, descriptions must contain no hints, self-checks, suggested functions, solution approaches, or answer-revealing implementation guidance. State a function, construct, or approach directly in the numbered instructions only when the learning objective explicitly requires it.
+- For **formative** items, a brief non-answer-revealing self-check is allowed. For **both**, include only the formative guidance explicitly approved for revision use and do not reveal summative assessment details.
+- For Function and class-submission items, create `function_call.m` as a short student-facing run block with representative inputs, object construction, or method calls and no assertions. In combined single-file output, present this block under **How to call the function (when the learner clicks 'Run')**.
+- For items that require referenced files such as `SignalClass.m`, `TimeSignalClass.m`, `MeasurementXYZ.mat`, or a readable helper such as `constructor_pretest.m`, list them in `assessments.md` and instruct instructors to upload them as MATLAB Grader Referenced Files. Do not create `.p` files; when hidden helper logic is desired, say that educators may manually pcode reviewed `.m` helpers before uploading.
+- Create QTI 3 as an optional companion only when enabled by the profile. It preserves native artifacts but does not execute MATLAB Grader logic in a generic QTI player.
+
+### MATLAB Grader assessment model
+
+`assessments.md` is the authoritative MATLAB Grader setup guide. It must contain a **Student Template Line Locks** section, a requirement-to-assessment matrix, and one row per configured assessment.
+
+The **Student Template Line Locks** section must appear before the requirement-to-assessment matrix and use this structure:
+
+```markdown
+## Student Template Line Locks
+
+Line numbers are 1-based and refer to the final `template.m` exactly as generated. After pasting `template.m` into MATLAB Grader, lock the listed lines in the student template editor.
+
+| Line(s) | Lock? | Exact template text | Reason |
+| --- | --- | --- | --- |
+```
+
+List every template line instructors should lock. Use inclusive ranges for contiguous locked lines, such as `1-3`, and comma-separated groups only when needed, such as `1-3, 7, 11-12`. For a single locked line, include that exact line text. For a range, include the first and last line text. Lock instructor-provided scaffolding that students should not change: required task comments, fixed function signatures, fixed class names and inheritance declarations, required property or method signatures, provided setup values, `end` lines that preserve required structure, and referenced-file usage scaffolding that must remain intact. Do not lock learner implementation placeholders, blank lines intended for student work, or code regions where students must edit. If no lines should be locked, write: `No template lines need to be locked for this item.`
+
+The requirement-to-assessment matrix must use this table:
+
+| Requirement / LO evidence | Grader Test Type | MATLAB Grader UI fields | Code to paste | Expected evidence | Optional feedback on incorrect submission | Traceability |
+| --- | --- | --- | --- | --- | --- | --- |
+
+Use these test types precisely:
+
+- **Variable equals reference solution** only for direct equality of exactly one student variable in a Script submission. Put that single variable in the relevant UI field; do not recreate expected logic in code. Do not use this test type for Function or class-submission items. For Object Usage Script items, prefer targeted MATLAB Code checks for object properties when they provide clearer feedback than whole-object equality.
+- **MATLAB Code** for custom checks that direct equality cannot express, including one assessment that compares multiple student variables, every Function-submission output check, and class-submission checks for inheritance, properties, constructor behavior, and method behavior. A Function assessment must be self-contained: assign its test inputs, call the learner function, call the matching reference function through `reference.<functionName>`, then compare the learner output with `assessVariableEqual`. For example, `greeting = greetUser(name); greetingReference = reference.greetUser(name); assessVariableEqual('greeting', greetingReference);`. A class assessment must instantiate the learner class when concrete, instantiate `reference.<ClassName>` when a reference object is needed, run the same method calls and referenced-file setup, and compare observable properties, methods, classes, or superclass lists. Never recreate reference-solution logic or assume that `function_call.m` variables or `referenceVariables` exist in the assessment workspace. For class-sensitive Function results, compare the learner class with `class(reference.<functionName>(...))`, never a hard-coded class literal.
+- **Function or Keyword is present** only when the objective explicitly requires that named construct.
+- **Function or Keyword is absent** only when the objective explicitly requires implementation rather than a named prohibited shortcut.
+
+For Script submissions, **Variable equals reference solution** passes a learner value within ±0.1% relative tolerance or ±0.0001 absolute tolerance of the reference value. Use this default for ordinary numeric comparisons, including floating-point roundoff. To override either tolerance, configure the assessment as **MATLAB Code** and call `assessVariableEqual` with the full parameter names `RelativeTolerance` or `AbsoluteTolerance`, for example `assessVariableEqual('result', expected, 'RelativeTolerance', 1e-6)` or `assessVariableEqual('result', expected, 'AbsoluteTolerance', 1e-9)`. Never use shortened names such as `RelTol` or `AbsTol`; they are not accepted for this MATLAB Grader usage.
+
+For every configured assessment, provide a concise learner-visible assessment name in its MATLAB Grader UI fields. An assessment name for a **Function or Keyword is present** or **Function or Keyword is absent** row must describe the behavior being assessed and must not include the command or keyword checked by that row. Put the checked command or keyword only in the relevant configuration field.
+
+Create `tests.m` only for MATLAB Code rows. Split it into clearly labeled sections, one per custom assessment. Do not use a fixed number of tests. Every check must be distinct, objective-aligned, and traceable. Reject duplicated test logic.
+
+Fail generation when the description, template, solution, stated requirements, and `assessments.md` disagree.
+
+### Optional feedback on incorrect submissions
+
+During item development, create and validate targeted incorrect variants for plausible conceptual or syntactic mistakes. For each distinct assessment row, generate feedback only when a validated variant reveals a useful misconception. Do not add generic or duplicate feedback merely to fill every row.
+
+- For **formative** items, feedback identifies the failed requirement and a productive next check. A guided correction is allowed when it is educationally useful.
+- For **summative** items, feedback is diagnosis only: identify the unmet requirement or misconception without code, expected values, solution steps, or hidden-test details.
+- For **both** items, label any guided feedback as formative-only so instructors can omit it in a summative deployment.
+- Put the optional text in the matrix column and tell the instructor to paste it into the feedback field for that MATLAB Grader assessment. Use `—` when feedback is not appropriate.
+
+## Quality gates and validation
+
+Before marking output ready:
+
+1. Use `matlab-review-code` for every generated reference solution, template, function-call block, referenced helper `.m` file, and temporary validation code. Run MATLAB Code Analyzer and consult the MATLAB coding guidelines. Errors fail generation. Resolve warnings or report why they remain. Enforce descriptive names, modern string usage outside required character-array defaults, no shadowed built-ins, and no unsafe dynamic-workspace functions.
+2. Invoke `matlab-validate-function-arguments` only for Function items whose objective or profile explicitly includes an input contract or argument-validation outcome. Do not add an `arguments` block merely because an item is a Function item.
+3. Inspect generated `assessments.md` and `tests.m` files for invalid tolerance parameter names. `AbsTol` and `RelTol` fail generation; replace them with `AbsoluteTolerance` and `RelativeTolerance` before validation.
+4. Inspect generated student-facing prose, MATLAB comments, learner-visible assessment names, and optional feedback for the resolved content language. If the resolved content language is not English and these surfaces are obviously still English, generation is not ready; localize them before validation. Do not translate MATLAB code, identifiers, Grader test type labels, or instructor-facing setup headings.
+5. Validate the **Student Template Line Locks** section against the final `template.m`. Every listed line number must exist, ranges must be valid, and the quoted template text must match the generated file. Stale line numbers or mismatched text fail generation.
+6. If combined `AllGraderItems.md` output is generated, inspect every assessment `Copy` block. UI labels such as `Variable name:`, `Command or keyword:`, and `Code to paste:` must appear outside the fenced block only. For **Variable equals reference solution**, any fenced assessment field block containing anything other than the single variable identifier fails generation.
+7. In an operating-system temporary directory outside the repository and instructor-facing item folder, create a class-based `matlab.unittest` harness. Use `matlab-testing` and run it through MATLAB MCP against the reference solution, a completed learner template, and targeted incorrect variants. Confirm the reference and completed template pass, concept-specific mutants fail, every requirement in the matrix is represented, and every nonempty feedback entry is backed by its linked mutant.
+8. Do not leave the transient harness in the instructor-facing item folder. Report the MCP run result and its limits: it validates MATLAB behavior and the documented configuration model, while the instructor still pastes/configures the rows in MATLAB Grader.
+
+## Output summary
+
+For each item, report its title, resolved content language, approved complexity, item mode, folder, files, referenced files, number of template lines to lock, number and type of configured assessments, number of optional feedback entries, and the completed MATLAB MCP validation result. When created, also report the path to `AllGraderItems.md`. Never claim validation when MATLAB MCP did not complete.
 
 ## Credits
 
-The concept of generating complete MATLAB Grader assessment items from a
-learning objective comes from Andre Knoesen (UC Davis) and his
-[MATLAB Grader Problem Generator](https://github.com/VeriQAi/MatlabGraderProblemGenerator),
-a web application built on the Anthropic API.
-This skill reimplements that idea as a portable agent skill.
+This skill is inspired by Andre Knoesen’s [MATLAB Grader Problem Generator](https://github.com/VeriQAi/MatlabGraderProblemGenerator), a web application built on the Anthropic API.

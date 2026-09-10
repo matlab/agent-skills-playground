@@ -1,0 +1,11 @@
+Use MATLAB as a calculator to evaluate five mathematical expressions.
+
+Create these variables:
+
+1. `powerValues`, containing the result of 2 raised to the powers 1 through 5.
+2. `imaginaryRoot`, containing the square root of -9.
+3. `eValue`, containing e.
+4. `radianCosine`, containing the cosine of pi/2 radians.
+5. `degreeCosine`, containing the cosine of 30 degrees.
+
+Use the mathematical functions and constants appropriate to each expression.

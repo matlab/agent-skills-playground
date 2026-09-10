@@ -35,14 +35,6 @@ Choose the best-fit context from the input.
 - Review emphasis: table variable access, missing data, plot data, labels,
   reproducibility, and workspace outputs.
 
-**Object-oriented MATLAB**
-
-- Triggers: "class", "classdef", "constructor", "method", "property",
-  "operator", "object array".
-- Assessment item type emphasis: Class or Object usage.
-- Review emphasis: exact class names, constructor behavior, method outputs,
-  supporting class separation, and object state checks.
-
 **Graded homework, quiz, lab, project, or exam preparation**
 
 - Triggers: "graded", "homework", "quiz", "exam", "summative", "final",
@@ -80,6 +72,8 @@ Choose the best-fit context from the input.
 ## Recommended Assessment Configuration
 - Assessment item type:
 - Assessment purpose:
+- Content language: [Use `auto` to match the problem description, or a language
+  code such as `en`, `es`, or `ko` to force generated comments and feedback.]
 - QTI 3 export: [Recommend only when the instructor asked for portability,
   LMS review, interchange, or instructional-design handoff. Otherwise state
   "No" with a one-line note on when to revisit.]
@@ -92,6 +86,7 @@ Choose the best-fit context from the input.
 - `description.txt`:
 - `solution.m`:
 - `template.m`:
+- Template line locks:
 - `function_call.m` (Function assessment items only):
 - `tests.m`:
 - `qti3/` package (only when QTI 3 export is enabled):
@@ -104,7 +99,7 @@ Choose the best-fit context from the input.
 
 ## Instructor Checklist
 - [ ] State one measurable learning objective.
-- [ ] Choose an assessment item type: Script, Function, Class, or Object usage.
+- [ ] Choose an assessment item type: Script or Function.
 - [ ] Choose formative, summative, or both.
 - [ ] Review all native MATLAB Grader artifacts before use.
 - [ ] Parse QTI 3 XML before sharing (only when QTI 3 export is enabled).
@@ -125,26 +120,26 @@ portability or sharing; otherwise state "no QTI 3" in the prompt.
   `"Create a MATLAB Grader script assessment item for [objective]."`
 - Function:
   `"Create a MATLAB Grader function assessment item where students [observable behavior]. Include randomized tests."`
-- Class:
-  `"Create a MATLAB Grader class assessment item for [ClassName] that assesses [constructor/property/method/operator behavior]."`
-- Object usage:
-  `"Create a MATLAB Grader object usage assessment item where students use a provided [ClassName] class to [compute output]."`
 - Mixed practice and grading:
   `"Create this as both formative practice and summative-ready grading material, with self-checks and robust tests."`
 
 ## Review Gate Details
 
 - `description.txt`: clear task, required names, constraints, and non-revealing
-  hints.
+  hints; use the configured content language for student-facing prose.
 - `solution.m`: runnable, concise, aligned to the stated objective.
 - `template.m`: same names as the solution; blanks only where students should
-  work.
+  work; comments use the configured content language.
+- Template line locks: `assessments.md` lists 1-based `template.m` line numbers
+  to lock in MATLAB Grader; verify the quoted text still matches after any
+  manual template edit.
 - `function_call.m` (Function assessment items only): the three instructor
-  comments at the top, representative sample inputs, one plain call to the
-  required function, and no grading assertions; must run cleanly against the
-  reference solution.
-- `tests.m`: 3-5 sections, `assessVariableEqual`, randomized inputs, edge or
-  transfer case, and hardcoding detection.
+  comments at the top localized to the configured content language,
+  representative sample inputs, one plain call to the required function, and no
+  grading assertions; must run cleanly against the reference solution.
+- `tests.m`: only distinct, objective-aligned MATLAB Code sections, with
+  randomized inputs, an edge or transfer case, and hardcoding detection when
+  those checks measure separate evidence; learner-visible assessment names and
+  optional feedback use the configured content language.
 - `qti3/`: one manifest and one item XML inside the same assessment item
-  folder; metadata preserves description, template, solution, tests, and
-  supporting class content when applicable.
+  folder; metadata preserves description, template, solution, and tests.

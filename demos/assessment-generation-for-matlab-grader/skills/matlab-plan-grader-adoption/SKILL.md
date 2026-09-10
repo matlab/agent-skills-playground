@@ -40,18 +40,30 @@ vague to identify an assessment goal.
 
 1. Restate the inferred learning objective or assessment goal.
 2. Identify the best-fit assessment context and why it fits.
-3. Recommend an assessment item type: Script, Function, Class, or Object usage.
+3. Recommend an assessment item type: Script, Function, Class Definition,
+   Class Inheritance, Object Usage, or Class Methods.
 4. Recommend assessment purpose: formative, summative, or both.
    When the context mapping has a purpose emphasis, use it.
    Otherwise default to summative for graded or unspecified use, and both when
    the module serves practice first with grading reuse later.
-5. Provide an instructor-ready generation prompt for the `matlab-generate-grader-assessments` skill.
-6. Define review gates for `description.txt`, `solution.m`, `template.m`,
+5. Recommend `content_language: auto` unless the instructor requests a specific language code.
+6. Provide an instructor-ready generation prompt for the `matlab-generate-grader-assessments` skill.
+7. Define review gates for `description.txt`, `solution.m`, `template.m`,
+   template line locks documented in `assessments.md`,
    `function_call.m` when the recommended type is Function, and `tests.m`.
-7. Define QTI 3 export and sharing guidance when portability is requested.
-8. Propose a first pilot with one generated item, one review pass, and one
+8. Define QTI 3 export and sharing guidance when portability is requested.
+9. Propose a first pilot with one generated item, one review pass, and one
    revision loop.
-9. Include a concise instructor checklist.
+10. Include a concise instructor checklist.
+
+If the request requires a MATLAB class definition, class inheritance,
+object-usage, or class-method submission, include the generator's classdef
+constraints in the starter prompt: learner-authored class definitions must be
+plain `.m` files, not Live Script `.m` or `.mlx` files; referenced class, data,
+and helper files must be listed for MATLAB Grader upload; generated helper files
+must remain readable `.m` files rather than `.p` files. For abstract classes,
+recommend a concrete subclass or object-usage task unless the learner-submitted
+class can be assessed without instantiation.
 
 Read [references/setup-guide-template.md](references/setup-guide-template.md)
 for context mapping, output format, prompt patterns, and adaptation rules.

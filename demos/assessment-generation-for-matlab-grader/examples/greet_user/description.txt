@@ -1,0 +1,7 @@
+Write a function named `greetUser` with one input and one output:
+
+```matlab
+greeting = greetUser(name)
+```
+
+`name` is a string scalar. Create the string `"Hello, "` followed by `name` followed by `"!"`. Return that string in `greeting` and display the same greeting in the Command Window.

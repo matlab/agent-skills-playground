@@ -8,10 +8,10 @@ defensible assessment-design principles and practical MATLAB Grader choices.
 
 | Setup choice | Research basis | Practical setup-guide implication |
 | --- | --- | --- |
-| Constructive alignment | Assessment tasks should directly require the learner behavior named in the objective. | Start with a measurable objective, then choose Script, Function, Class, or Object usage based on the observable evidence. |
-| Formative assessment | Feedback is most useful when learners can inspect evidence and revise. | For practice, include self-check prompts, diagnostic test names, and visible MATLAB evidence such as values, sizes, classes, plots, or object state. |
+| Constructive alignment | Assessment tasks should directly require the learner behavior named in the objective. | Start with a measurable objective, then choose Script or Function based on the observable evidence. |
+| Formative assessment | Feedback is most useful when learners can inspect evidence and revise. | For practice, include self-check prompts, diagnostic test names, and visible MATLAB evidence such as values, sizes, data types, and plots. |
 | Summative assessment | Automated grading should use independent checks, edge cases, and robust evidence. | For graded use, include randomized inputs, different-range hardcoding detection, edge or transfer cases, and minimal answer-revealing hints. |
-| Output-based code assessment | Runnable outputs and tests give stronger evidence than code appearance alone unless style is the objective. | Prefer checking function outputs, workspace variables, class behavior, plot data, and object properties rather than grading syntax style. |
+| Output-based code assessment | Runnable outputs and tests give stronger evidence than code appearance alone unless style is the objective. | Prefer checking function outputs, workspace variables, and plot data rather than grading syntax style. |
 | Automated assessment review | Generated tests and prompts need instructor review before deployment. | Require review gates for description, solution, template, tests, and QTI 3 metadata before importing or assigning an item. |
 | Interchange transparency | Portable packages should preserve semantics and limitations. | State that QTI 3 export is for interchange and review; generic QTI runtimes should not be expected to execute MATLAB Grader tests. |
 
