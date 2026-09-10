@@ -1,6 +1,6 @@
 # MATLAB® AI Tutor Transcript Review Calibration
 
-<!-- Copyright 2026 - 2026 The MathWorks, Inc. -->
+<!-- Copyright 2026 The MathWorks, Inc. -->
 
 This example contains short synthetic transcript excerpts and calibrated review
 notes for instructor training. It is not a learner record.

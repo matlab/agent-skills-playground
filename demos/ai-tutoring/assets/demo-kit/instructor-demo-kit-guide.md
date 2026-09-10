@@ -1,6 +1,6 @@
 # MATLAB® AI Tutor Demo Kit
 
-<!-- Copyright 2026 - 2026 The MathWorks, Inc. -->
+<!-- Copyright 2026 The MathWorks, Inc. -->
 
 This demo kit gives instructors a complete, low-risk way to evaluate the MATLAB
 AI Tutor skills before using them with students. It is designed for a 20-30 minute

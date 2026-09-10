@@ -1,7 +1,7 @@
 ---
 name: matlab-log-tutor-sessions
 description: Use when starting, continuing, updating, exporting, or sharing a running transcript of a MATLAB AI tutoring session, especially when the transcript will be shared with an instructor, attached to a learner session report, or passed to an evaluation workflow for quality review.
-license: MathWorks BSD-3-Clause (see LICENSE)
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "1.0"

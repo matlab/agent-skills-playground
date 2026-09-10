@@ -1,7 +1,7 @@
 ---
 name: matlab-uihtml-app-builder
 description: Build interactive web applications using HTML/JavaScript interfaces with MATLAB computational backends via the uihtml component. Use when creating HTML-based MATLAB apps, JavaScript MATLAB interfaces, web UIs with MATLAB, interactive MATLAB GUIs, or when user mentions uihtml, HTML, JavaScript, web apps, or web interfaces.
-license: MathWorks BSD-3-Clause (see LICENSE)
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "1.0"

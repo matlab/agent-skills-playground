@@ -25,6 +25,18 @@ A sandbox for prototyping and demonstrating [Agent Skills](https://agentskills.i
 | **[ai-tutoring](demos/ai-tutoring/)** | A coordinated set of 11 skills that turn an agent into a course-aware MATLAB tutor: concept coaching, evidence-based debugging, practice activities, AI-use policies and guardrails, and session reports. Includes an instructor demo kit and example reports. |
 | **[course-generation](demos/course-generation/)** | Agent-driven generation of complete MATLAB and Simulink courses in IMS Common Cartridge format, following the MATLAB Course Designer model. An instructor interview feeds the IDStack instructional-design pipeline; MATLAB Exercises are validated against a live MATLAB session and Simulink Exercises get real starter and solution models. |
 
+## Skills
+
+Standalone skills under `skills/`, each installable on its own.
+Demos bundle their own copies separately.
+
+| Skill | What it does |
+|---|---|
+| **[matlab-performance-optimizer](skills/matlab-performance-optimizer/)** | Speeds up slow MATLAB code: vectorization in place of loops, preallocation, appropriate data types, sparse matrices, and in-place operations. Uses the profiler and `timeit` to find the real bottleneck before changing anything. |
+| **[matlab-symbolic-math](skills/matlab-symbolic-math/)** | Generates correct Symbolic Math Toolbox code, covering `syms` against `sym`, assumption management, calculus, equation solving, and transforms. Converts symbolic results into numeric functions, Simulink blocks, Simscape equations, or C code. Reference files cover ODEs, control systems, simplification, plotting, and `matlabFunction`. |
+| **[matlab-uihtml-app-builder](skills/matlab-uihtml-app-builder/)** | Builds interactive MATLAB apps with an HTML and JavaScript front end over a MATLAB computational backend, bridged by the `uihtml` component. Covers app structure, event wiring, and the communication patterns in both directions. |
+| **[matlab-uihtml-design](skills/matlab-uihtml-design/)** | Generates production-grade HTML, CSS, and JavaScript control panels for `uihtml`. Ships eight built-in styles with an interactive gallery for picking one, a base template per style, and a full design specification for each. Also takes a custom aesthetic described in prose. |
+
 ## About Agent Skills
 
 Skills are modular, portable capabilities that work across coding agents:
@@ -67,16 +79,16 @@ Each demo folder is self-contained: it bundles its own skills under `skills/`, a
 
 - [matlab/matlab-agentic-toolkit](https://github.com/matlab/matlab-agentic-toolkit): official MATLAB agent skills and live MATLAB session bridge.
 - [matlab/simulink-agentic-toolkit](https://github.com/matlab/simulink-agentic-toolkit): official Simulink agent skills and Model-Based Design tooling.
-- [matlab/matlab-mcp-core-server](https://github.com/matlab/matlab-mcp-core-server): official MATLAB MCP server for AI applications.
+- [matlab/matlab-mcp-server](https://github.com/matlab/matlab-mcp-server): official MATLAB MCP server for AI applications.
 - [matlab/rules](https://github.com/matlab/rules): MATLAB coding rules for AI coding assistants.
 - [matlab/prompts](https://github.com/matlab/prompts): curated AI prompts for MATLAB development.
 - [matlab/slash-commands](https://github.com/matlab/slash-commands): slash commands for MATLAB development in Claude Code.
 
 ## License
 
-Licensed under [LICENSE](LICENSE.md).
+The license is available in the [LICENSE.md](LICENSE.md) file in this GitHub repository.
 
-Copyright (c) 2025-2026, The MathWorks, Inc. All rights reserved.
+Copyright 2026 The MathWorks, Inc.
 
 ## Community
 

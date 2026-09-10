@@ -1,7 +1,7 @@
 ---
 name: simulink-create-course-activity
 description: Create MATLAB Course Designer Simulink Exercise learning activities with starter and solution Simulink model files. Use when the user asks to create a Simulink activity, Simulink Exercise, starter model, solution model, model-based learning activity, or Course Designer-ready Simulink artifact. Uses MATLAB MCP Server tool calls and Simulink Agentic Toolkit guidance to create, inspect, edit, simulate, and validate model files.
-license: MathWorks BSD-3-Clause (see LICENSE)
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "1.0"

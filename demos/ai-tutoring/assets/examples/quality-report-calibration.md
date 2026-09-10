@@ -1,6 +1,6 @@
 # MATLAB® AI Tutor Quality Report Calibration
 
-<!-- Copyright 2026 - 2026 The MathWorks, Inc. -->
+<!-- Copyright 2026 The MathWorks, Inc. -->
 
 This example shows an instructor-facing quality report for a synthetic set of
 MATLAB tutoring transcript excerpts.

@@ -1,7 +1,7 @@
 ---
 name: agent-skill-author
 description: Use this skill when the user wants to author, design, scope, or refine an Agent Skill (a SKILL.md file). Trigger phrases include "build a new skill", "design an agent skill", "scope a SKILL.md", "how should I structure this skill", "write a skill for X", "my skill isn't working well", or any request to improve an existing SKILL.md. Walks the user through an empirical, test-first process — probe the agent for real failures, design only for genuine knowledge gaps, iterate against runnable examples, and verify across models.
-license: MathWorks BSD-3-Clause (see LICENSE)
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "1.0"

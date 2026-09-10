@@ -1,7 +1,7 @@
 ---
 name: matlab-generate-grader-assessments
 description: Generate MATLAB Grader assessment items that are suitability-gated, profile-driven, feedback-aware, and validated through MATLAB MCP. Produces Script, Function, Class Definition, Class Inheritance, Object Usage, and Class Methods items with MATLAB Grader assessment setup instructions.
-license: MathWorks BSD-3-Clause (see LICENSE)
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "2.0"

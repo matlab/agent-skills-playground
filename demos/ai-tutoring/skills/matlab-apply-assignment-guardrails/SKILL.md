@@ -1,7 +1,7 @@
 ---
 name: matlab-apply-assignment-guardrails
 description: Use when a learner asks for help with MATLAB homework, labs, projects, graded assignments, take-home exams, quizzes, or any programming task where academic integrity, course policy, or instructor constraints may limit direct solutions. Use to provide policy-aware hints, conceptual coaching, partial feedback, and assignment-safe MATLAB tutoring.
-license: MathWorks BSD-3-Clause (see LICENSE)
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "1.0"

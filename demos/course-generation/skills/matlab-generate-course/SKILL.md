@@ -1,7 +1,7 @@
 ---
 name: matlab-generate-course
 description: Interview an instructor and generate a complete MATLAB and Simulink enabled course in IMS Common Cartridge format. Use when the user asks to create a MATLAB course, Simulink course, MATLAB and Simulink curriculum, MATLAB Course Designer-ready course shell, Common Cartridge course package, .imscc export, MATLAB Exercises with validated .m files, or Simulink Exercises with starter and solution model files. Coordinates IDStack, MATLAB Agentic Toolkit, Simulink Agentic Toolkit, matlab-create-course-activity, simulink-create-course-activity, and the existing matlab-generate-grader-assessments skill.
-license: MathWorks BSD-3-Clause (see LICENSE)
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "1.0"

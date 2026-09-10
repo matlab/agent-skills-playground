@@ -1,7 +1,7 @@
 ---
 name: matlab-create-mcq-practice
 description: Use when creating, asking, grading, or explaining multiple choice questions for MATLAB programming practice, concept checks, quizzes, or tutoring exercises.
-license: MathWorks BSD-3-Clause (see LICENSE)
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "1.0"

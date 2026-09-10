@@ -1,7 +1,7 @@
 ---
 name: matlab-generate-grader-assessments
 description: Generate MATLAB Grader assessment item sets. Use when the user asks to create MATLAB Grader assessment items, generate MATLAB assessment materials, build MATLAB homework assessment items, QTI 3 portable assessment items, or mentions "grader assessment items". Produces complete assessment item folders with description, solution, template, tests, Function call blocks, and optional QTI 3 interchange files.
-license: MathWorks BSD-3-Clause (see LICENSE)
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "1.0"

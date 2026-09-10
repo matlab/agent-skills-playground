@@ -12,7 +12,7 @@ description: >
   deployment; optimize AI for resource-constrained hardware; or use
   loadPyTorchExportedProgram, importNetworkFromPyTorch, dlquantizer,
   exportNetworkToSimulink, or Embedded Coder with AI models.
-license: MathWorks BSD-3-Clause (see LICENSE)
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "1.0"

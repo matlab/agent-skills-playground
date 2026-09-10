@@ -1,7 +1,7 @@
 ---
 name: matlab-plan-course-adoption
 description: Use when an instructor asks for a setup guide, adoption guide, planning guide, implementation checklist, prerequisite check, MATLAB Course Designer course structure plan, Common Cartridge workflow, Simulink starter and solution model planning, LMS import plan, or starter prompt for creating a MATLAB and Simulink enabled course with the matlab-generate-course skill.
-license: MathWorks BSD-3-Clause (see LICENSE)
+license: https://www.mathworks.com/content/dam/mathworks/license/pmrl/license.md
 metadata:
   author: MathWorks
   version: "1.0"
