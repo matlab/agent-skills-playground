@@ -35,9 +35,18 @@ Demos bundle their own copies separately.
 |---|---|
 | **[simulink-test-sequence-from-ears](skills/simulink-test-sequence-from-ears/)** | Generates Simulink Test Sequence harnesses from EARS requirements and model signals, buses, and enumerations. Uses a YAML mapping review before generation and compile-checks the harnesses. |
 | **[matlab-performance-optimizer](skills/matlab-performance-optimizer/)** | Speeds up slow MATLAB code: vectorization in place of loops, preallocation, appropriate data types, sparse matrices, and in-place operations. Uses the profiler and `timeit` to find the real bottleneck before changing anything. |
-| **[matlab-symbolic-math](skills/matlab-symbolic-math/)** | Generates correct Symbolic Math Toolbox code, covering `syms` against `sym`, assumption management, calculus, equation solving, and transforms. Converts symbolic results into numeric functions, Simulink blocks, Simscape equations, or C code. Reference files cover ODEs, control systems, simplification, plotting, and `matlabFunction`. |
 | **[matlab-uihtml-app-builder](skills/matlab-uihtml-app-builder/)** | Builds interactive MATLAB apps with an HTML and JavaScript front end over a MATLAB computational backend, bridged by the `uihtml` component. Covers app structure, event wiring, and the communication patterns in both directions. |
 | **[matlab-uihtml-design](skills/matlab-uihtml-design/)** | Generates production-grade HTML, CSS, and JavaScript control panels for `uihtml`. Ships eight built-in styles with an interactive gallery for picking one, a base template per style, and a full design specification for each. Also takes a custom aesthetic described in prose. |
+
+## Graduated skills
+
+These skills started here and now ship in an official toolkit.
+Their folders here contain only a pointer to the official version.
+If you installed one from this repository, replace it with the official skill.
+
+| Former skill | Official skill |
+|---|---|
+| [matlab-symbolic-math](skills/matlab-symbolic-math/) | [`matlab-use-symbolic-math`](https://github.com/matlab/matlab-agentic-toolkit/tree/main/skills-catalog/math-and-optimization/matlab-use-symbolic-math) in the MATLAB Agentic Toolkit, **Math and Optimization** group |
 
 ## About Agent Skills
 
