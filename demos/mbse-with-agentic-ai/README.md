@@ -141,6 +141,8 @@ Mid-project edits work the same way. Ask the agent to add a requirement, link it
 
 ## Related products from MathWorks
 
+For executable Test Sequence harnesses generated from EARS requirements, see the [Requirements-Based Verification demo](../requirements-based-verification/). It uses a separate ModeLogic example and complements the test-case requirements created in this RFLP workflow.
+
 - [MATLAB](https://www.mathworks.com/products/matlab.html): programming and numeric computing platform.
 - [Simulink](https://www.mathworks.com/products/simulink.html): block-diagram environment for modeling, simulating, and analyzing dynamic systems.
 - [System Composer](https://www.mathworks.com/products/system-composer.html): architecture modeling, profiles and stereotypes, allocations, and analysis instances.

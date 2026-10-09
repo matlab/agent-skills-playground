@@ -1,0 +1,7 @@
+/work/
+/.claude/
+slprj/
+*.slxc
+*.autosave
+*.slx.bak
+*.slreqx.bak
