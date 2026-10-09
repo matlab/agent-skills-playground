@@ -18,6 +18,7 @@ A sandbox for prototyping and demonstrating [Agent Skills](https://agentskills.i
 |---|---|
 | **[engineering-an-agent-skill](demos/engineering-an-agent-skill/)** | A test-first process for authoring your own Agent Skills, with a meta-skill that walks an agent through the five stages. Accompanies the [blog post](https://blogs.mathworks.com/matlab/2026/05/11/how-to-engineer-an-ai-skill-for-matlab/). |
 | **[mbse-with-agentic-ai](demos/mbse-with-agentic-ai/)** | Agent-driven Model-Based Systems Engineering workflow in MATLAB and Simulink (RFLP methodology). Accompanies the [blog post](https://blogs.mathworks.com/simulink/2026/04/26/model-based-systems-engineering-and-agentic-ai/). |
+| **[requirements-based-verification](demos/requirements-based-verification/)** | Generate Simulink Test Sequence harnesses from reviewed EARS requirements. Includes the skill, a ModeLogic example, and MATLAB tests. |
 | **[embedded-ai-deployment](demos/embedded-ai-deployment/)** | Agent-driven deployment of AI models to embedded hardware with MATLAB, Simulink, and Embedded Coder. Routes between native models compressed for lean targets (Cortex-M, DSP) and direct C/C++ generation from PyTorch and LiteRT models for high-performance hardware. Requires MATLAB R2026a. |
 | **[lorenz-uihtml-app](demos/lorenz-uihtml-app/)** | An interactive Lorenz attractor, built by an agent using the [`matlab-uihtml-app-builder`](skills/matlab-uihtml-app-builder/) and [`matlab-uihtml-design`](skills/matlab-uihtml-design/) skills. An HTML control panel drives an `ode45` integration, with animated tracing, live speed control, mid-run stop, and PNG export. |
 | **[boids-uihtml-app](demos/boids-uihtml-app/)** | An interactive Boids flocking simulator for learning emergence, built with the same two uihtml skills in the Warm Dark style. Live rule-weight sliders, behavior presets, a flock-order readout, per-boid inspection, and predator strikes. The README teaches the model through guided experiments. |
@@ -32,6 +33,7 @@ Demos bundle their own copies separately.
 
 | Skill | What it does |
 |---|---|
+| **[simulink-test-sequence-from-ears](skills/simulink-test-sequence-from-ears/)** | Generates Simulink Test Sequence harnesses from EARS requirements and model signals, buses, and enumerations. Uses a YAML mapping review before generation and compile-checks the harnesses. |
 | **[matlab-performance-optimizer](skills/matlab-performance-optimizer/)** | Speeds up slow MATLAB code: vectorization in place of loops, preallocation, appropriate data types, sparse matrices, and in-place operations. Uses the profiler and `timeit` to find the real bottleneck before changing anything. |
 | **[matlab-symbolic-math](skills/matlab-symbolic-math/)** | Generates correct Symbolic Math Toolbox code, covering `syms` against `sym`, assumption management, calculus, equation solving, and transforms. Converts symbolic results into numeric functions, Simulink blocks, Simscape equations, or C code. Reference files cover ODEs, control systems, simplification, plotting, and `matlabFunction`. |
 | **[matlab-uihtml-app-builder](skills/matlab-uihtml-app-builder/)** | Builds interactive MATLAB apps with an HTML and JavaScript front end over a MATLAB computational backend, bridged by the `uihtml` component. Covers app structure, event wiring, and the communication patterns in both directions. |
@@ -65,7 +67,7 @@ git clone https://github.com/matlab/agent-skills-playground.git
 cd agent-skills-playground/demos/<demo-name>
 ```
 
-Each demo folder is self-contained: it bundles its own skills under `skills/`, a tutorial README, and any supporting files. Open the folder in your agent (for Claude Code, run `claude` from inside the folder) and follow the demo's README.
+Each demo has a tutorial README and supporting files. Demos that introduce skills bundle them under `skills/`; app demos link to the standalone skills used to build them. Follow the demo's README to install its skills and prepare the example before opening it in your agent. A folder named `skills/` is not automatically discovered by every agent.
 
 ## Skill development resources
 
