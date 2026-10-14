@@ -18,7 +18,7 @@ function buildInfo = prepareWritableBuildWorkspace(sourceDir, varargin)
     destinationRoot = char(parser.Results.DestinationRoot);
     excludeNames = string(parser.Results.Exclude);
 
-    buildDir = fullfile(destinationRoot, ['simulink_test_sequence_build_' char(string(java.util.UUID.randomUUID))]);
+    buildDir = tempname(destinationRoot);
     mkdir(buildDir);
 
     entries = dir(sourceDir);

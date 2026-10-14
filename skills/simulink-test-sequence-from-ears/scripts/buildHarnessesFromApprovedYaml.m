@@ -56,6 +56,10 @@ function result = buildHarnessesFromApprovedYaml(modelName, yamlPath, varargin)
     outputFolder = fullfile(buildDir, outputFolderName);
 
     yamlBuildPath = fullfile(buildDir, relativeSourcePath(sourceDir, yamlSourcePath));
+    if ~isfile(yamlBuildPath)
+        % The YAML lives outside the staged copy (or in an excluded folder).
+        copyfile(yamlSourcePath, yamlBuildPath);
+    end
 
     originalDir = pwd;
     cleaner = onCleanup(@() cd(originalDir));
@@ -98,18 +102,37 @@ function path = resolveSourcePath(sourceDir, inputPath)
 end
 
 function relPath = relativeSourcePath(sourceDir, sourcePath)
-    sourceDir = string(char(java.io.File(sourceDir).getCanonicalPath()));
-    sourcePath = string(char(java.io.File(sourcePath).getCanonicalPath()));
+    sourceDir = canonicalExistingFolder(sourceDir);
+    sourcePath = canonicalExistingPath(sourcePath);
 
+    % Windows paths are case-insensitive, and dir does not normalize case.
     prefix = sourceDir + filesep;
-    if startsWith(sourcePath, prefix)
+    if startsWith(sourcePath, prefix, 'IgnoreCase', ispc)
         relPath = char(extractAfter(sourcePath, strlength(prefix)));
-    elseif sourcePath == sourceDir
+    elseif strlength(sourcePath) == strlength(sourceDir) && startsWith(sourcePath, sourceDir, 'IgnoreCase', ispc)
         relPath = '';
     else
-        [~, name, ext] = fileparts(sourcePath);
+        [~, name, ext] = fileparts(char(sourcePath));
         relPath = [name ext];
     end
+end
+
+function path = canonicalExistingPath(path)
+    entries = dir(path);
+    if isempty(entries)
+        error('Path not found: %s', path);
+    end
+
+    path = string(fullfile(entries(1).folder, entries(1).name));
+end
+
+function path = canonicalExistingFolder(path)
+    entries = dir(path);
+    if isempty(entries)
+        error('Folder not found: %s', path);
+    end
+
+    path = string(entries(1).folder);
 end
 
 function ensureSourceModelWritable(modelPath)

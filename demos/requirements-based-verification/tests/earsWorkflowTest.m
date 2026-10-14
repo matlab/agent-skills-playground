@@ -106,6 +106,74 @@ classdef earsWorkflowTest < matlab.unittest.TestCase
             sltest.harness.open('ModeLogic', 'ModeLogic_REQ17_Harness');
             compileHarnessModel('ModeLogic_REQ17_Harness');
         end
+
+        function generateStagedModeLogicHarness(testCase)
+            testCase.assumeFalse(bdIsLoaded('ModeLogic'), ...
+                'Close the ModeLogic demo before running its isolated harness test.');
+            testCase.assumeFalse(bdIsLoaded('ModeLogic_REQ17_Harness'));
+            exampleDir = fullfile(testCase.DemoRoot, "examples", "mode-logic");
+            copyfile(fullfile(exampleDir, "*"), testCase.TempDir);
+            stagingRoot = string(tempname);
+            mkdir(stagingRoot);
+            testCase.addTeardown(@() rmdir(stagingRoot, "s"));
+            testCase.addTeardown(@() closeTestModels(testCase.TempDir));
+            mkdir(fullfile(testCase.TempDir, "reviews"));
+            relativeYamlPath = fullfile("reviews", "mapping_review_req17.yaml");
+            review = generateMappingReviewFromRequirements('ModeLogic', ...
+                fullfile(exampleDir, "HLR_ModeLogic_EARS.slreqx"), ...
+                fullfile(testCase.TempDir, relativeYamlPath), ...
+                'RequirementIds', "17", 'OpenInEditor', false);
+            testCase.assertEqual(numel(review), 1);
+
+            % Synthetic approval is confined to this known demo test fixture.
+            review.status = "approved";
+            writeMappingReviewYaml(fullfile(testCase.TempDir, relativeYamlPath), review, 'OpenInEditor', false);
+            result = buildHarnessesFromApprovedYaml('ModeLogic', relativeYamlPath, ...
+                'AssociateWithSourceModel', false, 'DestinationRoot', stagingRoot);
+            testCase.verifyEqual(result.association_mode, "copied_standalone_harness_files");
+            testCase.verifyTrue(startsWith(result.build_dir, stagingRoot));
+            testCase.verifyEqual(result.yaml_build_path, ...
+                string(fullfile(result.build_dir, relativeYamlPath)));
+            testCase.verifyTrue(isfile(result.yaml_build_path));
+            expectedHarness = fullfile(testCase.TempDir, "test_harnesses", "ModeLogic_REQ17_Harness.slx");
+            testCase.verifyEqual(result.copied_harnesses, string(expectedHarness));
+            testCase.verifyTrue(isfile(expectedHarness));
+        end
+
+        function generateStagedHarnessFromOutsideYaml(testCase)
+            testCase.assumeFalse(bdIsLoaded('ModeLogic'), ...
+                'Close the ModeLogic demo before running its isolated harness test.');
+            testCase.assumeFalse(bdIsLoaded('ModeLogic_REQ17_Harness'));
+            exampleDir = fullfile(testCase.DemoRoot, "examples", "mode-logic");
+            sourceDir = fullfile(testCase.TempDir, "source");
+            mkdir(sourceDir);
+            copyfile(fullfile(exampleDir, "*"), sourceDir);
+            stagingRoot = string(tempname);
+            mkdir(stagingRoot);
+            testCase.addTeardown(@() rmdir(stagingRoot, "s"));
+            testCase.applyFixture(matlab.unittest.fixtures.CurrentFolderFixture(sourceDir));
+            testCase.addTeardown(@() closeTestModels(sourceDir));
+            yamlPath = fullfile(testCase.TempDir, "mapping_review_req17.yaml");
+            review = generateMappingReviewFromRequirements('ModeLogic', ...
+                fullfile(exampleDir, "HLR_ModeLogic_EARS.slreqx"), yamlPath, ...
+                'RequirementIds', "17", 'OpenInEditor', false);
+            testCase.assertEqual(numel(review), 1);
+
+            % Synthetic approval is confined to this known demo test fixture.
+            review.status = "approved";
+            writeMappingReviewYaml(yamlPath, review, 'OpenInEditor', false);
+            sourceDirArg = sourceDir;
+            if ispc
+                sourceDirArg = lower(sourceDir);
+            end
+            result = buildHarnessesFromApprovedYaml('ModeLogic', yamlPath, ...
+                'SourceDir', sourceDirArg, 'AssociateWithSourceModel', false, ...
+                'DestinationRoot', stagingRoot);
+            testCase.verifyEqual(result.yaml_build_path, ...
+                string(fullfile(result.build_dir, "mapping_review_req17.yaml")));
+            testCase.verifyTrue(isfile(result.yaml_build_path));
+            testCase.verifyTrue(isfile(fullfile(sourceDir, "test_harnesses", "ModeLogic_REQ17_Harness.slx")));
+        end
     end
 end
 
